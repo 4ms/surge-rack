@@ -1048,7 +1048,7 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
             {
                 auto x = x0 + s * smpinv * lw;
 
-                p.template emplace_back(x, y0 + (-tb[s] + 1) * 0.5 * hw);
+                p.emplace_back(x, y0 + (-tb[s] + 1) * 0.5 * hw);
                 ribbon.emplace_back(x, y0 + (-tb[s] + 1) * 0.5 * hw);
             }
 
@@ -1065,7 +1065,7 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
                 {
                     auto x = x0 + s * smpinv * lw;
 
-                    ribbon.template emplace_back(x, y0 + (-tb[s] + 1) * 0.5 * hw);
+                    ribbon.emplace_back(x, y0 + (-tb[s] + 1) * 0.5 * hw);
                 }
             }
 
