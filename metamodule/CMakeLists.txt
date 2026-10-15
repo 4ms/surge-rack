@@ -26,7 +26,7 @@ target_sources(SurgeXT
     ${SOURCE_DIR}/src/VCO.cpp
 )
 
-add_subdirectory(${SOURCE_DIR}/libs/sst-rackhelpers ${CMAKE_CURRENT_BINARY_DIR}/sst-rackhelpers)
+# add_subdirectory(${SOURCE_DIR}/libs/sst-rackhelpers ${CMAKE_CURRENT_BINARY_DIR}/sst-rackhelpers)
 
 set(SURGE_BUILD_32BIT_LINUX TRUE CACHE BOOL "Allow 32 bit to try")
 set(SURGE_SKIP_JUCE_FOR_RACK TRUE CACHE BOOL "skip surge Juce build")
@@ -38,6 +38,8 @@ set(SURGE_SKIP_ALSA TRUE CACHE BOOL "skip surge Alsa build")
 set(SURGE_SKIP_STANDALONE TRUE CACHE BOOL "skip surge standalone build")
 set(SURGE_COMPILE_BLOCK_SIZE 8 CACHE STRING "surge compile block size")
 set(SURGE_SKIP_PIE_CHANGE TRUE CACHE BOOL "skip pie")
+set(SURGE_SKIP_JUCE_DSP TRUE CACHE BOOL "skip juce dsp")
+set(SURGE_NO_OS TRUE CACHE BOOL "no plugin infra")
 
 add_subdirectory(${SOURCE_DIR}/surge ${CMAKE_CURRENT_BINARY_DIR}/surge)
 
@@ -60,7 +62,7 @@ target_link_libraries(SurgeXT INTERFACE
     # sqlite 
     # eurorack 
     # airwindows 
-    sst-basic-blocks
+    # sst-basic-blocks
 )
 
 #######################################
