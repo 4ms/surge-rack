@@ -230,6 +230,102 @@
       "name": "EG x VCA"
     },
     {
+      "slug": "Phaser",
+      "name": "Phaser"
+    },
+    {
+      "slug": "Combulator",
+      "name": "Combulator"
+    },
+    {
+      "slug": "SpringReverb",
+      "name": "Spring Reverb"
+    },
+    {
+      "slug": "LFO",
+      "name": "LFO x EG"
+    },
+    {
+      "slug": "Delay",
+      "name": "Delay"
+    },
+    {
+      "slug": "DelayLineByFreqExpanded",
+      "name": "Tuned Delay +"
+    },
+    {
+      "slug": "DelayLineByFreq",
+      "name": "Tuned Delay"
+    },
+    {
+      "slug": "Nimbus",
+      "name": "Nimbus"
+    },
+    {
+      "slug": "Reverb",
+      "name": "Reverb"
+    },
+    {
+      "slug": "Reverb2",
+      "name": "Reverb 2"
+    },
+    {
+      "slug": "Resonator",
+      "name": "Resonator"
+    },
+    {
+      "slug": "Vocoder",
+      "name": "Vocoder"
+    },
+    {
+      "slug": "TreeMonster",
+      "name": "Tree Monster"
+    },
+    {
+      "slug": "RingMod",
+      "name": "Ring Modulator"
+    },
+    {
+      "slug": "FrequencyShifter",
+      "name": "Frequency Shifter"
+    },
+    {
+      "slug": "Bonsai",
+      "name": "Bonsai"
+    },
+    {
+      "slug": "Exciter",
+      "name": "Exciter"
+    },
+    {
+      "slug": "Chow",
+      "name": "Chow"
+    },
+    {
+      "slug": "Neuron",
+      "name": "Neuron"
+    },
+    {
+      "slug": "Distortion",
+      "name": "Distortion"
+    },
+    {
+      "slug": "Ensemble",
+      "name": "Ensemble"
+    },
+    {
+      "slug": "Chorus",
+      "name": "Chorus"
+    },
+    {
+      "slug": "RotarySpeaker",
+      "name": "Rotary Speaker"
+    },
+    {
+      "slug": "Flanger",
+      "name": "Flanger"
+    },
+    {
       "slug": "VCF",
       "name": "VCF"
     },

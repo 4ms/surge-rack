@@ -134,6 +134,182 @@
       ]
     },
     {
+      "slug": "Phaser",
+      "name": "Phaser",
+      "tags": [
+        "Phaser"
+      ]
+    },
+    {
+      "slug": "Combulator",
+      "name": "Combulator",
+      "tags": [
+        "Filter",
+        "Effect"
+      ]
+    },
+    {
+      "slug": "SpringReverb",
+      "name": "Spring Reverb",
+      "tags": [
+        "Reverb"
+      ]
+    },
+    {
+      "slug": "LFO",
+      "name": "LFO x EG",
+      "tags": [
+        "LFO",
+        "Envelope generator",
+        "Sequencer"
+      ]
+    },
+    {
+      "slug": "Delay",
+      "name": "Delay",
+      "tags": [
+        "Delay"
+      ]
+    },
+    {
+      "slug": "DelayLineByFreqExpanded",
+      "name": "Tuned Delay +",
+      "tags": [
+        "Delay",
+        "Physical modeling"
+      ]
+    },
+    {
+      "slug": "DelayLineByFreq",
+      "name": "Tuned Delay",
+      "tags": [
+        "Delay"
+      ]
+    },
+    {
+      "slug": "Nimbus",
+      "name": "Nimbus",
+      "tags": [
+        "Granular",
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Reverb",
+      "name": "Reverb",
+      "tags": [
+        "Reverb",
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Reverb2",
+      "name": "Reverb 2",
+      "tags": [
+        "Reverb"
+      ]
+    },
+    {
+      "slug": "Resonator",
+      "name": "Resonator",
+      "tags": [
+        "Filter",
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Vocoder",
+      "name": "Vocoder",
+      "tags": [
+        "Effect"
+      ]
+    },
+    {
+      "slug": "TreeMonster",
+      "name": "Tree Monster",
+      "tags": [
+        "Effect",
+        "Envelope follower"
+      ]
+    },
+    {
+      "slug": "RingMod",
+      "name": "Ring Modulator",
+      "tags": [
+        "Ring modulator"
+      ]
+    },
+    {
+      "slug": "FrequencyShifter",
+      "name": "Frequency Shifter",
+      "tags": [
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Bonsai",
+      "name": "Bonsai",
+      "tags": [
+        "Distortion"
+      ]
+    },
+    {
+      "slug": "Exciter",
+      "name": "Exciter",
+      "tags": [
+        "Distortion"
+      ]
+    },
+    {
+      "slug": "Chow",
+      "name": "Chow",
+      "tags": [
+        "Distortion"
+      ]
+    },
+    {
+      "slug": "Neuron",
+      "name": "Neuron",
+      "tags": [
+        "Distortion"
+      ]
+    },
+    {
+      "slug": "Distortion",
+      "name": "Distortion",
+      "tags": [
+        "Distortion"
+      ]
+    },
+    {
+      "slug": "Ensemble",
+      "name": "Ensemble",
+      "tags": [
+        "Chorus"
+      ]
+    },
+    {
+      "slug": "Chorus",
+      "name": "Chorus",
+      "tags": [
+        "Chorus"
+      ]
+    },
+    {
+      "slug": "RotarySpeaker",
+      "name": "Rotary Speaker",
+      "tags": [
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Flanger",
+      "name": "Flanger",
+      "tags": [
+        "Flanger"
+      ]
+    },
+    {
       "slug": "VCF",
       "name": "VCF",
       "tags": [

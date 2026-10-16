@@ -36,6 +36,39 @@ set(NIMBUS_SRC_SOURCES
 set_source_files_properties(${NIMBUS_SRC_SOURCES} PROPERTIES COMPILE_DEFINITIONS
     "HAVE_STDBOOL_H=1;ENABLE_SINC_FAST_CONVERTER;PACKAGE=\"libsamplerate\";VERSION=\"0.2.1\"")
 add_library(surge-mm-dsp STATIC
+    ${NIMBUS_SRC_SOURCES}
+    ${EURORACK}/clouds/dsp/correlator.cc
+    ${EURORACK}/clouds/dsp/granular_processor.cc
+    ${EURORACK}/clouds/dsp/mu_law.cc
+    ${EURORACK}/clouds/dsp/pvoc/frame_transformation.cc
+    ${EURORACK}/clouds/dsp/pvoc/phase_vocoder.cc
+    ${EURORACK}/clouds/dsp/pvoc/stft.cc
+    ${EURORACK}/clouds/resources.cc
+    dsp/lfo_dsp.cpp
+    dsp/delay_dsp.cpp
+    dsp/tuned_delay_plus_dsp.cpp
+    dsp/tuned_delay_dsp.cpp
+    dsp/nimbus_dsp.cpp
+    dsp/reverb_dsp.cpp
+    dsp/reverb2_dsp.cpp
+    dsp/spring_dsp.cpp
+    dsp/combulator_dsp.cpp
+    dsp/resonator_dsp.cpp
+    dsp/vocoder_dsp.cpp
+    dsp/treemonster_dsp.cpp
+    dsp/ringmod_dsp.cpp
+    dsp/ringmod_sine.cpp
+    dsp/frequency_shifter_dsp.cpp
+    dsp/bonsai_dsp.cpp
+    dsp/exciter_dsp.cpp
+    dsp/chow_dsp.cpp
+    dsp/neuron_dsp.cpp
+    dsp/distortion_dsp.cpp
+    dsp/ensemble_dsp.cpp
+    dsp/chorus_dsp.cpp
+    dsp/rotary_dsp.cpp
+    dsp/flanger_dsp.cpp
+    dsp/phaser_dsp.cpp
     dsp/engine.cpp
     dsp/table_data.cpp
     ${TABLE_GENERATED}/Wavetable.cpp

@@ -12,6 +12,30 @@
 #include "quad_lfo_panel.h"
 #include "eg_vca_panel.h"
 #include "filter_panels.h"
+#include "phaser_panel.h"
+#include "flanger_panel.h"
+#include "rotary_panel.h"
+#include "chorus_panel.h"
+#include "ensemble_panel.h"
+#include "distortion_panel.h"
+#include "neuron_panel.h"
+#include "chow_panel.h"
+#include "exciter_panel.h"
+#include "bonsai_panel.h"
+#include "frequency_shifter_panel.h"
+#include "ringmod_panel.h"
+#include "treemonster_panel.h"
+#include "vocoder_panel.h"
+#include "resonator_panel.h"
+#include "combulator_panel.h"
+#include "spring_panel.h"
+#include "nimbus_panel.h"
+#include "tuned_delay_panel.h"
+#include "tuned_delay_plus_panel.h"
+#include "delay_panel.h"
+#include "lfo_panel.h"
+#include "reverb_panel.h"
+#include "reverb2_panel.h"
 #include "unison_panels.h"
 extern "C" void init()
 {
@@ -36,6 +60,30 @@ extern "C" void init()
     register_eg_vca();
     register_filter<surge_mm::FilterModule::VCF>();
     register_filter<surge_mm::FilterModule::Waveshaper>();
+    register_phaser();
+    register_flanger();
+    register_rotary();
+    register_chorus();
+    register_ensemble();
+    register_distortion();
+    register_neuron();
+    register_chow();
+    register_exciter();
+    register_bonsai();
+    register_frequency_shifter();
+    register_ringmod();
+    register_treemonster();
+    register_vocoder();
+    register_resonator();
+    register_combulator();
+    register_spring();
+    register_nimbus();
+    register_tuned_delay();
+    register_tuned_delay_plus();
+    register_delay();
+    register_lfo();
+    register_reverb();
+    register_reverb2();
     register_unison_helper();
     register_unison_expander();
 }
