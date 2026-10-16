@@ -1,12 +1,52 @@
 {
-    "MetaModulePluginMaintainer": "",
-    "MetaModulePluginMaintainerEmail": "",
-    "MetaModulePluginMaintainerUrl": "",
-    "MetaModuleDescription": "",
-    "MetaModuleIncludedModules": [
+  "MetaModulePluginMaintainer": "",
+  "MetaModulePluginMaintainerEmail": "",
+  "MetaModulePluginMaintainerUrl": "",
+  "MetaModuleDescription": "Native Surge DSP with Rack-style panels and dedicated CV controls. Experimental port.",
+  "MetaModuleIncludedModules": [
     {
-      "slug": "VCO",
-      "name": "VCO"
+      "slug": "Classic",
+      "name": "Classic"
+    },
+    {
+      "slug": "Modern",
+      "name": "Modern"
+    },
+    {
+      "slug": "Sine",
+      "name": "Sine"
+    },
+    {
+      "slug": "FM2",
+      "name": "FM2"
+    },
+    {
+      "slug": "FM3",
+      "name": "FM3"
+    },
+    {
+      "slug": "SHNoise",
+      "name": "SHNoise"
+    },
+    {
+      "slug": "Alias",
+      "name": "Alias"
+    },
+    {
+      "slug": "String",
+      "name": "String"
+    },
+    {
+      "slug": "Twist",
+      "name": "Twist"
+    },
+    {
+      "slug": "Wavetable",
+      "name": "Wavetable"
+    },
+    {
+      "slug": "Window",
+      "name": "Window"
     }
-    ]
+  ]
 }

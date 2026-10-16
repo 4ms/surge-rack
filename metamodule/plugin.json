@@ -1,0 +1,87 @@
+{
+  "slug": "SurgeXTNative",
+  "name": "Surge XT Native",
+  "version": "0.1.45",
+  "license": "GPL-3.0-or-later",
+  "brand": "Surge XT Native",
+  "author": "Surge Synth Team and contributors",
+  "modules": [
+    {
+      "slug": "Classic",
+      "name": "Classic",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Modern",
+      "name": "Modern",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Sine",
+      "name": "Sine",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "FM2",
+      "name": "FM2",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "FM3",
+      "name": "FM3",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "SHNoise",
+      "name": "SHNoise",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Alias",
+      "name": "Alias",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "String",
+      "name": "String",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Twist",
+      "name": "Twist",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Wavetable",
+      "name": "Wavetable",
+      "tags": [
+        "Oscillator"
+      ]
+    },
+    {
+      "slug": "Window",
+      "name": "Window",
+      "tags": [
+        "Oscillator"
+      ]
+    }
+  ]
+}
