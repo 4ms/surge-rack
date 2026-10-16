@@ -7,6 +7,12 @@
 
 #include "oscillator_processor.h"
 #include "oscillator_panel.h"
+#include "utility_panels.h"
+#include "modulation_panels.h"
+#include "quad_lfo_panel.h"
+#include "eg_vca_panel.h"
+#include "filter_panels.h"
+#include "unison_panels.h"
 extern "C" void init()
 {
     register_direct_oscillator<surge_mm::Model::Classic>("Classic", "SurgeXTNative/Classic.png");
@@ -21,4 +27,15 @@ extern "C" void init()
     register_direct_oscillator<surge_mm::Model::Wavetable>("Wavetable",
                                                            "SurgeXTNative/Wavetable.png");
     register_direct_oscillator<surge_mm::Model::Window>("Window", "SurgeXTNative/Window.png");
+    register_mixer<false>();
+    register_mixer<true>();
+    register_digital_ring();
+    register_mod_matrix();
+    register_quad_ad();
+    register_quad_lfo();
+    register_eg_vca();
+    register_filter<surge_mm::FilterModule::VCF>();
+    register_filter<surge_mm::FilterModule::Waveshaper>();
+    register_unison_helper();
+    register_unison_expander();
 }

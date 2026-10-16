@@ -50,6 +50,12 @@ add_library(surge-mm-dsp STATIC
     ${EURORACK}/stmlib/dsp/units.cc
     ${EURORACK}/stmlib/dsp/atan.cc
     ${PLAITS_COMPAT}/stmlib/utils/random.cc
+    dsp/filter_dsp.cpp
+    dsp/utility_dsp.cpp
+    dsp/envelope_dsp.cpp
+    dsp/quad_lfo_dsp.cpp
+    dsp/eg_vca_dsp.cpp
+    dsp/unison_dsp.cpp
     ${COMMON}/dsp/oscillators/ClassicOscillator.cpp
     ${COMMON}/dsp/oscillators/SampleAndHoldOscillator.cpp
     ${COMMON}/dsp/oscillators/FM2Oscillator.cpp

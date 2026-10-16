@@ -82,6 +82,175 @@
       "tags": [
         "Oscillator"
       ]
+    },
+    {
+      "slug": "Mixer",
+      "name": "Mixer",
+      "tags": [
+        "Mixer"
+      ]
+    },
+    {
+      "slug": "MixerSlider",
+      "name": "MixerSlider",
+      "tags": [
+        "Mixer"
+      ]
+    },
+    {
+      "slug": "DigitalRingMod",
+      "name": "DigitalRingMod",
+      "tags": [
+        "Ring modulator"
+      ]
+    },
+    {
+      "slug": "ModMatrix",
+      "name": "ModMatrix",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "QuadAD",
+      "name": "QuadAD",
+      "tags": [
+        "Envelope generator"
+      ]
+    },
+    {
+      "slug": "QuadLFO",
+      "name": "QuadLFO",
+      "tags": [
+        "LFO"
+      ]
+    },
+    {
+      "slug": "EGxVCA",
+      "name": "EG x VCA",
+      "tags": [
+        "Envelope generator",
+        "VCA"
+      ]
+    },
+    {
+      "slug": "VCF",
+      "name": "VCF",
+      "tags": [
+        "Filter"
+      ]
+    },
+    {
+      "slug": "Waveshaper",
+      "name": "Waveshaper",
+      "tags": [
+        "Waveshaper"
+      ]
+    },
+    {
+      "slug": "UnisonHelper",
+      "name": "Unison Helper",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "UnisonHelperCVExpander",
+      "name": "Unison CV Expander",
+      "tags": [
+        "Expander"
+      ]
+    },
+    {
+      "slug": "ModMatrixClassic",
+      "name": "Classic CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixModern",
+      "name": "Modern CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixSine",
+      "name": "Sine CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixFM2",
+      "name": "FM2 CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixFM3",
+      "name": "FM3 CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixSHNoise",
+      "name": "SHNoise CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixAlias",
+      "name": "Alias CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixString",
+      "name": "String CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixTwist",
+      "name": "Twist CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixWavetable",
+      "name": "Wavetable CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixWindow",
+      "name": "Window CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixVCF",
+      "name": "VCF CV Depths",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
+      "slug": "ModMatrixWaveshaper",
+      "name": "Waveshaper CV Depths",
+      "tags": [
+        "Utility"
+      ]
     }
   ]
 }
