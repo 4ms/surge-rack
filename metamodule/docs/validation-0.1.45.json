@@ -1,0 +1,55 @@
+{
+  "scope": "Historical frozen 0.1.45 evidence. Current PR tree and intermediate commits have not been rebuilt. Reports and source archives are not embedded here.",
+  "native": {
+    "original_report": "source045-verification.json",
+    "original_report_sha256": "79a4d585ca01dd3271a8f672ce12c66e44f18dfafed5b28e70c843c01e755c83",
+    "recorded_result": {
+      "archive": "SurgeXTNative-0.1.45-source.tar.gz",
+      "archive_sha256": "5224d62debb2323470eae95163657763cbcf4b13db4e203993aceec9205b2176",
+      "arm_elf_sha256": "e7118b380689fe0eb97a8ffdc9fdacecfbdc5a0ee641800f9a1b73f08ee8cfad",
+      "arm_elf_bytes": 4511652,
+      "compiler_discovered_inputs": 758,
+      "all_compiler_inputs_inside_bundle_build_or_standard_toolchain": true,
+      "hardware_tested": false
+    }
+  },
+  "simulator": {
+    "original_report": "source-build-report.json",
+    "original_report_sha256": "ed22c0a81047a8cc25d6855476c3c9db0a6ac7227b46c41c57442009817ddbf4",
+    "recorded_result": {
+      "version": "0.1.45",
+      "source_repositories": 14,
+      "compiled_objects": 647,
+      "tests": {
+        "actual_export_cases": 46,
+        "load_mapping_reload_renders": 92
+      },
+      "compiler": "g++.exe (Rev11, Built by MSYS2 project) 15.2.0",
+      "hardware_tested": false
+    }
+  },
+  "handoff": {
+    "original_report": "source-handoff.json",
+    "original_report_sha256": "156ca690e7b810ab56c1544ccc01fb5b144fbbf3275eef12073d1700b134d6c3",
+    "recorded_result": {
+      "archive": "SurgeHub-0.1.45-reverb-history-source.tar.gz",
+      "archive_bytes": 101472317,
+      "archive_sha256": "b51d72640570c4454d187061fdca3f261425f3baa94f4201ae0ff25db4a3f6b1",
+      "clean_build": {
+        "label": "0.1.45-reverb-history",
+        "repositories": 12,
+        "verified_source_files": 5030,
+        "compiler_discovered_inputs": 1409,
+        "all_compiler_inputs_inside_bundle_build_sdk_or_toolchain": true,
+        "compiler": "g++.exe (Rev11, Built by MSYS2 project) 15.2.0",
+        "plugin_sha256": "56963c238f93925a45988da1ec670afaabd4bd6890b10709f5750bd65728aa2c",
+        "reference_plugin_sha256": "9750193d5f58ae89009554027c0808bd744f0b15afefa5dcf5c91c6e61b32444",
+        "byte_identical_plugin": false,
+        "windows_loadlibrary_passed": true,
+        "hub_suites_passed": 3,
+        "hardware_tested": false,
+        "compiled_units": 233
+      }
+    }
+  }
+}
