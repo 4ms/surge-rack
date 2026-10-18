@@ -5,15 +5,11 @@ Rack, plus 13 destination-specific modulation matrix variants. Oscillators and
 effects expose fixed CV inputs and Rack-style panels. The two Unison wrappers
 use the SDK Rack adapter for expander support.
 
-The current development version is 0.1.47. It includes the Spring Reverb
-optimization measured on hardware: the fixed demo dropped from 121.46% to
-71.34% mean CPU at 48 kHz / 256 samples, with zero overruns in the final tests.
-See the [CPU measurements](hardware/2026-10-18-spring.md) for workload and artifact
-identities; these measurements used development packages, not a full PR rebuild.
+The current development version is 0.1.47, including the Spring Reverb optimization.
 
-For implementation review, start with the [design guide](REVIEW_GUIDE.md),
-[upstream adaptation map](runtime/UPSTREAM_MAP.md) and
-[validation record](VALIDATION.md).
+For implementation review, start with the [design guide](REVIEW_GUIDE.md) and
+[upstream adaptation map](runtime/UPSTREAM_MAP.md). Hardware CPU measurements and
+validation results are in the [pull request description](https://github.com/Ericxgao/surge-rack/pull/1).
 
 ## Building
 
@@ -49,20 +45,10 @@ be patched manually or assigned in Rack and exported again. Group labels are
 static for each helper type. Reverb imports require the matching 0.1.45 Hub
 conversion marker; resend older patches to select the compatibility behavior.
 
-## Existing validation and limits
+## Compatibility and limits
 
-The frozen 0.1.45 source bundles have clean ARM and Hub build evidence, host
-DSP results, and simulator load/control/save-reload coverage for all 46 Rack
-module types. The 0.1.45 hardware sweep measured all 46 fixed native demos;
-Spring was the only overloaded patch. Development 0.1.47 fixes that measured
-case and passes targeted host/audio checks. The current PR organization has
-not received a complete ARM build. See [VALIDATION.md](VALIDATION.md) for artifact
-identities, the targeted PR-source check and the scope of each result.
-
-The remaining review acceptance check is a physical-device Wi-Fi transfer,
-audio and control check, followed by saving and reloading the patch. Most native
-engines support four voices; Unison has 16 slots across four banks.
-
-See [known issues](UPSTREAM_ISSUES.md) for upstream bugs and existing intentional
-behavior deviations. Further fidelity audits and broad hardware profiling are
-follow-up work. Original DSP licenses and attribution remain applicable.
+Most native engines support four voices; Unison has 16 slots across four banks.
+See [known issues](UPSTREAM_ISSUES.md) for upstream bugs and intentional behavior
+deviations. The [pull request](https://github.com/Ericxgao/surge-rack/pull/1) records
+the tested workloads and remaining validation limits. Original DSP licenses and
+attribution remain applicable.

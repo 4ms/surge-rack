@@ -32,6 +32,5 @@ identifies combined/extracted sources and describes the main adaptation areas.
 Consult it when updating pinned dependencies. The map does not certify every
 change as behavior-neutral. Known deviations require separate review.
 
-See [validation scope](../VALIDATION.md): full-package hardware measurements
-identify the development artifacts. The relocated PR Spring sources receive a
-targeted check; the complete PR package has not been rebuilt or device-profiled.
+See the [PR validation summary](https://github.com/Ericxgao/surge-rack/pull/1#validation-and-limits)
+for the relationship between the measured development packages and these sources.

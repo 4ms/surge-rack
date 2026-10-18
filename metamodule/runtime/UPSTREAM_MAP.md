@@ -37,7 +37,7 @@ revisions pinned by that checkout:
   Spring 0.1.47 prepares reflection tap interpolation at control rate and caches
   unchanged coefficients, invalidating them during preparation. Its host SIMD
   adapter stores native vector values to avoid ARM aggregate copies. See the
-  [measured optimization](../hardware/2026-10-18-spring.md).
+  [CPU measurements in the PR](https://github.com/Ericxgao/surge-rack/pull/1#cpu-by-module-with-spring-optimization).
   Review capacities and boundary/history behavior alongside the algorithms.
 - **Defined initial state and bounds:** SST coefficient scratch arrays are
   initialized; several dependencies add bounds or finite-domain handling.

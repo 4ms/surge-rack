@@ -16,7 +16,7 @@ The desktop Hub translates Rack patches into this native module vocabulary.
 | Panel and registration | [oscillator_panel.h](oscillator_panel.h), [plugin.cpp](plugin.cpp) | Stable IDs, stepped controls and model registration |
 | Modulation helpers | [modulation_processor.h](modulation_processor.h), [modulation_panels.h](modulation_panels.h) | Depth scaling, polyphonic summation and destination labels |
 | Tables and expanders | [table_oscillator.h](table_oscillator.h), [unison_processor.h](unison_processor.h) | Ownership across callbacks and bank/expander coordination |
-| Build and evidence | [CMakeLists.txt](CMakeLists.txt), [validation](VALIDATION.md) | Dependencies, package contents and the limits of existing evidence |
+| Build and evidence | [CMakeLists.txt](CMakeLists.txt), [PR validation](https://github.com/Ericxgao/surge-rack/pull/1#validation-and-limits) | Dependencies, package contents and the limits of existing evidence |
 
 The commit sequence introduces upstream adaptations, the DSP boundary, an
 oscillator plugin, control/filter/expander modules, and the remaining effects.
