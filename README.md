@@ -2,9 +2,6 @@
 
 This repository builds SurgeXT Rack modules.
 
-The experimental MetaModule port, build instructions and current coverage are
-documented in [metamodule/README.md](metamodule/README.md).
-
 It has tags for each official release (including tags for the prior Surge 1.7
 releases) as well as the current beta on the main branch.
 

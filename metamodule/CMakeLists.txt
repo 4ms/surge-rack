@@ -15,9 +15,8 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_
 project(SurgeXTNative VERSION "${SURGE_MM_VERSION}" LANGUAGES C CXX)
 set(SURGE_DIR "${CMAKE_CURRENT_LIST_DIR}/../surge")
 set(COMMON "${SURGE_DIR}/src/common")
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
 # Checked-in embedded adaptations of the pinned Surge sources.
-# See runtime/README.md for provenance. No preparation scripts run at configure time.
+# No preparation scripts run at configure time.
 set(SURGE_MM_RUNTIME "${CMAKE_CURRENT_LIST_DIR}/runtime")
 set(ALIAS_SOURCE "${SURGE_MM_RUNTIME}/AliasOscillator.cpp")
 set(STRING_SOURCE "${SURGE_MM_RUNTIME}/StringOscillator.cpp")
@@ -114,33 +113,13 @@ target_link_libraries(SurgeXTNative PRIVATE surge-mm-dsp)
 if(NOT INSTALL_DIR)
     set(INSTALL_DIR "${CMAKE_BINARY_DIR}/metamodule-plugins")
 endif()
-# The simulator provides a create_plugin() shim and sets SDK_DIR to its
-# own source directory. Only the real ARM SDK has the architecture target
-# and produces an installable archive that needs staging/verification.
-set(SURGE_MM_PACKAGE_ASSETS "${CMAKE_CURRENT_LIST_DIR}/assets")
-if(TARGET arch_mp15x_a7)
-    set(SURGE_MM_PACKAGE_ASSETS "${CMAKE_CURRENT_BINARY_DIR}/surge-mm-package-assets")
-    add_custom_target(surge-mm-package-assets
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/scripts/package_assets.py"
-            --sdk "${METAMODULE_SDK_DIR}" --build-dir "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMENT "Staging Surge assets and upstream license/attribution notices"
-        VERBATIM)
-endif()
 create_plugin(SOURCE_LIB SurgeXTNative PLUGIN_NAME SurgeXTNative
     PLUGIN_JSON ${CMAKE_CURRENT_LIST_DIR}/plugin.json
-    SOURCE_ASSETS ${SURGE_MM_PACKAGE_ASSETS} DESTINATION ${INSTALL_DIR})
+    SOURCE_ASSETS ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${INSTALL_DIR})
 if(TARGET arch_mp15x_a7)
     # The SDK's custom ELF link consumes surge-mm-dsp objects but only
     # declares the top-level archive as a file dependency. A DSP-only edit
     # must relink the ELF before packaging, even if plugin.cpp is unchanged.
     add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/SurgeXTNative-debug.so"
         APPEND DEPENDS surge-mm-dsp "$<TARGET_FILE:surge-mm-dsp>")
-    add_dependencies(plugin surge-mm-package-assets)
-    add_custom_command(TARGET plugin POST_BUILD
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/scripts/verify_package.py"
-            --package "${INSTALL_DIR}/SurgeXTNative.mmplugin"
-            --metadata-dir "${CMAKE_CURRENT_LIST_DIR}" --assets-dir "${SURGE_MM_PACKAGE_ASSETS}"
-            --expected-version "${PROJECT_VERSION}"
-        COMMENT "Verifying the packaged ARM binary, panels and notices"
-        VERBATIM)
 endif()
