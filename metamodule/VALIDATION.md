@@ -79,7 +79,7 @@ The latest physical-device Wi-Fi/audio/control/save-reload smoke check remains
 unverified. Older device playback does not qualify this exact revision.
 The fixed native workload CPU results above are measured. RAM headroom,
 per-helper scheduling latency, exhaustive parameter combinations and remaining
-lifecycle fidelity work (including Resonator) remain open. The port remains a draft.
+lifecycle fidelity work (including Resonator) remain open. The port remains experimental.
 
 To check a fresh PR checkout, initialize its pinned submodules and build with
 the commands in [README.md](README.md), using a separate SDK checkout. Compare
