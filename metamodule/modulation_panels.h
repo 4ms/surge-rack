@@ -216,12 +216,50 @@ inline void register_mod_matrix()
         knob.display_mult = 1600;
         knob.display_offset = -800;
     }
+    // Nimbus depth units follow the Rack mode at export time. Only the
+    // readout changes: the matrix still produces the same volts per volt.
+    static std::array<std::array<Element, 61>, 5> nimbus_elements;
+    for (unsigned mode = 0; mode < 5; ++mode)
+    {
+        nimbus_elements[mode] = elements;
+        for (unsigned target = mode == 4 ? 0 : 2; target < (mode == 4 ? 4 : 8); ++target)
+        {
+            float span = 100;
+            if (mode < 4)
+            {
+                if (target == 4)
+                    span = 96;
+                if (target == 5 && (mode == 0 || mode == 3))
+                    span = 200;
+                if (target == 6 && mode != 0)
+                    span = 200;
+            }
+            for (unsigned source = 0; source < 4; ++source)
+            {
+                auto &knob = std::get<Knob>(nimbus_elements[mode][8 + target * 4 + source]);
+                // Exported raw depth d is stored as 0.5 + d / 8.
+                knob.display_mult = span * 8;
+                knob.display_offset = -span * 4;
+                knob.units = mode < 4 && target == 4 ? "semitones" : "%";
+            }
+        }
+    }
     for (auto destination : surge_matrix_profiles)
     {
         const auto slug = std::string("ModMatrix") + destination;
         auto destination_info = info;
         if (std::string_view(destination) == "String")
             destination_info.elements = string_elements;
+        const std::string_view name(destination);
+        if (name.starts_with("Nimbus"))
+        {
+            unsigned mode = name.ends_with("Part2")    ? 4
+                            : name == "NimbusPitch"    ? 1
+                            : name == "NimbusLoop"     ? 2
+                            : name == "NimbusSpectral" ? 3
+                                                       : 0;
+            destination_info.elements = nimbus_elements[mode];
+        }
         register_module<SurgeModMatrix>("SurgeXTNative", slug.c_str(), destination_info,
                                         "SurgeXTNative/ModMatrix.png");
     }
