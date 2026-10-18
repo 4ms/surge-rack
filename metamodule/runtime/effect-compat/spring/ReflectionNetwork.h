@@ -54,8 +54,10 @@ template <bool Compact = true> class ReflectionNetwork
         for (int i = 0; i < 4; ++i)
         {
             auto delaySamples = baseDelaysSec[i] * reverbSize * fs;
-            delayTimes[i] = delaySamples;
-            delays[i].setDelay(delaySamples);
+            if constexpr (Compact)
+                taps[i] = SpringReflectionDelay::makeTap(delaySamples);
+            else
+                delays[i].setDelay(delaySamples);
             feedbackArr[i] = std::pow(0.001f, delaySamples / (t60 * fs));
             feedbackArr[i] *= 0.23f * mix * (0.735f + 0.235f * reverbSize);
         }
@@ -70,8 +72,10 @@ template <bool Compact = true> class ReflectionNetwork
     {
         float output alignas(16)[4];
         for (int i = 0; i < 4; ++i)
-            output[i] =
-                Compact ? delays[0].popSample(ch, delayTimes[i], false) : delays[i].popSample(ch);
+            if constexpr (Compact)
+                output[i] = delays[0].readTap(ch, taps[i]);
+            else
+                output[i] = delays[i].popSample(ch);
         if constexpr (Compact)
             delays[0].incrementReadPointer(ch);
 
@@ -95,11 +99,13 @@ template <bool Compact = true> class ReflectionNetwork
   private:
     float fs = 48000.0f;
 
-    using ReflectionDelay = DelayLine<float, chowdsp::DelayLineInterpolationTypes::Lagrange3rd>;
+    using ReflectionDelay =
+        std::conditional_t<Compact, SpringReflectionDelay,
+                           DelayLine<float, chowdsp::DelayLineInterpolationTypes::Lagrange3rd>>;
     std::array<ReflectionDelay, 4> delays{ReflectionDelay{1 << 18}, ReflectionDelay{1 << 18},
                                           ReflectionDelay{1 << 18}, ReflectionDelay{1 << 18}};
 
-    float delayTimes[4]{};
+    std::array<SpringReflectionDelay::Tap, 4> taps{};
     __m128 feedback;
 
     ShelfFilter<> shelfFilter;

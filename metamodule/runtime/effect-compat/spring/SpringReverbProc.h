@@ -64,6 +64,9 @@ template <bool Compact = true, bool Guard = true> class SpringReverbProc
     using APFCascade = std::array<SchroederAllpass<VecType, 2, Compact>, allpassStages>;
     APFCascade vecAPFs;
 
+    bool coefficientsValid{false};
+    Params previousParams{};
+    float cachedT60{}, cachedBaseDelay{};
     bool nativeReset{true};
     unsigned seed{1};
     std::minstd_rand generator{1};
@@ -137,6 +140,7 @@ template <bool Compact, bool Guard>
 void SpringReverbProc<Compact, Guard>::prepare(float sampleRate, int samplesPerBlock)
 {
     fs = sampleRate;
+    coefficientsValid = false;
     if (nativeReset)
     {
         generator.seed(seed);
@@ -194,33 +198,56 @@ void SpringReverbProc<Compact, Guard>::setParams(
         shakeCounter = -1;
     }
 
-    constexpr float lowT60 = 0.5f;
-    constexpr float highT60 = 4.5f;
-    const auto decayCorr = 0.7f * (1.0f - params.size * params.size);
-    float t60Seconds = lowT60 * std::pow(highT60 / lowT60, 0.95f * params.decay - decayCorr);
+    const bool sizeChanged = !coefficientsValid || params.size != previousParams.size;
+    const bool decayChanged = sizeChanged || params.decay != previousParams.decay;
+    const bool dampingChanged = !coefficientsValid || params.damping != previousParams.damping;
+    float t60Seconds, delaySamples;
+    if (!Compact || decayChanged)
+    {
+        constexpr float lowT60 = 0.5f;
+        constexpr float highT60 = 4.5f;
+        const auto decayCorr = 0.7f * (1.0f - params.size * params.size);
+        t60Seconds = lowT60 * std::pow(highT60 / lowT60, 0.95f * params.decay - decayCorr);
 
-    float delaySamples = 1000.0f + std::pow(params.size * 0.099f, 1.0f) * fs;
+        delaySamples = 1000.0f + std::pow(params.size * 0.099f, 1.0f) * fs;
+
+        cachedT60 = t60Seconds;
+        cachedBaseDelay = delaySamples;
+    }
+    else
+    {
+        t60Seconds = cachedT60;
+        delaySamples = cachedBaseDelay;
+    }
     chaosSmooth.setTargetValue(urng01() * delaySamples * 0.07f);
     delaySamples += std::pow(params.chaos, 3.0f) * chaosSmooth.skip(numSamples);
     delay.setDelay(delaySamples);
 
     feedbackGain = std::pow(0.001f, delaySamples / (t60Seconds * fs));
 
-    auto apfG = 0.5f - 0.4f * params.spin;
-    float apfGVec alignas(16)[4] = {apfG, -apfG, apfG, -apfG};
-    VecType apfGVecAsVecType = 0;
-    for (int i = 0; i < 4; ++i)
-        apfGVecAsVecType[i] = apfGVec[i];
-    for (auto &apf : vecAPFs)
-        apf.setParams(msToSamples(0.35f + 3.0f * params.size), apfGVecAsVecType);
-
-    constexpr float dampFreqLow = 4000.0f;
-    constexpr float dampFreqHigh = 18000.0f;
-    auto dampFreq = dampFreqLow * std::pow(dampFreqHigh / dampFreqLow, 1.0f - params.damping);
-    lpf.setCutoffFrequency(dampFreq);
-
+    if (!Compact || sizeChanged || params.spin != previousParams.spin)
+    {
+        auto apfG = 0.5f - 0.4f * params.spin;
+        float apfGVec alignas(16)[4] = {apfG, -apfG, apfG, -apfG};
+        VecType apfGVecAsVecType = 0;
+        for (int i = 0; i < 4; ++i)
+            apfGVecAsVecType[i] = apfGVec[i];
+        for (auto &apf : vecAPFs)
+            apf.setParams(msToSamples(0.35f + 3.0f * params.size), apfGVecAsVecType);
+    }
+    if (!Compact || dampingChanged)
+    {
+        constexpr float dampFreqLow = 4000.0f;
+        constexpr float dampFreqHigh = 18000.0f;
+        auto dampFreq = dampFreqLow * std::pow(dampFreqHigh / dampFreqLow, 1.0f - params.damping);
+        lpf.setCutoffFrequency(dampFreq);
+    }
     auto reflSkew = 0.95f * params.reflections * params.reflections;
-    reflectionNetwork.setParams(params.size, t60Seconds, reflSkew, params.damping);
+    if (!Compact || decayChanged || dampingChanged ||
+        params.reflections != previousParams.reflections)
+        reflectionNetwork.setParams(params.size, t60Seconds, reflSkew, params.damping);
+    previousParams = params;
+    coefficientsValid = true;
 }
 
 template <bool Compact, bool Guard>

@@ -39,25 +39,31 @@ inline float vSum(__m128 x)
 struct SpringVector
 {
     using value_type = float;
-    float lane[4]{};
-    SpringVector() = default;
-    SpringVector(float x)
+    // A native register avoids GCC's ARM aggregate copies through scalar
+    // registers and the stack for every operator. The delay's byte storage
+    // guarantees float alignment only; retain unaligned-safe vector accesses.
+    typedef __m128 Register __attribute__((aligned(4)));
+    Register value;
+    SpringVector() : value(_mm_setzero_ps())
     {
-        std::fill_n(lane, 4, x);
+    }
+    SpringVector(float x) : value(_mm_set1_ps(x))
+    {
+    }
+    explicit SpringVector(__m128 x) : value(x)
+    {
     }
     static SpringVector fromRawArray(const float *p)
     {
-        SpringVector r;
-        _mm_storeu_ps(r.lane, _mm_loadu_ps(p));
-        return r;
+        return SpringVector(_mm_loadu_ps(p));
     }
     void copyToRawArray(float *p) const
     {
-        _mm_storeu_ps(p, _mm_loadu_ps(lane));
+        _mm_storeu_ps(p, value);
     }
     float &operator[](size_t i)
     {
-        return lane[i];
+        return value[i];
     }
     SpringVector &operator+=(SpringVector b)
     {
@@ -66,24 +72,56 @@ struct SpringVector
     }
     friend SpringVector operator+(SpringVector a, SpringVector b)
     {
-        SpringVector r;
-        _mm_storeu_ps(r.lane, _mm_add_ps(_mm_loadu_ps(a.lane), _mm_loadu_ps(b.lane)));
-        return r;
+        return SpringVector(_mm_add_ps(a.value, b.value));
     }
     friend SpringVector operator-(SpringVector a, SpringVector b)
     {
-        SpringVector r;
-        _mm_storeu_ps(r.lane, _mm_sub_ps(_mm_loadu_ps(a.lane), _mm_loadu_ps(b.lane)));
-        return r;
+        return SpringVector(_mm_sub_ps(a.value, b.value));
     }
     friend SpringVector operator*(SpringVector a, SpringVector b)
     {
-        SpringVector r;
-        _mm_storeu_ps(r.lane, _mm_mul_ps(_mm_loadu_ps(a.lane), _mm_loadu_ps(b.lane)));
-        return r;
+        return SpringVector(_mm_mul_ps(a.value, b.value));
     }
 };
 static_assert(sizeof(SpringVector) == 16 && alignof(SpringVector) == alignof(float));
+// Prepare reflection interpolation at control rate. Retain Chow's full ring,
+// pointer convention and arithmetic order, including zero-delay history.
+class SpringReflectionDelay : public DelayLine<float, DelayLineInterpolationTypes::Lagrange3rd>
+{
+    using Base = DelayLine<float, DelayLineInterpolationTypes::Lagrange3rd>;
+
+  public:
+    using Base::Base;
+    struct Tap
+    {
+        int offset{};
+        float fraction{}, c1{}, c2{}, c3{}, c4{};
+    };
+    static Tap makeTap(float samples)
+    {
+        Tap t;
+        samples = std::clamp(samples, 0.f, float(1 << 18));
+        t.offset = int(std::floor(samples));
+        t.fraction = samples - float(t.offset);
+        if (t.offset >= 1)
+        {
+            ++t.fraction;
+            --t.offset;
+        }
+        const auto d1 = t.fraction - 1.f, d2 = t.fraction - 2.f, d3 = t.fraction - 3.f;
+        t.c1 = -d1 * d2 * d3 / 6.f;
+        t.c2 = d2 * d3 * .5f;
+        t.c3 = -d1 * d3 * .5f;
+        t.c4 = d1 * d2 / 6.f;
+        return t;
+    }
+    float readTap(int channel, const Tap &t) const noexcept
+    {
+        const auto *p =
+            this->bufferData.getChannelPointer(channel) + this->readPos[channel] + t.offset;
+        return p[0] * t.c1 + t.fraction * (p[1] * t.c2 + p[2] * t.c3 + p[3] * t.c4);
+    }
+};
 // Bounds include the maximum parameter values at the highest accepted rate.
 static_assert((1000 + .099 * 192000) * 1.07 < 32768);
 // Reflection taps retain the original full ring, with one shared history.

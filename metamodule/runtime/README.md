@@ -1,7 +1,9 @@
 # Embedded runtime sources
 
-These are the production C++ source/header adaptations used by the frozen
-0.1.45 ARM build. They are checked in directly so the compiler inputs are
+These production C++ source/header adaptations are based on the frozen
+0.1.45 ARM build, with the measured 0.1.47 Spring optimization applied to
+`spring/ReflectionNetwork.h` and `spring/SpringReverbProc.h` under `effect-compat`.
+They are checked in directly so the compiler inputs are
 visible and configuring the plugin needs no source-generation step.
 The CMake build still uses the pinned upstream submodules for unmodified DSP.
 
@@ -30,5 +32,6 @@ identifies combined/extracted sources and describes the main adaptation areas.
 Consult it when updating pinned dependencies. The map does not certify every
 change as behavior-neutral. Known deviations require separate review.
 
-See [validation scope](../VALIDATION.md): the earlier executable evidence
-predates relocation of these files into the source tree.
+See [validation scope](../VALIDATION.md): full-package hardware measurements
+identify the development artifacts. The relocated PR Spring sources receive a
+targeted check; the complete PR package has not been rebuilt or device-profiled.

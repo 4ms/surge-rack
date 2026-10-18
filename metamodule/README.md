@@ -5,7 +5,11 @@ Rack, plus 13 destination-specific modulation matrix variants. Oscillators and
 effects expose fixed CV inputs and Rack-style panels. The two Unison wrappers
 use the SDK Rack adapter for expander support.
 
-The review version is 0.1.45. Hardware qualification is still pending.
+The current development version is 0.1.47. It includes the Spring Reverb
+optimization measured on hardware: the fixed demo dropped from 121.46% to
+71.34% mean CPU at 48 kHz / 256 samples, with zero overruns in the final tests.
+See the [CPU measurements](hardware/2026-10-18-spring.md) for workload and artifact
+identities; these measurements used development packages, not a full PR rebuild.
 
 For implementation review, start with the [design guide](REVIEW_GUIDE.md),
 [upstream adaptation map](runtime/UPSTREAM_MAP.md) and
@@ -49,9 +53,11 @@ conversion marker; resend older patches to select the compatibility behavior.
 
 The frozen 0.1.45 source bundles have clean ARM and Hub build evidence, host
 DSP results, and simulator load/control/save-reload coverage for all 46 Rack
-module types. The current PR organization has received static checks only;
-it has not been rebuilt. See [VALIDATION.md](VALIDATION.md) for artifact
-identities and the scope of each result.
+module types. The 0.1.45 hardware sweep measured all 46 fixed native demos;
+Spring was the only overloaded patch. Development 0.1.47 fixes that measured
+case and passes targeted host/audio checks. The current PR organization has
+not received a complete ARM build. See [VALIDATION.md](VALIDATION.md) for artifact
+identities, the targeted PR-source check and the scope of each result.
 
 The remaining review acceptance check is a physical-device Wi-Fi transfer,
 audio and control check, followed by saving and reloading the patch. Most native

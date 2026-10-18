@@ -34,6 +34,10 @@ revisions pinned by that checkout:
 - **Block/storage changes:** Chorus refreshes interpolation padding over
   eight-sample writes. Neuron omits unused delay channels. Reverb2 and Spring
   adapt delay storage; Spring also shares identical reflection histories.
+  Spring 0.1.47 prepares reflection tap interpolation at control rate and caches
+  unchanged coefficients, invalidating them during preparation. Its host SIMD
+  adapter stores native vector values to avoid ARM aggregate copies. See the
+  [measured optimization](../hardware/2026-10-18-spring.md).
   Review capacities and boundary/history behavior alongside the algorithms.
 - **Defined initial state and bounds:** SST coefficient scratch arrays are
   initialized; several dependencies add bounds or finite-domain handling.
