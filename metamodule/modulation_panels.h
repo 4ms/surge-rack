@@ -206,10 +206,23 @@ inline void register_mod_matrix()
                         .indices = indices};
     register_module<SurgeModMatrix>("SurgeXTNative", "ModMatrix", info,
                                     "SurgeXTNative/ModMatrix.png");
+    // Rack String Stiffness spans -100..100%, so full modulation depth is
+    // 200%. The exporter stores that depth as 0.625 (0.5 V/V through this
+    // matrix). Change only the readout; saved values and CV gain stay intact.
+    static auto string_elements = elements;
+    for (unsigned source = 0; source < 4; ++source)
+    {
+        auto &knob = std::get<Knob>(string_elements[8 + 7 * 4 + source]);
+        knob.display_mult = 1600;
+        knob.display_offset = -800;
+    }
     for (auto destination : surge_matrix_profiles)
     {
         const auto slug = std::string("ModMatrix") + destination;
-        register_module<SurgeModMatrix>("SurgeXTNative", slug.c_str(), info,
+        auto destination_info = info;
+        if (std::string_view(destination) == "String")
+            destination_info.elements = string_elements;
+        register_module<SurgeModMatrix>("SurgeXTNative", slug.c_str(), destination_info,
                                         "SurgeXTNative/ModMatrix.png");
     }
 }
