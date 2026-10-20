@@ -17,6 +17,7 @@ ignore/
 
 # Local development notes
 *.md
+!**/docs/*.md
 
 # Local generation and verification tools
 /metamodule/scripts/
