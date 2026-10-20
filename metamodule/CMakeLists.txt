@@ -18,9 +18,6 @@ set(COMMON "${SURGE_DIR}/src/common")
 # Checked-in embedded adaptations of the pinned Surge sources.
 # No preparation scripts run at configure time.
 set(SURGE_MM_RUNTIME "${CMAKE_CURRENT_LIST_DIR}/runtime")
-set(ALIAS_SOURCE "${SURGE_MM_RUNTIME}/AliasOscillator.cpp")
-set(STRING_SOURCE "${SURGE_MM_RUNTIME}/StringOscillator.cpp")
-set(TWIST_SOURCE "${SURGE_MM_RUNTIME}/TwistOscillator.cpp")
 set(EURORACK "${SURGE_DIR}/libs/eurorack/eurorack")
 set(TABLE_GENERATED "${SURGE_MM_RUNTIME}/table-generated")
 set(EFFECT_COMPAT "${SURGE_MM_RUNTIME}/effect-compat")
@@ -73,9 +70,9 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/chowdsp/exciter/LevelDetector.cpp
     ${TABLE_GENERATED}/table_resources.cpp
     ${COMMON}/dsp/oscillators/WavetableOscillator.cpp
-    ${ALIAS_SOURCE}
-    ${STRING_SOURCE}
-    ${TWIST_SOURCE}
+    ${COMMON}/dsp/oscillators/AliasOscillator.cpp
+    ${COMMON}/dsp/oscillators/StringOscillator.cpp
+    ${COMMON}/dsp/oscillators/TwistOscillator.cpp
     ${PLAITS_SOURCES}
     ${EURORACK}/plaits/resources.cc
     ${EURORACK}/stmlib/dsp/units.cc

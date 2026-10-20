@@ -13,6 +13,13 @@
 #include <random>
 #include "sst/basic-blocks/tables/SincTableProvider.h"
 #include "basic_dsp.h"
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <cstdio>
+#ifndef TXT_SIZE
+#define TXT_SIZE 256
+#endif
 namespace Tunings
 {
 constexpr double MIDI_0_FREQ = 8.175798915643707;
@@ -76,6 +83,35 @@ struct ParameterDynamicNameFunction
     virtual const char *getName(const Parameter *) const = 0;
     virtual ~ParameterDynamicNameFunction() = default;
 };
+// UI-only hooks referenced by Alias/Twist init_ctrltypes; never called on MetaModule.
+struct ParameterDynamicBoolFunction
+{
+    virtual bool getValue(const Parameter *p) const = 0;
+};
+struct ParameterDynamicDeactivationFunction : ParameterDynamicBoolFunction
+{
+    virtual Parameter *getPrimaryDeactivationDriver(const Parameter *) const { return nullptr; }
+};
+struct ParameterExternalFormatter : ParamUserData
+{
+    virtual bool formatValue(const Parameter *, float, char *, int) const = 0;
+    virtual bool formatAltValue(const Parameter *, float, char *txt, int) const { txt[0] = 0; return true; }
+    virtual bool stringToValue(const Parameter *, const char *, float &) const = 0;
+};
+struct ParameterDiscreteIndexRemapper : ParamUserData
+{
+    virtual int remapStreamedIndexToDisplayIndex(int i) const = 0;
+    virtual std::string nameAtStreamedIndex(int i) const = 0;
+    virtual bool hasGroupNames() const { return false; }
+    virtual std::string groupNameAtStreamedIndex(int) const { return ""; }
+    virtual bool sortGroupNames() const { return true; }
+    virtual bool useRemappedOrderingForGroupsIfNotSorted() const { return false; }
+    virtual bool supportsTotalIndexOrdering() const { return false; }
+    virtual const std::vector<int> totalIndexOrdering() const { return {}; }
+};
+enum osc_type { ot_twist = 10 };
+struct SurgeStorage;
+namespace Surge::Memory { struct SurgeMemoryPools; }
 struct Parameter
 {
     pdata val{}, val_min{}, val_max{}, val_default{};
@@ -84,6 +120,10 @@ struct Parameter
     ctrltypes ctrltype{ct_percent};
     const char *name{""};
     ParameterDynamicNameFunction *dynamicName{};
+    ParameterDynamicBoolFunction *dynamicBipolar{};
+    ParameterDynamicDeactivationFunction *dynamicDeactivation{};
+    SurgeStorage *storage{};
+    int scene{1}, ctrlgroup_entry{};
     void set_user_data(ParamUserData *)
     {
     }
@@ -242,7 +282,7 @@ struct OscillatorStorage : ParamUserData
 {
     WavetableView wt;
     std::array<Parameter, 7> p{};
-    Parameter retrigger;
+    Parameter retrigger, type;
     struct
     {
         int nData{};
@@ -256,9 +296,21 @@ struct SurgeStorage
     struct Patch
     {
         Parameter character;
+        // Alias "Memory From..." sources; never selected on MetaModule (engine maps them out).
+        inline static const uint8_t scenedata[256]{}, stepsequences[256]{};
+        struct DawExtra { uint8_t bytes[256]; };
+        inline static const DawExtra dawExtraState{};
+        struct Scene { OscillatorStorage osc[3]; };
+        inline static Scene scene[2]{};
     } patch;
+    // Tuning: MetaModule is always 12-TET.
+    enum TuningApplicationMode { RETUNE_ALL = 0, RETUNE_MIDI_ONLY = 1 } tuningApplicationMode{RETUNE_MIDI_ONLY};
+    void *oddsound_mts_client{};
+    bool oddsound_mts_active_as_client{}, isStandardTuning{true};
+    struct { double logScaledFrequencyForMidiNote(int) const { return 0; } } currentTuning;
     uint32_t random_state{0x13579bdf};
     WavetableView WindowWT;
+    Surge::Memory::SurgeMemoryPools *memoryPools{};
     int16_t *sinctableI16{};
     float *sinctable{};
     float (*audio_in)[64]{};

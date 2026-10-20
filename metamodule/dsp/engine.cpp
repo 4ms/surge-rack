@@ -12,8 +12,12 @@
 #include "SineOscillator.h"
 #include "ClassicOscillator.h"
 #include "SampleAndHoldOscillator.h"
+#include "SurgeMemoryPools.h"
+#include "plaits/dsp/voice.h"
 #include "sst/filters/HalfRateFilter.h"
+#include <cstring>
 #include <memory>
+#include <new>
 // Base methods from Surge Oscillator.cpp; its full factory pulls in the synth.
 Oscillator::Oscillator(SurgeStorage *s, OscillatorStorage *o, pdata *p)
     : storage(s), oscdata(o), localcopy(p), master_osc(nullptr), drift(0), ticker(0)
@@ -22,6 +26,27 @@ Oscillator::Oscillator(SurgeStorage *s, OscillatorStorage *o, pdata *p)
 Oscillator::~Oscillator() = default;
 namespace surge_mm
 {
+namespace
+{
+Surge::Memory::SurgeMemoryPools string_delay_pool;
+// The engine reuses one Twist across resets and sample-rate changes, where Rack respawns it.
+// Rebuild the resampler for the current rate and clear the Plaits voice and its shared RAM.
+struct NativeTwistOscillator : TwistOscillator
+{
+    using TwistOscillator::TwistOscillator;
+    void init(float pitch, bool is_display = false, bool nonzero_drift = true) override
+    {
+        using Resampler = sst::basic_blocks::dsp::LanczosResampler<BLOCK_SIZE>;
+        lancRes->~Resampler();
+        new (lancRes.get()) Resampler(48000, storage->dsamplerate_os);
+        voice->~Voice();
+        std::memset(static_cast<void *>(voice.get()), 0, sizeof(plaits::Voice));
+        new (voice.get()) plaits::Voice();
+        std::memset(shared_buffer, 0, 16384);
+        TwistOscillator::init(pitch, is_display, nonzero_drift);
+    }
+};
+} // namespace
 struct OscillatorExtras
 {
     std::array<float, alias_option_count> options{};
@@ -71,7 +96,7 @@ struct Engine
             oscillator = std::make_unique<WindowOscillator>(&storage, &oscdata, local.data());
             break;
         case Model::Twist:
-            oscillator = std::make_unique<TwistOscillator>(&storage, &oscdata, local.data());
+            oscillator = std::make_unique<NativeTwistOscillator>(&storage, &oscdata, local.data());
             break;
         case Model::String:
             oscillator = std::make_unique<StringOscillator>(&storage, &oscdata, local.data());
@@ -108,10 +133,12 @@ struct Engine
         }
         if (m == Model::String)
         {
+            // Allocate the delay lines here so init() never allocates on the audio thread;
+            // the destructor hands them back to the pool.
             auto *string = static_cast<StringOscillator *>(oscillator.get());
-            string->ownDelayLines = true;
+            storage.memoryPools = &string_delay_pool;
             for (auto &line : string->delayLine)
-                line = new SSESincDelayLine<16384>(storage.sinctable);
+                line = string_delay_pool.stringDelayLines.getItem(storage.sinctable);
             oscdata.p[6].deform_type = StringOscillator::filter_compensate;
             extra->options = {0, 1, 1, 0, 0, 0, 0, .5f, 1};
         }
