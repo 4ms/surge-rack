@@ -16,10 +16,18 @@ project(SurgeXTNative VERSION "${SURGE_MM_VERSION}" LANGUAGES C CXX)
 set(SURGE_DIR "${CMAKE_CURRENT_LIST_DIR}/../surge")
 set(COMMON "${SURGE_DIR}/src/common")
 # Checked-in embedded adaptations of the pinned Surge sources.
-# No preparation scripts run at configure time.
 set(SURGE_MM_RUNTIME "${CMAKE_CURRENT_LIST_DIR}/runtime")
 set(EURORACK "${SURGE_DIR}/libs/eurorack/eurorack")
-set(TABLE_GENERATED "${SURGE_MM_RUNTIME}/table-generated")
+# The default wavetable and the Window oscillator's table, embedded from surge/resources.
+set(TABLE_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/table_resources.cpp")
+set(TABLE_FILES
+    "${SURGE_DIR}/resources/data/wavetables/Basic/Sine To Sawtooth.wt"
+    "${SURGE_DIR}/resources/surge-shared/windows.wt")
+add_custom_command(OUTPUT "${TABLE_RESOURCES}"
+    COMMAND ${CMAKE_COMMAND} -DSURGE_DIR=${SURGE_DIR} -DOUT=${TABLE_RESOURCES}
+        -P ${CMAKE_CURRENT_LIST_DIR}/cmake/embed_tables.cmake
+    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmake/embed_tables.cmake ${TABLE_FILES}
+    VERBATIM)
 set(EFFECT_COMPAT "${SURGE_MM_RUNTIME}/effect-compat")
 file(GLOB_RECURSE PLAITS_SOURCES CONFIGURE_DEPENDS "${EURORACK}/plaits/dsp/*.cc")
 set(NIMBUS_SRC_SOURCES
@@ -68,7 +76,7 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/Wavetable.cpp
     ${COMMON}/dsp/oscillators/WindowOscillator.cpp
     ${COMMON}/dsp/effects/chowdsp/exciter/LevelDetector.cpp
-    ${TABLE_GENERATED}/table_resources.cpp
+    ${TABLE_RESOURCES}
     ${COMMON}/dsp/oscillators/WavetableOscillator.cpp
     ${COMMON}/dsp/oscillators/AliasOscillator.cpp
     ${COMMON}/dsp/oscillators/StringOscillator.cpp
