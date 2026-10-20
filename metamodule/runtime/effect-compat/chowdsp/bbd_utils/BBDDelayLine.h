@@ -28,7 +28,7 @@
 #include <numeric>
 #include <vector>
 
-#include "BBDFilterBank.h"
+#include "chowdsp/bbd_utils/BBDFilterBank.h"
 
 template <size_t STAGES> class BBDDelayLine
 {

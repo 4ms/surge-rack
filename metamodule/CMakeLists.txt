@@ -22,9 +22,7 @@ set(ALIAS_SOURCE "${SURGE_MM_RUNTIME}/AliasOscillator.cpp")
 set(STRING_SOURCE "${SURGE_MM_RUNTIME}/StringOscillator.cpp")
 set(TWIST_SOURCE "${SURGE_MM_RUNTIME}/TwistOscillator.cpp")
 set(EURORACK "${SURGE_DIR}/libs/eurorack/eurorack")
-set(PLAITS_COMPAT "${SURGE_MM_RUNTIME}/plaits-compat")
 set(TABLE_GENERATED "${SURGE_MM_RUNTIME}/table-generated")
-set(FILTER_COMPAT "${SURGE_MM_RUNTIME}/filter-compat")
 set(EFFECT_COMPAT "${SURGE_MM_RUNTIME}/effect-compat")
 file(GLOB_RECURSE PLAITS_SOURCES CONFIGURE_DEPENDS "${EURORACK}/plaits/dsp/*.cc")
 set(NIMBUS_SRC_SOURCES
@@ -70,8 +68,9 @@ add_library(surge-mm-dsp STATIC
     dsp/phaser_dsp.cpp
     dsp/engine.cpp
     dsp/table_data.cpp
-    ${TABLE_GENERATED}/Wavetable.cpp
-    ${TABLE_GENERATED}/WindowOscillator.cpp
+    ${COMMON}/dsp/Wavetable.cpp
+    ${COMMON}/dsp/oscillators/WindowOscillator.cpp
+    ${COMMON}/dsp/effects/chowdsp/exciter/LevelDetector.cpp
     ${TABLE_GENERATED}/table_resources.cpp
     ${COMMON}/dsp/oscillators/WavetableOscillator.cpp
     ${ALIAS_SOURCE}
@@ -81,7 +80,7 @@ add_library(surge-mm-dsp STATIC
     ${EURORACK}/plaits/resources.cc
     ${EURORACK}/stmlib/dsp/units.cc
     ${EURORACK}/stmlib/dsp/atan.cc
-    ${PLAITS_COMPAT}/stmlib/utils/random.cc
+    ${EURORACK}/stmlib/utils/random.cc
     dsp/filter_dsp.cpp
     dsp/utility_dsp.cpp
     dsp/envelope_dsp.cpp
@@ -98,7 +97,7 @@ set_target_properties(surge-mm-dsp PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUI
 target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=1)
 target_include_directories(surge-mm-dsp PRIVATE
     ${SURGE_DIR}/libs/libsamplerate/include
-    ${EFFECT_COMPAT} ${FILTER_COMPAT} ${PLAITS_COMPAT} ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include
+    ${EFFECT_COMPAT} ${COMMON}/dsp/effects ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include
     dsp/compat ${COMMON} ${COMMON}/dsp ${COMMON}/dsp/oscillators ${COMMON}/dsp/utilities
     ${COMMON}/dsp/vembertech ${COMMON}/dsp/filters ${SURGE_DIR}/src ${SURGE_DIR}/libs/simde
     ${SURGE_DIR}/libs/sst/sst-basic-blocks/include

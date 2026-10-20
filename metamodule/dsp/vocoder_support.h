@@ -4,7 +4,7 @@
 #include "effect_config.h"
 #include <sst/basic-blocks/dsp/BlockInterpolators.h>
 #include <sst/basic-blocks/mechanics/block-ops.h>
-#include "VocoderIntrinsics.h"
+#include "portable_intrinsics.h"
 namespace surge_mm::vocoder
 {
 constexpr int BLOCK_SIZE = 8, BLOCK_SIZE_QUAD = 2;

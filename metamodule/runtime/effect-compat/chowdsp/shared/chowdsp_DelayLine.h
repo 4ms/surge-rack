@@ -24,7 +24,7 @@
 #define SURGE_SRC_COMMON_DSP_EFFECTS_CHOWDSP_SHARED_CHOWDSP_DELAYLINE_H
 
 #include "chow_buffer.h"
-#include "chowdsp_DelayInterpolation.h"
+#include "chowdsp/shared/chowdsp_DelayInterpolation.h"
 
 namespace chowdsp
 {
