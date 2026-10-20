@@ -20,6 +20,13 @@ struct EnvelopeClock
         for (unsigned i = 0; i < 512; ++i)
             rates[i] = float(8.0 / (double(sr) * std::pow(2.0, (int(i) - 256.0) / 16.0)));
     }
+    float envelope_rate_linear(float x) const
+    {
+        x = x * 16 + 256;
+        int e = int(x);
+        float a = x - e;
+        return (1 - a) * rates[e & 511] + a * rates[(e + 1) & 511];
+    }
     float envelope_rate_linear_nowrap(float x) const
     {
         x = x * 16 + 256;

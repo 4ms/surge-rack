@@ -144,6 +144,8 @@ struct Engine
         }
         if (m == Model::Alias)
         {
+            // The panel offers 13 of the waves; process() maps them onto Surge's list.
+            oscdata.p[0].val_max.i = 12;
             oscillator->init_extra_config();
             for (int i = 0; i < 16; ++i)
                 extra->options[i] = .5f + .5f / (i + 1);

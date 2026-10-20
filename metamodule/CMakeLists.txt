@@ -72,6 +72,7 @@ add_library(surge-mm-dsp STATIC
     dsp/flanger_dsp.cpp
     dsp/phaser_dsp.cpp
     dsp/engine.cpp
+    dsp/compat/SurgeStorage.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp
     ${COMMON}/dsp/oscillators/WindowOscillator.cpp

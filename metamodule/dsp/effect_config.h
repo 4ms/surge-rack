@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Embedded host for the same SST effect classes used by SurgeSSTFXAdapter.h.
 #pragma once
+#include "db_table.h"
 #include "filter_tuning.h"
 #include "modulation_clock.h"
 #include <cstdlib>
@@ -11,23 +12,9 @@ struct EffectGlobal : EnvelopeClock
 {
     double dsamplerate_inv{1.0 / 48000};
     float tempo_ratio{1};
-    struct DecibelTable
-    {
-        float values[512];
-        DecibelTable()
-        {
-            for (int i = 0; i < 512; ++i)
-                values[i] = std::pow(10.f, .05f * (float(i) - 384));
-        }
-    };
     EffectGlobal()
     {
-        (void)db_table();
-    }
-    static const DecibelTable &db_table()
-    {
-        static const DecibelTable table;
-        return table;
+        (void)DecibelTable::get();
     }
     void set_samplerate(float sr)
     {
@@ -40,18 +27,7 @@ struct EffectGlobal : EnvelopeClock
     }
     static float db_to_linear(float x)
     {
-        x += 384;
-        int e = int(x);
-        float a = x - e;
-        const auto &v = db_table().values;
-        return (1 - a) * v[e & 511] + a * v[(e + 1) & 511];
-    }
-    float envelope_rate_linear(float x) const
-    {
-        x = x * 16 + 256;
-        int e = int(x);
-        float a = x - e;
-        return (1 - a) * rates[e & 511] + a * rates[(e + 1) & 511];
+        return surge_mm::db_to_linear(x);
     }
 };
 struct EffectSettings
