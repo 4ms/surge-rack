@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Native adaptation of src/EGxVCA.h, copyright Surge Synth Team contributors.
 #include "eg_vca_dsp.h"
+#include "rack_clock.h"
 #include "modulation_clock.h"
 #include <cstring>
 #include <memory>
@@ -23,72 +24,8 @@ struct EGxVCA
     std::array<std::unique_ptr<DAHD>, 4> dahd;
     std::array<std::unique_ptr<SlowDAHD>, 4> slow_dahd;
     Edge triggers[4]{};
-    unsigned rack_gates[4]{2, 2, 2, 2};
-    struct RackTempo
-    {
-        unsigned gate{2};
-        int elapsed{-1};
-        float ratio{1}, last_bpm{-1}, last_volts{-11};
-        bool connected{}, synced{};
-        static bool edge(unsigned &state, float v)
-        {
-            if (state == 0 && v >= 1)
-            {
-                state = 1;
-                return true;
-            }
-            if (state == 1 && v <= 0)
-                state = 0;
-            else if (state == 2)
-            {
-                if (v >= 1)
-                    state = 1;
-                else if (v <= 0)
-                    state = 0;
-            }
-            return false;
-        }
-        void process(float volts, bool patched, bool bpm, float sr)
-        {
-            if (!patched)
-            {
-                if (elapsed >= 0 || connected)
-                    synced = false;
-                elapsed = -1;
-                connected = false;
-                return;
-            }
-            if (bpm)
-            {
-                if (!connected)
-                    synced = true;
-                connected = true;
-                if (volts != last_volts)
-                    ratio = float(std::pow(2.0, volts));
-                last_volts = volts;
-            }
-            else
-            {
-                if (edge(gate, volts))
-                {
-                    if (elapsed > 0 && elapsed < sr * 6)
-                    {
-                        float rate = 60 * sr / elapsed;
-                        if (std::abs(rate - std::round(rate)) < .015f)
-                            rate = std::round(rate);
-                        if (rate != last_bpm)
-                            ratio = rate / 120;
-                        last_bpm = rate;
-                    }
-                    else
-                        synced = true;
-                    elapsed = 0;
-                }
-                if (elapsed >= 0 && elapsed < 2147483647)
-                    ++elapsed;
-            }
-        }
-    } rack_tempo;
+    RackTrigger rack_gates[4];
+    RackClock rack_tempo;
     struct Interpolate
     {
         float value{}, delta{};
@@ -139,7 +76,7 @@ struct EGxVCA
         {
             auto &env = *engines[lane];
             bool event = false;
-            if (rack_compat ? RackTempo::edge(rack_gates[lane], in[2][lane])
+            if (rack_compat ? rack_gates[lane].process(in[2][lane])
                             : triggers[lane].process(in[2][lane]))
             {
                 env.attackFrom((rack_compat ? p[12] >= .5f : p[12] > .5f) ? env.output : 0,
@@ -211,7 +148,7 @@ void reset_eg_vca(EGxVCA *e)
     e->tempo.reset();
     e->rack_tempo = {};
     e->rack_started = false;
-    std::fill_n(e->rack_gates, 4, 2);
+    std::fill_n(e->rack_gates, 4, RackTrigger{});
     e->position = 0;
     e->channels = 1;
     e->last_mode = e->last_slow = 0;
@@ -283,7 +220,7 @@ void process_eg_vca(EGxVCA *e, const std::array<float, 17> &p, const std::array<
                 continue;
             }
             if (rack_compat && e->rack_started && lane >= previous)
-                e->rack_gates[lane] = 0;
+                e->rack_gates[lane].state = 0;
             for (unsigned id = 0; id < 7; ++id)
             {
                 float value = p[id] + in[4 + id][lane] / 5.f;

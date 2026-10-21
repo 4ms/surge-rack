@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Mode/clock routing adapted from src/QuadLFO.h and src/XTModule.h (Surge Synth Team).
 #include "quad_lfo_dsp.h"
+#include "rack_clock.h"
 #include "modulation_clock.h"
 #include <functional>
 #include <memory>
@@ -41,32 +42,8 @@ struct QuadLFO
     uint32_t seed{};
     struct RackState
     {
-        struct Trigger
-        {
-            unsigned state{2};
-            bool process(float v)
-            {
-                if (state == 0 && v >= 1)
-                {
-                    state = 1;
-                    return true;
-                }
-                if (state == 1 && v <= 0)
-                    state = 0;
-                else if (state == 2)
-                {
-                    if (v >= 1)
-                        state = 1;
-                    else if (v <= 0)
-                        state = 0;
-                }
-                return false;
-            }
-        };
-        Trigger triggers[4][4], clock;
-        int elapsed{-1};
-        float ratio{1}, last_bpm{-1}, last_volts{-11};
-        bool bpm_connected{}, synced{};
+        RackTrigger triggers[4][4];
+        RackClock clock;
     } rack;
     QuadLFO()
     {
@@ -89,7 +66,7 @@ void quad_lfo_rack_mode(QuadLFO *p, bool enabled)
     p->rack_compat = enabled;
     if (enabled)
     {
-        p->rack.ratio = 1.f / 120;
+        p->rack.clock.ratio = 1.f / 120;
     }
 }
 void reset_quad_lfo(QuadLFO *e)
@@ -130,52 +107,9 @@ static void process_rack_quad_lfo(QuadLFO *e, const std::array<float, 19> &p,
 {
     int mode = int(std::round(p[16] * 4));
     auto &r = e->rack;
-    bool reset_amplitude = false;
-    if (!mode || !counts[1])
-    {
-        if (r.elapsed >= 0 || r.bpm_connected)
-        {
-            r.synced = false;
-            reset_amplitude = true;
-        }
-        r.elapsed = -1;
-        r.bpm_connected = false;
-    }
-    else if (p[18] > .5f)
-    {
-        if (!r.bpm_connected)
-        {
-            r.synced = true;
-            reset_amplitude = true;
-        }
-        r.bpm_connected = true;
-        if (in[1][0] != r.last_volts)
-            r.ratio = float(std::pow(2.0, in[1][0]));
-        r.last_volts = in[1][0];
-    }
-    else
-    {
-        if (r.clock.process(in[1][0]))
-        {
-            if (r.elapsed > 0 && r.elapsed < e->clock.samplerate * 6)
-            {
-                float bpm = 60 * e->clock.samplerate / r.elapsed;
-                if (std::abs(bpm - std::round(bpm)) < .015f)
-                    bpm = std::round(bpm);
-                if (bpm != r.last_bpm)
-                    r.ratio = bpm / 120;
-                r.last_bpm = bpm;
-            }
-            else
-            {
-                r.synced = true;
-                reset_amplitude = true;
-            }
-            r.elapsed = 0;
-        }
-        if (r.elapsed >= 0 && r.elapsed < 2147483647)
-            ++r.elapsed;
-    }
+    // Rack's QuadLFO resets its amplitudes whenever the clock starts or stops driving it.
+    bool reset_amplitude =
+        r.clock.process(in[1][0], mode && counts[1], p[18] > .5f, e->clock.samplerate);
     if (reset_amplitude)
         for (auto &stage : e->lfo)
             for (auto &lfo : stage)
@@ -216,8 +150,8 @@ static void process_rack_quad_lfo(QuadLFO *e, const std::array<float, 19> &p,
                     v[i] = i < 4 ? p[i] + in[4 + i][c] / 5.f
                                  : (p[i] * 2 - 1) + (in[4 + i][c] / 5.f) * 2;
                 float rate = v[mode ? 0 : stage] * 13 - 5, deform = v[4 + stage];
-                if (mode && r.synced)
-                    rate = float(tempo_round(rate - 1) + std::log2(double(r.ratio)));
+                if (mode && r.clock.synced)
+                    rate = float(tempo_round(rate - 1) + std::log2(double(r.clock.ratio)));
                 if (mode == 1 && stage)
                 {
                     constexpr float ratios[12]{2, 3, 4, 5, 6, 7, 8, 12, 16, 24, 32};

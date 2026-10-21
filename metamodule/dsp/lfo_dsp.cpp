@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Native adapter for src/LFO.h and the original LFOModulationSource engine.
 #include "lfo_dsp.h"
+#include "rack_clock.h"
 #include "modulators/LFOModulationSource.h"
 #include <memory>
 #include <new>
@@ -21,83 +22,6 @@ struct LFORandom : SurgeStorage::RandomSource
     uint32_t rand() override { return std::uniform_int_distribution<int>(0, RAND_MAX)(generator); }
     uint32_t rand_u32() override { return std::uniform_int_distribution<uint32_t>()(generator); }
     float rand_01() override { return std::uniform_real_distribution<float>(0, 1)(generator); }
-};
-// Rack starts Schmitt triggers unarmed and retains their state on disconnection.
-struct RackTrigger
-{
-    unsigned state{2};
-    bool process(float v)
-    {
-        if (state == 0 && v >= 1)
-        {
-            state = 1;
-            return true;
-        }
-        if (state == 1 && v <= 0)
-            state = 0;
-        else if (state == 2)
-        {
-            if (v >= 1)
-                state = 1;
-            else if (v <= 0)
-                state = 0;
-        }
-        return false;
-    }
-};
-struct RackClock
-{
-    RackTrigger trigger;
-    int elapsed{-1};
-    float ratio{1}, inverse{1}, last_bpm{-1}, last_volts{-11};
-    bool connected{}, synced{};
-    void process(float volts, bool patched, bool bpm, float sr)
-    {
-        if (!patched)
-        {
-            if (elapsed >= 0 || connected)
-                synced = false;
-            elapsed = -1;
-            connected = false;
-            return;
-        }
-        if (bpm)
-        {
-            if (!connected)
-                synced = true;
-            connected = true;
-            if (volts != last_volts)
-            {
-                double r = std::pow(2.0, volts);
-                ratio = r;
-                inverse = 1.f / r;
-            }
-            last_volts = volts;
-        }
-        else
-        {
-            if (trigger.process(volts))
-            {
-                if (elapsed > 0 && elapsed < sr * 6)
-                {
-                    float rate = 60 * sr / elapsed;
-                    if (std::abs(rate - std::round(rate)) < .015f)
-                        rate = std::round(rate);
-                    if (rate != last_bpm)
-                    {
-                        ratio = rate / 120;
-                        inverse = 120 / rate;
-                    }
-                    last_bpm = rate;
-                }
-                else
-                    synced = true;
-                elapsed = 0;
-            }
-            if (elapsed >= 0 && elapsed < 2147483647)
-                ++elapsed;
-        }
-    }
 };
 struct Voice
 {

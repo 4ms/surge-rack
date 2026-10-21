@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Link routing adapted from src/QuadAD.h, copyright Surge Synth Team contributors.
 #include "envelope_dsp.h"
+#include "rack_trigger.h"
 #include "modulation_clock.h"
 #include <algorithm>
 #include <cmath>
@@ -19,29 +20,7 @@ struct QuadAD
     unsigned block_pos{};
     struct RackState
     {
-        struct Trigger
-        {
-            unsigned state{2};
-            bool process(float v)
-            {
-                if (state == 0 && v >= 1)
-                {
-                    state = 1;
-                    return true;
-                }
-                if (state == 1 && v <= 0)
-                    state = 0;
-                else if (state == 2)
-                {
-                    if (v >= 1)
-                        state = 1;
-                    else if (v <= 0)
-                        state = 0;
-                }
-                return false;
-            }
-        };
-        Trigger external[4][4], linked[4][4];
+        RackTrigger external[4][4], linked[4][4];
         bool gated[4][4]{}, incoming[4]{}, sum[4]{}, any_link{};
         std::array<int, 4> push{-1, -1, -1, -1}, last{-1, -1, -1, -1};
         unsigned co_trigger[4]{}, channels[4]{1, 1, 1, 1};
