@@ -1,21 +1,36 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "exciter_dsp.h"
-#include "ExciterKernel.h"
+#include "chowdsp/ExciterEffect.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+struct Kernel : chowdsp::ExciterEffect
+{
+    using chowdsp::ExciterEffect::ExciterEffect;
+    // Fresh oversampler state and gains; rebuilding the effect would reallocate them.
+    void reset_native()
+    {
+        os.reset();
+        drive_gain.set_target(0);
+        drive_gain.instantize();
+        wet_gain.set_target(0);
+        wet_gain.instantize();
+        init();
+    }
+};
 struct Voice
 {
-    exciter::ExciterStorage global;
-    exciter::ExciterSettings settings;
-    std::array<exciter::ExciterValue, 5> values{};
-    exciter::ExciterKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     Voice(bool imported = false, float sr = 48000)
     {
-        global.set_samplerate(sr);
+        global.setSamplerate(sr);
+        kernel.init_ctrltypes();
         if (imported)
             kernel.init();
         else
@@ -84,9 +99,9 @@ void exciter_samplerate(Exciter *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_exciter(p);
 }

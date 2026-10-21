@@ -1,26 +1,38 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "chow_dsp.h"
-#include "ChowKernel.h"
+#include "chowdsp/CHOWEffect.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+struct Kernel : chowdsp::CHOWEffect
+{
+    using chowdsp::CHOWEffect::CHOWEffect;
+    // Fresh smoothing and gains; rebuilding the effect would reallocate its oversampler.
+    void reset_native()
+    {
+        thresh_smooth.setCurrentAndTargetValue(1);
+        ratio_smooth.setCurrentAndTargetValue(1);
+        makeup.set_target(0);
+        makeup.instantize();
+        mix.set_target(0);
+        mix.instantize();
+        cur_os = true;
+        init();
+    }
+};
 struct Voice
 {
-    chow::ChowStorage global;
-    chow::ChowSettings settings;
-    std::array<chow::ChowValue, 4> values{};
-    chow::ChowKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     Voice(bool deferred_init = false, float sr = 48000)
     {
-        global.set_samplerate(sr);
-        for (unsigned i = 0; i < 4; ++i)
-        {
-            settings.p[i].val_min.f = chow_minimum[i];
-            settings.p[i].val_max.f = chow_minimum[i] + chow_range[i];
-        }
+        global.setSamplerate(sr);
+        kernel.init_ctrltypes();
         if (!deferred_init)
             kernel.init();
     }
@@ -83,9 +95,9 @@ void chow_samplerate(Chow *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_chow(p);
 }
