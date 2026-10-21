@@ -20,25 +20,46 @@ frequency clamp or adaptive damping workaround. A retained local Vocoder reprodu
 source filters until the instability is reproduced; this does not play audio.
 Vocoder routing/voice-history fixes remain and are tested separately.
 
-## Existing deviations to review separately
+## Surge bugs fixed in the 4ms forks
 
-The port includes the following deviations from its pinned source. Their
-disposition requires review; they are not claims of exact upstream equivalence.
+These affect desktop Surge too. They are candidates for upstream pull requests; see
+[UPSTREAM_MAP.md](UPSTREAM_MAP.md) for the commits.
 
-| Finding | Existing local behavior | Follow-up |
+| Finding | Fix |
+| --- | --- |
+| CHOW computes a dry/wet blend but returns the wet signal, so Mix has no effect | Copy the blend back (the port applies Mix in imported patches too, unlike Rack) |
+| Distortion's drive ramp uses a two-step divisor over four oversampled steps; a falling drive passes through zero | Divide by the oversampling factor |
+| Exciter's diode exponential can overflow | Bounded exponent in LevelDetector |
+| Ensemble loops forever for nonpositive or NaN BBD periods; the BBD nonlinearity reads past its table | Bounded period and index |
+| chowdsp DelayLine writes one element past its buffer | Wrap pointers at totalSize |
+| Spring's damping filter goes NaN below 36.7 kHz | Clamp the filter cutoff below Nyquist |
+| Chorus reads stale interpolation padding when BLOCK_SIZE < 12; its LFO phase can run away | Refresh the padding per block; wrap with fmod |
+| Alias converts negative or large floats to unsigned (UB; ARM saturates) | Convert through wider integers |
+| String's comb taps exceed the delay at 2x oversampling and low pitch | Bound by the oversampling level |
+| Wavetable reads past its last frame when Continuous Morph is toggled at the end of the range | Re-check the frame index |
+| TreeMonster, Rotary, Distortion and the LFO read uninitialized state | Value-initialize it |
+
+## Port behavior that differs from Rack
+
+| Area | Behavior | Notes |
 | --- | --- | --- |
-| Chow calculates a dry/wet blend but returns the wet buffers | `runtime/effect-compat/ChowKernel.h` copies the blend back | Decide disposition of the existing deviation; record source issue |
-| Legacy Distortion advances a drive ramp over four oversampled steps using a two-step divisor | `runtime/effect-compat/DistortionKernel.h` changes the divisor; a falling ramp can otherwise cross zero | Keep the raw reproducer; review existing deviation separately |
-| Rack Ring Modulator Poly path does not refresh the oversampled external carrier or auto-select it | The imported path enables Mono carrier handling in imported Poly mode | Source is the Rack wrapper, not the sound engine; review separately |
-| Exciter diode exponential can overflow | `runtime/effect-compat/chowdsp/exciter/LevelDetector.h` limits the exponential argument | Record existing numerical deviation separately |
-| Ensemble can loop indefinitely for nonpositive BBD periods | `runtime/effect-compat/chowdsp/bbd_utils/BBDDelayLine.h` bounds invalid periods/tick density | Record termination behavior separately; do not confuse it with audio equivalence |
-| Combulator envelope coefficient is set at construction rate | Native mode recalculates it; imported mode retains Rack behavior | Native extension only; imported behavior already preserved |
+| Rack Ring Modulator Poly | The Rack wrapper does not refresh the oversampled external carrier in Poly; imported patches use Mono carrier handling | Source is the Rack wrapper |
+| Combulator | Natively, the envelope follower follows the current sample rate; imported patches keep the creation rate like Rack | |
+| Reverb2 (imported) | Allpasses are sized for 192 kHz, so Size CV beyond about 3.5 (48 kHz) or 2.5 (96 kHz) clamps the longest allpass delays at 32767 samples instead of 131071 | Memory: 8.3 MB instead of 13 MB per voice |
+| DigitalRingMod Link | Feeds the first stage's output to the second, as labelled; Rack copies input A | Changes imported patches with Link on |
+| DigitalRingMod legacy CXOR modes | Run their legacy kernels; Rack falls through to plain ring modulation | |
+| VCF, Waveshaper | Modulation is clamped to the knob range; Rack lets CV exceed it | Imported patches with large CV |
+| VCO | DC blocker defaults off natively (Rack: on); the reset trigger's low threshold is 0.1 V | Imported patches restore DC blocking |
+| Oscillator random phases | Each voice's storage starts the same xorshift seed, so voices and instances share start phases after a simultaneous reset | Rack shares one randomly seeded RNG |
+| EGxVCA (imported) | Level is cubed without Rack's clamp at 0, so negative Level phase-inverts | |
 
-Other bounds/initialization edits in the embedded runtime adaptations still
-need classification. ARM integer semantics, SIMD alignment, ownership changes
-and defined initial storage can be necessary port adaptations; they are not
-evidence that the source sound algorithm should be changed. This list is an
-initial audit, not an exhaustive certification.
+## Numerical changes from building against upstream
+
+- Oscillators, Waveshaper and Unison now use Surge's interpolated pitch and dB tables
+  rather than exact exp2/pow, matching desktop Surge and Rack. Outputs differ by
+  interpolation error. Long high-drive Waveshaper renders diverge noticeably through
+  its stateful shapers.
+- With the tables, Classic and SHNoise no longer hang on extreme pitch modulation.
 
 ## Review limits
 

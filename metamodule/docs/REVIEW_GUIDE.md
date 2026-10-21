@@ -9,27 +9,23 @@ The desktop Hub translates Rack patches into this native module vocabulary.
 
 | Concern | Starting point | What to verify |
 | --- | --- | --- |
-| Upstream adaptations | [runtime source map](runtime/UPSTREAM_MAP.md) | Imported algorithms versus host, storage, reset and numerical changes |
-| Engine boundary | [engine.h](dsp/engine.h), [engine.cpp](dsp/engine.cpp) | Normalized controls, input routing, block processing and output stage |
-| SDK boundary | [oscillator_processor.h](oscillator_processor.h), [utility_processor.h](utility_processor.h) | Channel counts, mono broadcasting, bypass and state callbacks |
-| Representative effect | [Chorus processor](chorus_processor.h), [Chorus DSP](dsp/chorus_dsp.cpp), [Chorus panel](chorus_panel.h) | One control's journey from panel to engine; native versus imported behavior |
-| Panel and registration | [oscillator_panel.h](oscillator_panel.h), [plugin.cpp](plugin.cpp) | Stable IDs, stepped controls and model registration |
-| Modulation helpers | [modulation_processor.h](modulation_processor.h), [modulation_panels.h](modulation_panels.h) | Depth scaling, polyphonic summation and destination labels |
-| Tables and expanders | [table_oscillator.h](table_oscillator.h), [unison_processor.h](unison_processor.h) | Ownership across callbacks and bank/expander coordination |
-| Build and evidence | [CMakeLists.txt](CMakeLists.txt), [PR validation](https://github.com/Ericxgao/surge-rack/pull/1#validation-and-limits) | Dependencies, package contents and the limits of existing evidence |
+| Use of upstream Surge | [upstream map](UPSTREAM_MAP.md) | Compiled sources, stand-ins in `dsp/compat`, fork patches |
+| Engine boundary | [engine.h](../dsp/engine.h), [engine.cpp](../dsp/engine.cpp) | Normalized controls, input routing, block processing and output stage |
+| SDK boundary | [oscillator_processor.h](../oscillator_processor.h), [utility_processor.h](../utility_processor.h) | Channel counts, mono broadcasting, bypass and state callbacks |
+| Representative effect | [Chorus processor](../chorus_processor.h), [Chorus DSP](../dsp/chorus_dsp.cpp), [Chorus panel](../chorus_panel.h) | One control's journey from panel to engine; native versus imported behavior |
+| Panel and registration | [oscillator_panel.h](../oscillator_panel.h), [plugin.cpp](../plugin.cpp) | Stable IDs, stepped controls and model registration |
+| Modulation helpers | [modulation_processor.h](../modulation_processor.h), [modulation_panels.h](../modulation_panels.h) | Depth scaling, polyphonic summation and destination labels |
+| Tables and expanders | [table_oscillator.h](../table_oscillator.h), [unison_processor.h](../unison_processor.h) | Ownership across callbacks and bank/expander coordination |
+| Build and evidence | [CMakeLists.txt](../CMakeLists.txt), [PR validation](https://github.com/Ericxgao/surge-rack/pull/1#validation-and-limits) | Dependencies, package contents and the limits of existing evidence |
 
-The commit sequence introduces upstream adaptations, the DSP boundary, an
-oscillator plugin, control/filter/expander modules, and the remaining effects.
-The first two commits provide source dependencies; the oscillator commit first
-activates the native plugin target. Later module commits extend registration
-and metadata together. These intermediate configurations have received static
-inspection, not separate builds.
+Surge's DSP is compiled from the `surge` submodule. Necessary changes to it are
+commits on the 4ms forks, listed in the upstream map.
 
 ## Boundaries and stable coordinates
 
-`runtime/` contains extracted or adapted upstream production sources. `dsp/`
-supplies the embedded host, storage and per-module engine interfaces. Processors
-translate SDK calls into those interfaces; panels describe the controls and
+Upstream DSP comes from the `surge` submodule, compiled against the stand-ins in
+`dsp/compat/`. `dsp/` supplies the embedded host and per-module engine interfaces.
+Processors translate SDK calls into those interfaces; panels describe the controls and
 jacks. CMake compiles DSP as C++17 and SDK integration as C++23.
 
 Parameter and jack indices are serialized patch coordinates. Reordering a
@@ -113,11 +109,11 @@ costs still require hardware measurement.
 
 ## Maintenance boundaries
 
-Update the pinned source and its adaptations together; consult the source map
-before copying a new upstream implementation. Keep algorithm changes separate
-from platform integration. Existing numerical and behavioral deviations are
-listed in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md), including unresolved ones.
-The map is provenance, not a claim that every adaptation is behavior-neutral.
+Change Surge's DSP only on the fork branches, never by copying it into this tree.
+Keep platform integration (resets, Rack-import modes, voice handling) in the engines.
+[UPSTREAM_MAP.md](UPSTREAM_MAP.md) describes the stand-ins and the update procedure.
+Behavioural deviations from Rack are listed in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md),
+including unresolved ones.
 
 The Base64 helper in `dsp/table_encoding.hh` is also used by the desktop Hub
 as `src/mapping/table_encoding.hh`. The implementations currently match apart
