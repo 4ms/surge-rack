@@ -73,6 +73,11 @@ add_library(surge-mm-dsp STATIC
     dsp/phaser_dsp.cpp
     dsp/engine.cpp
     dsp/compat/SurgeStorage.cpp
+    ${COMMON}/dsp/Effect.cpp
+    ${COMMON}/dsp/effects/VocoderEffect.cpp
+    ${COMMON}/dsp/effects/ResonatorEffect.cpp
+    ${COMMON}/dsp/effects/CombulatorEffect.cpp
+    ${COMMON}/dsp/filters/VectorizedSVFilter.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp
     ${COMMON}/dsp/oscillators/WindowOscillator.cpp
@@ -99,6 +104,8 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/oscillators/FM3Oscillator.cpp
     ${COMMON}/dsp/oscillators/ModernOscillator.cpp
     ${COMMON}/dsp/oscillators/SineOscillator.cpp)
+# Only the Effect base class; the port instantiates each effect directly.
+set_source_files_properties(${COMMON}/dsp/Effect.cpp PROPERTIES COMPILE_DEFINITIONS SURGE_EFFECT_BASE_ONLY)
 set_target_properties(surge-mm-dsp PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES)
 target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=1)
 target_include_directories(surge-mm-dsp PRIVATE

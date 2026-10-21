@@ -1,20 +1,72 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "combulator_dsp.h"
-#include "CombulatorKernel.h"
-#include <memory>
+#include "CombulatorEffect.h"
+#include <cmath>
 #include <cstdlib>
+#include <memory>
+#include <random>
 namespace surge_mm
 {
 namespace
 {
+// Surge sets the envelope follower's coefficients only when the effect is created.
+void set_envelope_rate(CombulatorEffect &e, const SurgeStorage &s)
+{
+    e.envA = e.envR = std::pow(.01, 1.0 / (5 * s.dsamplerate_os * .001));
+}
+// A fresh filter and noise state at the current sample rate; unlike a new effect, the
+// half-band filters keep their history.
+void reset_native(CombulatorEffect &e, SurgeStorage &s, unsigned seed)
+{
+    for (int c = 0; c < 2; ++c)
+        e.qfus[c] = {};
+    for (int b = 0; b < 3; ++b)
+    {
+        e.freq[b] = {};
+        e.gain[b] = {};
+        for (int c = 0; c < 2; ++c)
+        {
+            e.coeff[b][c].Reset();
+            e.WP[b][c] = 0;
+            for (auto &r : e.Reg[b][c])
+                r = 0;
+        }
+    }
+    e.feedback = {};
+    e.pan2 = {};
+    e.pan3 = {};
+    e.tone = {};
+    e.noisemix = {};
+    e.lp.suspend();
+    e.hp.suspend();
+    s.seed_pm1(seed);
+    set_envelope_rate(e, s);
+    e.init();
+}
+// Imported Rack patches draw all voices' noise from one generator.
+struct SharedNoise
+{
+    std::minstd_rand generator;
+    std::uniform_real_distribution<float> distribution{-1.f, 1.f};
+    static float next(void *context)
+    {
+        auto *n = static_cast<SharedNoise *>(context);
+        return n->distribution(n->generator);
+    }
+};
 struct Voice
 {
-    combulator::CombulatorStorage global;
-    combulator::CombulatorSettings settings;
-    std::array<combulator::CombulatorValue, 12> values{};
-    combulator::CombulatorKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, 12> values{};
+    CombulatorEffect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
+    unsigned seed{1};
     bool pending{true};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
     void reset()
     {
         pending = true;
@@ -31,9 +83,9 @@ struct Combulator
     unsigned position{}, channels{1};
     std::unique_ptr<Voice> rack_mono;
     std::array<bool, 4> rack_created{};
-    std::array<combulator::CombulatorValue, 12> shared_values{};
-    combulator::CombulatorSettings shared_settings{};
-    combulator::CombulatorStorage rack_random;
+    std::array<pdata, 12> shared_values{};
+    FxStorage shared_settings{};
+    SharedNoise rack_random;
     bool rack_mode{};
     unsigned last_rack_channels{};
     Combulator()
@@ -41,7 +93,7 @@ struct Combulator
         for (unsigned c = 0; c < 4; ++c)
         {
             voices[c] = std::make_unique<Voice>();
-            voices[c]->global.seed = 1 + 7919 * c;
+            voices[c]->seed = 1 + 7919 * c;
         }
     }
 };
@@ -59,17 +111,13 @@ void combulator_rack_mode(Combulator *p, bool enabled)
     if (enabled)
     {
         float sr = p->voices[0]->global.dsamplerate_os * .5;
-        p->rack_random.seed = std::rand();
-        p->rack_random.reset_random();
+        p->rack_random.generator.seed(std::rand());
+        p->rack_random.distribution.reset();
         auto prepare = [&](Voice &v) {
-            v.global.set_samplerate(sr);
-            v.global.rack_random_context = &p->rack_random;
-            v.global.rack_random = [](void *ctx) {
-                return static_cast<combulator::CombulatorStorage *>(ctx)->rand_pm1();
-            };
-            v.kernel.rack_history = true;
-            v.kernel.envA = v.kernel.envR =
-                std::pow(.01, 1.0 / (5 * v.global.dsamplerate_os * .001));
+            v.global.setSamplerate(sr);
+            v.global.shared_pm1_context = &p->rack_random;
+            v.global.shared_pm1 = SharedNoise::next;
+            set_envelope_rate(v.kernel, v.global);
         };
         p->rack_mono = std::make_unique<Voice>();
         prepare(*p->rack_mono);
@@ -78,7 +126,7 @@ void combulator_rack_mode(Combulator *p, bool enabled)
         {
             auto &v = p->voices[c];
             v = std::make_unique<Voice>();
-            v->global.seed = 1 + 7919 * c;
+            v->seed = 1 + 7919 * c;
             prepare(*v);
         }
         p->rack_created = {};
@@ -90,9 +138,8 @@ void combulator_rack_mode(Combulator *p, bool enabled)
     else
         for (auto &v : p->voices)
         {
-            v->global.rack_random = nullptr;
-            v->global.rack_random_context = nullptr;
-            v->kernel.rack_history = false;
+            v->global.shared_pm1 = nullptr;
+            v->global.shared_pm1_context = nullptr;
         }
 }
 void reset_combulator(Combulator *p)
@@ -106,9 +153,9 @@ void combulator_samplerate(Combulator *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_combulator(p);
 }
@@ -136,8 +183,7 @@ void process_combulator(Combulator *p, const std::array<float, 16> &params,
                 auto &v = *p->voices[c];
                 // Rack creates each poly engine at its first use. Its envelope
                 // coefficients retain that creation rate even after later changes.
-                v.kernel.envA = v.kernel.envR =
-                    std::pow(.01, 1.0 / (5 * v.global.dsamplerate_os * .001));
+                set_envelope_rate(v.kernel, v.global);
                 initialize(v);
                 p->rack_created[c] = true;
             }
@@ -193,7 +239,7 @@ void process_combulator(Combulator *p, const std::array<float, 16> &params,
             v.settings.p[5].deactivated = params[12] < .5f;
             if (!imported && v.pending)
             {
-                v.kernel.reset_native();
+                reset_native(v.kernel, v.global, v.seed);
                 v.pending = false;
             }
             for (unsigned s = 0; s < 2; ++s)

@@ -16,6 +16,8 @@
 #include "filter_tuning.h"
 #include "modulation_clock.h"
 #include "sst/basic-blocks/tables/SincTableProvider.h"
+// Surge's SurgeStorage.h provides the filter library through FilterConfiguration.h.
+#include "sst/filters.h"
 #include "sst/waveshapers/WaveshaperConfiguration.h"
 #include <array>
 #include <cmath>
@@ -288,6 +290,7 @@ struct SurgeStorage
     int16_t *sinctableI16{};
     float *sinctable{}, *sinctable1X{};
     float (*audio_in)[64]{};
+    float audio_in_nonOS alignas(16)[2][BLOCK_SIZE]{};
 
     SurgeStorage()
     {
@@ -311,7 +314,18 @@ struct SurgeStorage
         envelope.set_samplerate(sr);
     }
 
-    // Random source: one xorshift state per storage.
+    // Random sources. rand, rand_u32 and rand_01 (oscillators) step one xorshift state
+    // per storage. rand_pm1 (Combulator noise) follows Surge's RNGGen: minstd_rand with a
+    // uniform -1..1 distribution, seeded per storage, or a source shared between storages.
+    std::minstd_rand pm1_generator{1};
+    std::uniform_real_distribution<float> pm1_distribution{-1.f, 1.f};
+    float (*shared_pm1)(void *){};
+    void *shared_pm1_context{};
+    void seed_pm1(unsigned seed)
+    {
+        pm1_generator.seed(seed);
+        pm1_distribution.reset();
+    }
     uint32_t rand() { return rand_u32(); }
     uint32_t rand_u32()
     {
@@ -325,9 +339,13 @@ struct SurgeStorage
         random_state ^= random_state << 5;
         return (random_state >> 8) * (1.f / 16777216.f);
     }
-    float rand_pm1() { return rand_01() * 2 - 1; }
+    float rand_pm1()
+    {
+        return shared_pm1 ? shared_pm1(shared_pm1_context) : pm1_distribution(pm1_generator);
+    }
 
     // 12-TET pitch and omega tables
+    static constexpr double MIDI_0_FREQ = surge_mm::FilterTuning::MIDI_0_FREQ;
     static constexpr int tuningConstantNote = 60;
     static constexpr float tuningPitch = 32.f, tuningPitchInv = 1.f / 32.f;
     float note_to_pitch(float x) const { return surge_mm::FilterTuning::note_to_pitch(x); }

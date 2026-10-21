@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "vocoder_dsp.h"
-#include "VocoderKernel.h"
+#include "VocoderEffect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -8,15 +9,15 @@ namespace
 {
 struct Voice
 {
-    vocoder::VocoderStorage global;
-    vocoder::VocoderSettings settings;
-    std::array<vocoder::VocoderValue, 12> values{};
-    vocoder::VocoderKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, 12> values{};
+    VocoderEffect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
     Voice(float sr = 48000)
     {
-        global.set_samplerate(sr);
+        global.setSamplerate(sr);
     }
     void reset()
     {
@@ -34,7 +35,7 @@ struct Vocoder
     unsigned position{}, channels{1};
     std::unique_ptr<Voice> rack_mono;
     std::array<bool, 4> rack_created{};
-    std::array<vocoder::VocoderValue, 12> shared_values{};
+    std::array<pdata, 12> shared_values{};
     alignas(16) float rack_modulator[2][8]{};
     bool rack_mode{};
     unsigned last_rack_channels{};
@@ -81,9 +82,9 @@ void vocoder_samplerate(Vocoder *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_vocoder(p);
 }
@@ -158,7 +159,7 @@ void process_vocoder(Vocoder *p, const std::array<float, 12> &params,
             v.values[8].i = int(std::round(params[10] * 3));
             if (!imported && v.pending)
             {
-                v.kernel.reset_native();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             if (imported)

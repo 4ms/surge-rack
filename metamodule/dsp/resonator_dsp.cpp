@@ -1,19 +1,42 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "resonator_dsp.h"
-#include "ResonatorKernel.h"
+#include "ResonatorEffect.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+// A fresh filter state; unlike a new effect, the half-band filters keep their history.
+void reset_native(ResonatorEffect &e)
+{
+    for (int c = 0; c < 2; ++c)
+        e.qfus[c] = {};
+    for (int b = 0; b < 3; ++b)
+    {
+        e.cutoff[b] = {};
+        e.resonance[b] = {};
+        e.bandGain[b] = {};
+        for (int c = 0; c < 2; ++c)
+        {
+            e.coeff[b][c].Reset();
+            for (auto &r : e.Reg[b][c])
+                r = 0;
+        }
+    }
+    e.init();
+}
 struct Voice
 {
-    resonator::ResonatorStorage global;
-    resonator::ResonatorSettings settings;
-    std::array<resonator::ResonatorValue, 12> values{};
-    resonator::ResonatorKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, 12> values{};
+    ResonatorEffect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
     void reset()
     {
         pending = true;
@@ -53,7 +76,7 @@ void resonator_samplerate(Resonator *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     reset_resonator(p);
 }
 void process_resonator(Resonator *p, const std::array<float, 19> &params,
@@ -96,7 +119,7 @@ void process_resonator(Resonator *p, const std::array<float, 19> &params,
             v.values[11].f = std::clamp(params[11] + cv[10][c] * .2f, 0.f, 1.f);
             if (v.pending)
             {
-                v.kernel.reset_native();
+                reset_native(v.kernel);
                 v.pending = false;
             }
             for (unsigned s = 0; s < 2; ++s)
