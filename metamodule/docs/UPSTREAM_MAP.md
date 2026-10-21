@@ -105,7 +105,7 @@ All on branch `metamodule-runtime-fixes` of each fork.
 | [4ms/sst-filters](https://github.com/4ms/sst-filters) | Value-initialized coefficient scratch arrays; one shared `globalSincTable` |
 | [4ms/sst-basic-blocks](https://github.com/4ms/sst-basic-blocks) | FXModControl sine-index mask and `resetState()` |
 | [4ms/sst-effects](https://github.com/4ms/sst-effects) | UB and range fixes in Bonsai, Reverb1, Flanger; Flanger S&H snap |
-| sst-waveshapers (fork pending) | One shared `globalWaveshaperTables` |
+| [4ms/sst-waveshapers](https://github.com/4ms/sst-waveshapers) | One shared `globalWaveshaperTables` |
 | [4ms/pichenettes-eurorack](https://github.com/4ms/pichenettes-eurorack) | Atomic stmlib RNG state; Plaits ChordEngine init |
 
 Use `git -C surge log 65d381578..metamodule-runtime-fixes` for the full Surge series.
