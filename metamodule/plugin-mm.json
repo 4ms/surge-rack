@@ -3,5 +3,10 @@
     "MetaModulePluginMaintainerEmail": "",
     "MetaModulePluginMaintainerUrl": "https://4mscompany.com",
     "MetaModuleDescription": "Surge XT modules for MetaModule",
-    "MetaModuleIncludedModules": []
+    "MetaModuleIncludedModules": [
+        {
+            "slug": "SurgeXTFXChorus",
+            "name": "Chorus"
+        }
+    ]
 }

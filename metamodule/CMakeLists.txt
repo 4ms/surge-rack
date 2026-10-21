@@ -12,8 +12,7 @@ endif()
 
 include(${METAMODULE_SDK_DIR}/plugin.cmake)
 
-# Surge's version.cpp is generated from the top-level project's version (as in the Rack build)
-project(SurgeXTMetaModulePlugin VERSION 1.0
+project(SurgeXTMetaModulePlugin
     DESCRIPTION "SurgeXT Plugin for MetaModule"
     LANGUAGES   C CXX ASM
 )
@@ -27,10 +26,18 @@ add_library(SurgeXT STATIC)
 
 target_sources(SurgeXT PRIVATE
     bringup_init.cpp
+    ${SURGE_RACK_DIR}/src/FX.cpp
+    ${SURGE_RACK_DIR}/src/XTModule.cpp
+    ${SURGE_RACK_DIR}/src/XTModuleWidget.cpp
+    ${SURGE_RACK_DIR}/src/XTStyle.cpp
+    ${SURGE_RACK_DIR}/src/XTWidgets.cpp
 )
 
+# sst-rackhelpers is header-only. It's not linked as a library, since create_plugin()
+# would try to package the objects of an INTERFACE library.
 target_include_directories(SurgeXT PRIVATE
     ${SURGE_RACK_DIR}/src
+    ${SURGE_RACK_DIR}/libs/sst-rackhelpers/include
 )
 
 # The SDK requires C++20. Surge needs u8string() to return std::string, as in Rack's C++20 build.
@@ -47,6 +54,19 @@ if("${INSTALL_DIR}" STREQUAL "")
     set(INSTALL_DIR ${CMAKE_CURRENT_LIST_DIR}/metamodule-plugins)
 endif()
 
+# The plugin's assets: metamodule/assets (faceplates, etc.) and the Surge data that the
+# Rack plugin also ships in build/surge-data/ (see the root Makefile's dist target)
+set(SURGE_MM_ASSETS ${CMAKE_CURRENT_BINARY_DIR}/assets)
+file(GLOB_RECURSE SURGE_MM_ASSET_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/assets/*)
+file(REMOVE_RECURSE ${SURGE_MM_ASSETS})
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${SURGE_MM_ASSETS})
+file(COPY
+    ${SURGE_RACK_DIR}/surge/resources/surge-shared/configuration.xml
+    ${SURGE_RACK_DIR}/surge/resources/surge-shared/windows.wt
+    ${SURGE_RACK_DIR}/surge/resources/data/fx_presets
+    ${SURGE_RACK_DIR}/res/surge_extra_data/fx_presets
+    DESTINATION ${SURGE_MM_ASSETS}/build/surge-data)
+
 # create_plugin() makes a presets/ dir next to the plugin.json it is given,
 # so give it a copy in the build dir instead of the Rack plugin's plugin.json.
 configure_file(${SURGE_RACK_DIR}/plugin.json ${CMAKE_CURRENT_BINARY_DIR}/rack-plugin/plugin.json COPYONLY)
@@ -55,6 +75,6 @@ create_plugin(
     SOURCE_LIB      SurgeXT
     PLUGIN_NAME     SurgeXTRack
     PLUGIN_JSON     ${CMAKE_CURRENT_BINARY_DIR}/rack-plugin/plugin.json
-    SOURCE_ASSETS   ${CMAKE_CURRENT_LIST_DIR}/assets
+    SOURCE_ASSETS   ${SURGE_MM_ASSETS}
     DESTINATION     ${INSTALL_DIR}
 )

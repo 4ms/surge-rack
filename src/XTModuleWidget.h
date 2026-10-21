@@ -78,6 +78,21 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
         ModuleWidget::step();
     }
 
+#ifdef METAMODULE
+    // MetaModule makes a graphic display of each child widget that isn't a param, port, or
+    // light. The panel art (background, labels, LCD frames) is in the faceplate image there,
+    // so add those widgets as plain children.
+    using rack::ModuleWidget::addChild;
+    void addChild(rack::widget::Widget *w)
+    {
+        if (dynamic_cast<rack::app::ParamWidget *>(w) || dynamic_cast<rack::app::PortWidget *>(w) ||
+            dynamic_cast<rack::app::LightWidget *>(w))
+            rack::ModuleWidget::addChild(w);
+        else
+            rack::widget::Widget::addChild(w);
+    }
+#endif
+
     virtual void selectModulator(int whichMod) {}
 
     virtual void appendModuleSpecificMenu(rack::ui::Menu *menu) {}

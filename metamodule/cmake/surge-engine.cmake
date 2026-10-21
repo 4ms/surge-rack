@@ -50,6 +50,11 @@ if(SURGE_MM_HARDWARE)
     add_compile_definitions(SURGE_MM_NO_GTHREADS)
 endif()
 
+# Surge generates version.cpp from the top-level project's version, which is the simulator's
+# project in simulator builds. Use the Rack build's project version (1.0).
+set(CMAKE_PROJECT_VERSION_MAJOR 1)
+set(CMAKE_PROJECT_VERSION_MINOR 0)
+
 # The simulator's firmware already has a pffft target (surge-common doesn't use it)
 if(TARGET pffft)
     set(SURGE_LIBS_PROVIDED_BY_PARENT pffft)
