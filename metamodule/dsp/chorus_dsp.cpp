@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "chorus_dsp.h"
 #include "fx_clock.h"
-#include "ChorusKernel.h"
+#include "ChorusEffectImpl.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -9,18 +10,24 @@ namespace
 {
 struct Voice
 {
-    chorus::ChorusStorage global;
-    chorus::ChorusSettings settings;
-    std::array<chorus::ChorusValue, 8> values{};
-    chorus::ChorusKernel<4> kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    ChorusEffect<4> kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
+    // A new effect with cleared settings and values, as Rack creates one.
     void fresh_kernel()
     {
-        kernel.~ChorusKernel();
+        kernel.~ChorusEffect();
         settings = {};
         values = {};
-        new (&kernel) chorus::ChorusKernel<4>(&global, &settings, values.data());
+        new (&kernel) ChorusEffect<4>(&global, &settings, values.data());
+        kernel.init_ctrltypes();
     }
     void reset()
     {
@@ -36,7 +43,7 @@ struct Chorus
 {
     std::array<std::unique_ptr<Voice>, 4> voices;
     std::unique_ptr<Voice> rack_mono;
-    chorus::ChorusSettings rack_settings;
+    FxStorage rack_settings;
     std::array<bool, 4> rack_created{};
     FXClock tempo;
     unsigned position{}, channels{1}, last_rack_channels{};
@@ -62,7 +69,7 @@ void chorus_rack_clock(Chorus *p, bool enabled)
     {
         if (!p->rack_mono)
             p->rack_mono = std::make_unique<Voice>();
-        p->rack_mono->global.set_samplerate(p->voices[0]->global.samplerate);
+        p->rack_mono->global.setSamplerate(p->voices[0]->global.samplerate);
         p->rack_mono->fresh_kernel();
         p->rack_mono->kernel.init();
         p->rack_mono->kernel.init_default_values();
@@ -90,9 +97,9 @@ void chorus_samplerate(Chorus *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     p->tempo.sample_rate_changed();
     if (!p->tempo.rack_mode)
         reset_chorus(p);
@@ -197,7 +204,7 @@ void process_chorus(Chorus *p, const std::array<float, 12> &params,
             {
                 for (unsigned i = 0; i < 8; ++i)
                     v.settings.p[i].val = v.values[i];
-                v.kernel.reset_native();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             for (unsigned s = 0; s < 2; ++s)
