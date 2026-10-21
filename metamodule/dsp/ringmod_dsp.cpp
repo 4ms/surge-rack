@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ringmod_dsp.h"
-#include "RingModKernel.h"
+#include "RingModulatorEffect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -8,16 +9,20 @@ namespace
 {
 struct Voice
 {
-    ringmod::RingModStorage global;
-    ringmod::RingModSettings settings;
-    std::array<ringmod::RingModValue, 9> values{};
-    ringmod::RingModKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    RingModulatorEffect kernel{&global, &settings, values.data()};
     sst::filters::HalfRate::HalfRateFilter carrier_filter{6, true};
+    // The oversampled carrier the effect reads as Surge's audio input.
+    alignas(16) float carrier_os[2][64]{};
     alignas(16) float input[2][8]{}, carrier[2][8]{}, processed[2][8]{};
     bool pending{true};
     Voice(float sr = 48000)
     {
-        global.set_samplerate(sr);
+        global.setSamplerate(sr);
+        global.audio_in = carrier_os;
+        kernel.init_ctrltypes();
     }
     void reset()
     {
@@ -39,7 +44,7 @@ struct RingMod
     bool connected{};
     std::unique_ptr<Voice> rack_mono;
     std::array<bool, 4> rack_created{};
-    std::array<ringmod::RingModValue, 9> shared_values{};
+    std::array<pdata, n_fx_params> shared_values{};
     sst::filters::HalfRate::HalfRateFilter rack_carrier_filter{6, true};
     alignas(16) float rack_carrier[2][8]{}, rack_oversampled[2][16]{};
     bool rack_mode{};
@@ -94,9 +99,9 @@ void ringmod_samplerate(RingMod *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_ringmod(p);
 }
@@ -200,7 +205,7 @@ bool process_ringmod(RingMod *p, const std::array<float, 14> &params,
             v.settings.p[2].absolute = params[13] > .5f;
             if (!imported && v.pending)
             {
-                v.kernel.reset_native();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             if (imported)

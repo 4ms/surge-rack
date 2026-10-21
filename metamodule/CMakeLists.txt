@@ -59,7 +59,6 @@ add_library(surge-mm-dsp STATIC
     dsp/vocoder_dsp.cpp
     dsp/treemonster_dsp.cpp
     dsp/ringmod_dsp.cpp
-    dsp/ringmod_sine.cpp
     dsp/frequency_shifter_dsp.cpp
     dsp/bonsai_dsp.cpp
     dsp/exciter_dsp.cpp
@@ -81,6 +80,7 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/TreemonsterEffect.cpp
     ${COMMON}/dsp/effects/RotarySpeakerEffect.cpp
     ${COMMON}/dsp/effects/DistortionEffect.cpp
+    ${COMMON}/dsp/effects/RingModulatorEffect.cpp
     ${COMMON}/dsp/filters/VectorizedSVFilter.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp

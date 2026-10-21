@@ -12,6 +12,7 @@
 #include "Wavetable.h"
 #include "basic_dsp.h"
 #include "SurgeParamConfig.h"
+#include "Tunings.h"
 #include "db_table.h"
 #include "filter_tuning.h"
 #include "modulation_clock.h"
@@ -36,10 +37,6 @@
 #define TXT_SIZE 256
 #endif
 
-namespace Tunings
-{
-constexpr double MIDI_0_FREQ = surge_mm::FilterTuning::MIDI_0_FREQ;
-}
 constexpr int FIRipolI16_N = 8, FIRoffsetI16 = 4;
 constexpr int FIRipol_N = 12;
 constexpr int FIRipol_M = 256, FIRoffset = FIRipol_N >> 1;
