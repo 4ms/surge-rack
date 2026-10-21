@@ -15,8 +15,6 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_
 project(SurgeXTNative VERSION "${SURGE_MM_VERSION}" LANGUAGES C CXX)
 set(SURGE_DIR "${CMAKE_CURRENT_LIST_DIR}/../surge")
 set(COMMON "${SURGE_DIR}/src/common")
-# Checked-in embedded adaptations of the pinned Surge sources.
-set(SURGE_MM_RUNTIME "${CMAKE_CURRENT_LIST_DIR}/runtime")
 set(EURORACK "${SURGE_DIR}/libs/eurorack/eurorack")
 # The default wavetable and the Window oscillator's table, embedded from surge/resources.
 set(TABLE_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/table_resources.cpp")
@@ -28,7 +26,6 @@ add_custom_command(OUTPUT "${TABLE_RESOURCES}"
         -P ${CMAKE_CURRENT_LIST_DIR}/cmake/embed_tables.cmake
     DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmake/embed_tables.cmake ${TABLE_FILES}
     VERBATIM)
-set(EFFECT_COMPAT "${SURGE_MM_RUNTIME}/effect-compat")
 file(GLOB_RECURSE PLAITS_SOURCES CONFIGURE_DEPENDS "${EURORACK}/plaits/dsp/*.cc")
 set(NIMBUS_SRC_SOURCES
     ${SURGE_DIR}/libs/libsamplerate/src/samplerate.c
@@ -84,6 +81,7 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/chowdsp/CHOWEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/ExciterEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/NeuronEffect.cpp
+    ${COMMON}/dsp/modulators/LFOModulationSource.cpp
     ${COMMON}/dsp/effects/chowdsp/SpringReverbEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/spring_reverb/SpringReverbProc.cpp
     ${COMMON}/dsp/effects/chowdsp/shared/StateVariableFilter.cpp
@@ -128,7 +126,7 @@ target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=
     SURGE_SPRING_ALLPASS_DELAY_SIZE=1024)
 target_include_directories(surge-mm-dsp PRIVATE
     ${SURGE_DIR}/libs/libsamplerate/include
-    ${EFFECT_COMPAT} ${COMMON}/dsp/effects ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include
+    ${COMMON}/dsp/effects ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include
     dsp/compat ${COMMON} ${COMMON}/dsp ${COMMON}/dsp/oscillators ${COMMON}/dsp/utilities
     ${COMMON}/dsp/vembertech ${COMMON}/dsp/filters ${SURGE_DIR}/src ${SURGE_DIR}/libs/simde
     ${SURGE_DIR}/libs/sst/sst-basic-blocks/include

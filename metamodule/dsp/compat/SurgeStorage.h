@@ -17,6 +17,7 @@
 #include "filter_tuning.h"
 #include "modulation_clock.h"
 #include "sst/basic-blocks/tables/SincTableProvider.h"
+#include "ModulationHelpers.h"
 // Surge's SurgeStorage.h provides the filter library through FilterConfiguration.h.
 #include "sst/filters.h"
 #include "sst/waveshapers/WaveshaperConfiguration.h"
@@ -179,9 +180,60 @@ struct Parameter
             return -((16 - f) * 31.f / 16.f + 1);
         case ct_percent_with_extend_to_bipolar_static_default:
             return 2 * f - 1;
+        case ct_lfoamplitude:
+        case ct_lfophaseshuffle:
+            return (2.f * f) - 1.f;
         default:
             return f;
         }
+    }
+    float value_to_normalized(float value) const
+    {
+        switch (valtype)
+        {
+        case vt_float:
+            return (value - val_min.f) / (val_max.f - val_min.f);
+        case vt_int:
+            return ((float)value - (float)val_min.i) / ((float)val_max.i - (float)val_min.i);
+        default:
+            return (value > 0.5) ? 1.f : 0.f;
+        }
+    }
+    // Parameter::set_value_f01 with the part of bound_value that the LFO's controls use:
+    // temposync snapping (to whole, dotted and triplet values) and clamping.
+    void set_value_f01(float v)
+    {
+        if (valtype == vt_int)
+        {
+            val.i = std::clamp(int((1 / .99) * (v - .005) * float(val_max.i - val_min.i) + .5) +
+                                   val_min.i,
+                               val_min.i, val_max.i);
+            return;
+        }
+        if (valtype == vt_bool)
+        {
+            val.b = v > .5f;
+            return;
+        }
+        val.f = v * (val_max.f - val_min.f) + val_min.f;
+        if (temposync)
+        {
+            float a, b = std::modf(val.f, &a);
+            if (b < 0)
+            {
+                b += 1.f;
+                a -= 1.f;
+            }
+            b = std::pow(2.f, b);
+            if (b > 1.41f)
+                b = std::log2(double(1.5f));
+            else if (b > 1.167f)
+                b = std::log2(double(1.3333333333f));
+            else
+                b = 0;
+            val.f = a + b;
+        }
+        val.f = std::clamp(val.f, val_min.f, val_max.f);
     }
     // Port helpers: map a 0..1 control onto the parameter's range.
     void set_normalized(float v)
@@ -228,6 +280,99 @@ struct OscillatorStorage : ParamUserData
         int nData{};
         std::array<float, 16> data{};
     } extraConfig;
+};
+enum lfo_type
+{
+    lt_sine = 0,
+    lt_tri,
+    lt_square,
+    lt_ramp,
+    lt_noise,
+    lt_snh,
+    lt_envelope,
+    lt_stepseq,
+    lt_mseg,
+    lt_formula,
+    n_lfo_types,
+};
+enum lfo_trigger_mode
+{
+    lm_freerun = 0,
+    lm_keytrigger,
+    lm_random,
+    n_lfo_trigger_modes,
+};
+enum deform_type
+{
+    type_1,
+    type_2,
+    type_3,
+    type_4,
+    n_deform_types,
+};
+// The ranges and initial values of the MetaModule LFO panel (Surge sets these up per scene in
+// SurgePatch); magnitude and start phase carry their control types for get_extended.
+struct LFOStorage
+{
+    Parameter rate, shape, start_phase, magnitude, deform;
+    Parameter trigmode, unipolar;
+    Parameter delay, hold, attack, decay, sustain, release;
+
+    enum LFOExtraOutputAmplitude
+    {
+        UNSCALED,
+        SCALED
+    } lfoExtraAmplitude{UNSCALED};
+
+    LFOStorage()
+    {
+        Parameter *fields[]{&rate,     &shape,    &start_phase, &magnitude, &deform,
+                            &trigmode, &unipolar, &delay,       &hold,      &attack,
+                            &decay,    &sustain,  &release};
+        constexpr float lo[]{-7, 0, 0, 0, -1, 0, 0, -8, -8, -8, -8, 0, -8};
+        constexpr float hi[]{9, 9, 1, 1, 1, 2, 1, 5, 5, 5, 5, 1, 5};
+        constexpr float initial[]{0, 0, 0, 1, 0, 1, 0, -8, -8, -8, 0, 1, 5};
+        for (unsigned i = 0; i < 13; ++i)
+        {
+            auto &p = *fields[i];
+            p.param_id_in_scene = i;
+            p.val_min.f = lo[i];
+            p.val_max.f = hi[i];
+            p.val.f = initial[i];
+        }
+        magnitude.ctrltype = ct_lfoamplitude;
+        start_phase.ctrltype = ct_lfophaseshuffle;
+        shape.valtype = trigmode.valtype = vt_int;
+        shape.val_min.i = 0;
+        shape.val_max.i = 9;
+        shape.val.i = 0;
+        trigmode.val_min.i = 0;
+        trigmode.val_max.i = 2;
+        trigmode.val.i = lm_keytrigger;
+        unipolar.valtype = vt_bool;
+        unipolar.val.b = false;
+    }
+};
+const int n_stepseqsteps = 16;
+struct StepSequencerStorage
+{
+    float steps[n_stepseqsteps]{};
+    int loop_start{}, loop_end{15};
+    float shuffle{};
+    uint64_t trigmask{};
+};
+// Only the fields the LFO reads before reaching (unsupported) MSEG evaluation.
+struct MSEGStorage
+{
+    enum EditMode
+    {
+        ENVELOPE,
+        LFO,
+    } editMode{ENVELOPE};
+    float totalDuration{};
+};
+struct FormulaModulatorStorage
+{
 };
 struct FxStorage
 {
@@ -323,17 +468,23 @@ struct SurgeStorage
         pm1_generator.seed(seed);
         pm1_distribution.reset();
     }
-    uint32_t rand() { return rand_u32(); }
-    uint32_t rand_u32()
+    // An engine can supply rand, rand_u32 and rand_01 from its own generator instead (the LFO
+    // keeps its established sequence this way).
+    struct RandomSource
     {
-        rand_01();
-        return random_state;
-    }
+        virtual ~RandomSource() = default;
+        virtual uint32_t rand() = 0;
+        virtual uint32_t rand_u32() = 0;
+        virtual float rand_01() = 0;
+    };
+    RandomSource *random{};
+    uint32_t rand() { return random ? random->rand() : xorshift_u32(); }
+    uint32_t rand_u32() { return random ? random->rand_u32() : xorshift_u32(); }
     float rand_01()
     {
-        random_state ^= random_state << 13;
-        random_state ^= random_state >> 17;
-        random_state ^= random_state << 5;
+        if (random)
+            return random->rand_01();
+        xorshift_u32();
         return (random_state >> 8) * (1.f / 16777216.f);
     }
     float rand_pm1()
@@ -378,7 +529,18 @@ struct SurgeStorage
     float lookup_waveshape(sst::waveshapers::WaveshaperType entry, float x) const;
     float lookup_waveshape_warp(sst::waveshapers::WaveshaperType entry, float x) const;
 
+    double songpos{0};
+    // Only Formula modulators report errors, and they are not built.
+    void reportError(const std::string &, const std::string &) {}
+
   private:
+    uint32_t xorshift_u32()
+    {
+        random_state ^= random_state << 13;
+        random_state ^= random_state >> 17;
+        random_state ^= random_state << 5;
+        return random_state;
+    }
     surge_mm::FilterTuning tuning;
     surge_mm::EnvelopeClock envelope;
 };

@@ -28,6 +28,7 @@ scanned = [
         "RotarySpeakerEffect.cpp", "TreemonsterEffect.cpp", "chowdsp/NeuronEffect.cpp",
         "chowdsp/ExciterEffect.cpp", "chowdsp/CHOWEffect.cpp", "chowdsp/SpringReverbEffect.cpp")],
     common / "dsp" / "Effect.cpp",
+    mm / "dsp" / "compat" / "SurgeStorage.h",
     *sorted((mm / "dsp").glob("*.cpp")),
     *sorted((mm / "dsp").glob("*.h")),
 ]

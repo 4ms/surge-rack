@@ -51,6 +51,8 @@ enum ctrltypes
     ct_freq_vocoder_high,
     ct_freq_vocoder_low,
     ct_fxlfowave,
+    ct_lfoamplitude,
+    ct_lfophaseshuffle,
     ct_lforate,
     ct_lforate_deactivatable,
     ct_modern_trimix,
@@ -359,6 +361,18 @@ template <typename P> void set_parameter_range(P &p, int ctrltype)
         p.val_min.i = 0;
         p.val_max.i = 5;
         p.val_default.i = 0;
+        break;
+    case ct_lfoamplitude:
+        p.val_min.f = 0;
+        p.val_max.f = 1;
+        p.valtype = vt_float;
+        p.val_default.f = 1;
+        break;
+    case ct_lfophaseshuffle:
+        p.val_min.f = 0;
+        p.val_max.f = 1;
+        p.valtype = vt_float;
+        p.val_default.f = 0;
         break;
     case ct_lforate:
         p.valtype = vt_float;

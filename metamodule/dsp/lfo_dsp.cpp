@@ -1,13 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Native adapter for src/LFO.h and the original LFOModulationSource engine.
 #include "lfo_dsp.h"
-#include "LFOKernel.h"
+#include "modulators/LFOModulationSource.h"
+#include <memory>
+#include <new>
+#include <random>
 #include "modulation_clock.h"
 namespace surge_mm
 {
 namespace
 {
 constexpr std::array<unsigned, 10> offsets{0, 2, 4, 3, 7, 9, 8, 10, 11, 12};
+// Number of deform types for each of the eight shapes the panel offers.
+constexpr std::array<int, 8> deform_counts{3, 3, 1, 3, 1, 2, 3, 2};
+// The module's random sequence: one generator for all voices, restarted on reset.
+struct LFORandom : SurgeStorage::RandomSource
+{
+    static constexpr unsigned seed = 0x2468ace1;
+    std::mt19937 generator{seed};
+    uint32_t rand() override { return std::uniform_int_distribution<int>(0, RAND_MAX)(generator); }
+    uint32_t rand_u32() override { return std::uniform_int_distribution<uint32_t>()(generator); }
+    float rand_01() override { return std::uniform_real_distribution<float>(0, 1)(generator); }
+};
 // Rack starts Schmitt triggers unarmed and retains their state on disconnection.
 struct RackTrigger
 {
@@ -87,9 +101,9 @@ struct RackClock
 };
 struct Voice
 {
-    lfo::LFOStorage settings;
-    std::array<lfo::pdata, 13> values{};
-    lfo::LFOKernel kernel;
+    LFOStorage settings;
+    std::array<pdata, 13> values{};
+    LFOModulationSource kernel;
     Edge gate_edge, env_edge;
     bool attack{}, env_attack{}, high{}, previous_high{};
     RackTrigger rack_gate, rack_env;
@@ -97,9 +111,9 @@ struct Voice
     std::array<unsigned, 3> countdown{};
     std::array<float, 3> previous{}, next{};
 };
-lfo::Parameter &field(lfo::LFOStorage &s, unsigned id)
+Parameter &field(LFOStorage &s, unsigned id)
 {
-    lfo::Parameter *fields[]{&s.rate,     &s.shape,    &s.start_phase, &s.magnitude, &s.deform,
+    Parameter *fields[]{&s.rate,     &s.shape,    &s.start_phase, &s.magnitude, &s.deform,
                              &s.trigmode, &s.unipolar, &s.delay,       &s.hold,      &s.attack,
                              &s.decay,    &s.sustain,  &s.release};
     return *fields[id];
@@ -107,8 +121,9 @@ lfo::Parameter &field(lfo::LFOStorage &s, unsigned id)
 } // namespace
 struct LFO
 {
-    lfo::SurgeStorage storage;
-    lfo::StepSequencerStorage steps;
+    SurgeStorage storage;
+    LFORandom random;
+    StepSequencerStorage steps;
     std::array<Voice, 4> voices;
     TempoClock tempo;
     RackClock rack_clock;
@@ -116,6 +131,7 @@ struct LFO
     unsigned position{}, channels{1}, pulse_samples{576}, previous_shape{};
     LFO()
     {
+        storage.random = &random;
         reset_lfo(this);
     }
 };
@@ -144,14 +160,18 @@ void reset_lfo(LFO *p)
     p->tempo = {};
     p->rack_clock = {};
     p->steps = {};
-    p->storage.generator.seed(0x2468ace1);
+    p->random.generator.seed(LFORandom::seed);
     p->storage.temposyncratio = p->storage.temposyncratio_inv = 1;
     for (auto &v : p->voices)
     {
         v.settings = {};
         v.values = {};
-        v.kernel.reset_native(&p->storage, &v.settings, v.values.data(), &p->steps);
-        v.kernel.envRetrigMode = lfo::LFOKernel::FROM_LAST;
+        // A fresh LFO, as Surge creates for each voice, without allocating.
+        std::destroy_at(&v.kernel);
+        new (&v.kernel) LFOModulationSource();
+        v.kernel.assign(&p->storage, &v.settings, v.values.data(), nullptr, &p->steps, nullptr,
+                        nullptr);
+        v.kernel.envRetrigMode = LFOModulationSource::FROM_LAST;
         v.gate_edge = {};
         v.env_edge = {};
         v.rack_gate = {};
@@ -166,7 +186,7 @@ void lfo_samplerate(LFO *p, float sr)
 {
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
-    p->storage.set_samplerate(sr);
+    p->storage.setSamplerate(sr);
     p->pulse_samples = unsigned(std::ceil(sr * .012));
     if (p->rack_compat)
         lfo_rack_mode(p, true);
@@ -234,13 +254,13 @@ void process_lfo(LFO *p, std::array<float, lfo_parameter_count> &params,
     }
     if (p->position == 0)
     {
-        unsigned shape = unsigned(std::round(params[10] * 7)),
+        unsigned shape = std::min(unsigned(std::round(params[10] * 7)), 7u),
                  deform = std::min(unsigned(std::round(params[12] * 2)),
-                                   unsigned(lfo::deform_counts[shape] - 1));
+                                   unsigned(deform_counts[shape] - 1));
         if (rack_compat && deform != unsigned(std::round(params[12] * 2)))
             params[12] = deform / 2.f;
         unsigned sync = unsigned(std::round(params[13] * 3));
-        if (!rack_compat || shape == lfo::lt_stepseq)
+        if (!rack_compat || shape == lt_stepseq)
         {
             p->steps.loop_start = int(std::round(params[49] * 15));
             p->steps.loop_end = int(std::round(params[50] * 15));
@@ -259,10 +279,10 @@ void process_lfo(LFO *p, std::array<float, lfo_parameter_count> &params,
                                  unsigned(std::round(params[16] * 4))};
         // Rack selects automatic A/B roles from the preceding block's shape.
         for (unsigned i = 0; i < 2; ++i)
-            if (rack_compat && p->previous_shape != lfo::lt_stepseq)
+            if (rack_compat && p->previous_shape != lt_stepseq)
                 trigger_type[i] = 2 - i;
             else if (!trigger_type[i])
-                trigger_type[i] = p->previous_shape == lfo::lt_stepseq ? 3 + i : 2 - i;
+                trigger_type[i] = p->previous_shape == lt_stepseq ? 3 + i : 2 - i;
         p->previous_shape = shape;
         if (rack_compat)
             for (auto &v : p->voices)
@@ -276,7 +296,7 @@ void process_lfo(LFO *p, std::array<float, lfo_parameter_count> &params,
             s.unipolar.val.b = params[11] > .5f;
             s.deform.deform_type = deform;
             s.rate.deactivated = counts[3] > 0;
-            s.trigmode.val.i = params[14] > .5f ? lfo::lm_random : lfo::lm_keytrigger;
+            s.trigmode.val.i = params[14] > .5f ? lm_random : lm_keytrigger;
             for (unsigned i = 0; i < 10; ++i)
             {
                 auto &f = field(s, offsets[i]);
@@ -307,7 +327,7 @@ void process_lfo(LFO *p, std::array<float, lfo_parameter_count> &params,
             bool attack = v.attack, env_attack = v.env_attack;
             v.attack = v.env_attack = false;
             auto retrigger_mode =
-                params[56] > .5f ? lfo::LFOKernel::FROM_ZERO : lfo::LFOKernel::FROM_LAST;
+                params[56] > .5f ? LFOModulationSource::FROM_ZERO : LFOModulationSource::FROM_LAST;
             if (attack)
             {
                 v.kernel.envRetrigMode = retrigger_mode;
@@ -333,7 +353,7 @@ void process_lfo(LFO *p, std::array<float, lfo_parameter_count> &params,
             }
             bool new_stage = v.kernel.getEnvState() != v.prior_env;
             v.prior_env = v.kernel.getEnvState();
-            bool ended = new_stage && v.prior_env == lfo::lfoeg_stuck && !v.high;
+            bool ended = new_stage && v.prior_env == lfoeg_stuck && !v.high;
             for (unsigned i = 0; i < 2; ++i)
                 if (!v.countdown[i + 1])
                 {
