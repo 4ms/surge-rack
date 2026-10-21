@@ -1,12 +1,7 @@
 {
-    "MetaModulePluginMaintainer": "",
+    "MetaModulePluginMaintainer": "4ms Company",
     "MetaModulePluginMaintainerEmail": "",
-    "MetaModulePluginMaintainerUrl": "",
-    "MetaModuleDescription": "",
-    "MetaModuleIncludedModules": [
-    {
-      "slug": "VCO",
-      "name": "VCO"
-    }
-    ]
+    "MetaModulePluginMaintainerUrl": "https://4mscompany.com",
+    "MetaModuleDescription": "Surge XT modules for MetaModule",
+    "MetaModuleIncludedModules": []
 }

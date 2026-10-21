@@ -12,58 +12,34 @@ endif()
 
 include(${METAMODULE_SDK_DIR}/plugin.cmake)
 
-project(SurgeXTMetaModulePlugin
-    DESCRIPTION "SurgeXT Plugin for MetaModule" 
+# Surge's version.cpp is generated from the top-level project's version (as in the Rack build)
+project(SurgeXTMetaModulePlugin VERSION 1.0
+    DESCRIPTION "SurgeXT Plugin for MetaModule"
     LANGUAGES   C CXX ASM
 )
 
+set(SURGE_RACK_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
+
+# The Surge engine (surge-common and its libraries), configured for MetaModule
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/surge-engine.cmake)
+
 add_library(SurgeXT STATIC)
 
-set(SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
-
-target_sources(SurgeXT
-    PRIVATE
-    ${SOURCE_DIR}/src/VCO.cpp
+target_sources(SurgeXT PRIVATE
+    bringup_init.cpp
 )
-
-# add_subdirectory(${SOURCE_DIR}/libs/sst-rackhelpers ${CMAKE_CURRENT_BINARY_DIR}/sst-rackhelpers)
-
-set(SURGE_BUILD_32BIT_LINUX TRUE CACHE BOOL "Allow 32 bit to try")
-set(SURGE_SKIP_JUCE_FOR_RACK TRUE CACHE BOOL "skip surge Juce build")
-set(SURGE_SKIP_LUA TRUE CACHE BOOL "skip surge Lua build")
-set(SURGE_SKIP_AIRWINDOWS TRUE CACHE BOOL "skip surge airwindows build")
-set(SURGE_SKIP_ODDSOUND_MTS TRUE CACHE BOOL "skip surge oddsound-mts build")
-set(SURGE_SKIP_VST3 TRUE CACHE BOOL "skip surge VST3 build")
-set(SURGE_SKIP_ALSA TRUE CACHE BOOL "skip surge Alsa build")
-set(SURGE_SKIP_STANDALONE TRUE CACHE BOOL "skip surge standalone build")
-set(SURGE_COMPILE_BLOCK_SIZE 8 CACHE STRING "surge compile block size")
-set(SURGE_SKIP_PIE_CHANGE TRUE CACHE BOOL "skip pie")
-set(SURGE_SKIP_JUCE_DSP TRUE CACHE BOOL "skip juce dsp")
-set(SURGE_NO_OS TRUE CACHE BOOL "no plugin infra")
-
-add_subdirectory(${SOURCE_DIR}/surge ${CMAKE_CURRENT_BINARY_DIR}/surge)
 
 target_include_directories(SurgeXT PRIVATE
-    ${SOURCE_DIR}/src
-    # ${SOURCE_DIR}/surge/src/common
+    ${SURGE_RACK_DIR}/src
 )
 
-set_property(TARGET SurgeXT PROPERTY CXX_STANDARD 23)
+# The SDK requires C++20. Surge needs u8string() to return std::string, as in Rack's C++20 build.
+set_property(TARGET SurgeXT PROPERTY CXX_STANDARD 20)
+target_compile_options(SurgeXT PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-char8_t>)
 
-
-target_link_libraries(SurgeXT INTERFACE 
-    surge-common 
-    # juce_dsp_rack_sub 
-    # tinyxml
-    # strnatcmp 
-    # samplerate 
-    # sst-plugininfra 
-    # fmt 
-    # sqlite 
-    # eurorack 
-    # airwindows 
-    # sst-basic-blocks
-)
+# create_plugin() packages the objects of the libraries linked directly to SurgeXT
+# (not their dependencies), so every static library in the engine is listed here.
+target_link_libraries(SurgeXT PRIVATE ${SURGE_MM_ENGINE_LIBS})
 
 #######################################
 
@@ -71,11 +47,14 @@ if("${INSTALL_DIR}" STREQUAL "")
     set(INSTALL_DIR ${CMAKE_CURRENT_LIST_DIR}/metamodule-plugins)
 endif()
 
-create_plugin(
-    SOURCE_LIB      SurgeXT                                          # This is the cmake target name (defined in add_target)
-    PLUGIN_NAME     SurgeXT                                          # This must match the brand "slug" used in VCV Rack
-    PLUGIN_JSON     ${SOURCE_DIR}/plugin.json                      # Path to the plugin.json file used by VCV Rack
-    SOURCE_ASSETS   ${CMAKE_CURRENT_LIST_DIR}/assets               # Path to the assets/ dir containing the PNGs
-    DESTINATION     ${INSTALL_DIR}                                 # Dir where plugin .mmplugin file should be put
-)
+# create_plugin() makes a presets/ dir next to the plugin.json it is given,
+# so give it a copy in the build dir instead of the Rack plugin's plugin.json.
+configure_file(${SURGE_RACK_DIR}/plugin.json ${CMAKE_CURRENT_BINARY_DIR}/rack-plugin/plugin.json COPYONLY)
 
+create_plugin(
+    SOURCE_LIB      SurgeXT
+    PLUGIN_NAME     SurgeXTRack
+    PLUGIN_JSON     ${CMAKE_CURRENT_BINARY_DIR}/rack-plugin/plugin.json
+    SOURCE_ASSETS   ${CMAKE_CURRENT_LIST_DIR}/assets
+    DESTINATION     ${INSTALL_DIR}
+)
