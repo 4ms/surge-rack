@@ -80,6 +80,7 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/FrequencyShifterEffect.cpp
     ${COMMON}/dsp/effects/TreemonsterEffect.cpp
     ${COMMON}/dsp/effects/RotarySpeakerEffect.cpp
+    ${COMMON}/dsp/effects/DistortionEffect.cpp
     ${COMMON}/dsp/filters/VectorizedSVFilter.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp

@@ -1,37 +1,54 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "distortion_dsp.h"
-#include "DistortionKernel.h"
+#include "DistortionEffect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+void initialize_shaper(sst::waveshapers::QuadWaveshaperState &state,
+                       sst::waveshapers::WaveshaperType type)
+{
+    float initial[sst::waveshapers::n_waveshaper_registers]{};
+    sst::waveshapers::initializeWaveshaperRegister(type, initial);
+    for (unsigned i = 0; i < sst::waveshapers::n_waveshaper_registers; ++i)
+        state.R[i] = _mm_set1_ps(initial[i]);
+    state.init = _mm_cmpeq_ps(_mm_setzero_ps(), _mm_setzero_ps());
+}
 void warm_shapers()
 {
     static const bool ready = []() {
-        for (int i = 0; i < distortion::n_fxws; ++i)
+        for (int i = 0; i < n_fxws; ++i)
         {
             sst::waveshapers::QuadWaveshaperState state{};
-            distortion::initialize_shaper(state, distortion::FXWaveShapers[i]);
-            auto fn = sst::waveshapers::GetQuadWaveshaper(distortion::FXWaveShapers[i]);
+            initialize_shaper(state, FXWaveShapers[i]);
+            auto fn = sst::waveshapers::GetQuadWaveshaper(FXWaveShapers[i]);
             fn(&state, _mm_setzero_ps(), _mm_set1_ps(1));
         }
         return true;
     }();
     (void)ready;
 }
+struct Kernel : DistortionEffect
+{
+    using DistortionEffect::DistortionEffect;
+    // Natively, a model change starts the shaper from its initial registers.
+    void select_model(int model) { initialize_shaper(wsState, FXWaveShapers[model]); }
+};
 struct Voice
 {
-    distortion::DistortionStorage global;
-    distortion::DistortionSettings settings;
-    std::array<distortion::DistortionValue, 12> values{};
-    distortion::DistortionKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
     int model{-1};
     Voice(float sr = 48000)
     {
-        global.set_samplerate(sr);
+        global.setSamplerate(sr);
+        kernel.init_ctrltypes();
     }
     void reset()
     {
@@ -50,8 +67,8 @@ struct Distortion
     unsigned position{}, channels{1};
     std::unique_ptr<Voice> rack_mono;
     std::array<bool, 4> rack_created{};
-    std::array<distortion::DistortionValue, 12> shared_values{};
-    distortion::DistortionSettings shared_settings{};
+    std::array<pdata, n_fx_params> shared_values{};
+    FxStorage shared_settings{};
     bool rack_mode{};
     unsigned last_rack_channels{};
     Distortion()
@@ -99,9 +116,9 @@ void distortion_samplerate(Distortion *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_distortion(p);
 }
@@ -182,28 +199,23 @@ void process_distortion(Distortion *p, const std::array<float, 18> &params,
                 v.values[11].i = int(std::round(v.values[11].f));
             v.settings.p[3].deactivated = params[12] < .5f;
             v.settings.p[9].deactivated = params[13] < .5f;
-            v.settings.p[0].multiplier = params[15] > .5f ? 3 : 1;
-            v.settings.p[6].multiplier = params[16] > .5f ? 3 : 1;
-            v.settings.p[4].multiplier = params[17] > .5f ? 5 : 1;
+            v.settings.p[0].extend_range = params[15] > .5f;
+            v.settings.p[6].extend_range = params[16] > .5f;
+            v.settings.p[4].extend_range = params[17] > .5f;
             if (!imported && v.pending)
             {
-                v.kernel.hr_a.reset();
-                v.kernel.hr_b.reset();
-                v.kernel.drive.set_target(0);
-                v.kernel.drive.instantize();
-                v.kernel.outgain.set_target(0);
-                v.kernel.outgain.instantize();
-                v.kernel.init();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             if (!imported && v.model != v.values[11].i)
             {
                 v.model = v.values[11].i;
-                distortion::initialize_shaper(v.kernel.wsState, distortion::FXWaveShapers[v.model]);
+                v.kernel.select_model(v.model);
             }
             for (unsigned s = 0; s < 2; ++s)
                 std::copy_n(buffer.input[s], 8, buffer.processed[s]);
-            v.kernel.process(buffer.processed[0], buffer.processed[1]);
+            // Like Rack's FX host: Distortion fades out by its ringout count otherwise.
+            v.kernel.process_ringout(buffer.processed[0], buffer.processed[1], true);
             if (imported)
             {
                 p->shared_values = v.values;
