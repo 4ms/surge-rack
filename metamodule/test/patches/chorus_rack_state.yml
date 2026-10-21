@@ -1,0 +1,35 @@
+PatchData:
+  patch_name: SurgeChorusRackState
+  description: SurgeXT Chorus bring-up
+  module_slugs:
+    0: HubMedium
+    1: SurgeXTRack:SurgeXTFXChorus
+  int_cables: []
+  mapped_ins:
+    - panel_jack_id: 0
+      ins:
+        - module_id: 1
+          jack_id: 0
+    - panel_jack_id: 1
+      ins:
+        - module_id: 1
+          jack_id: 1
+  mapped_outs:
+    - panel_jack_id: 0
+      out:
+        module_id: 1
+        jack_id: 0
+    - panel_jack_id: 1
+      out:
+        module_id: 1
+        jack_id: 1
+  static_knobs: []
+  mapped_knobs: []
+  midi_maps:
+    set: []
+  midi_poly_num: 0
+  valid_knob_set_names: 0
+  vcvModuleStates:
+    - module_id: 1
+      data: |-
+        {"xtshared":{"streamingVersion":1,"buildInfo":"os:mac surge:abc","localStyle":-1,"localLightColor":-1,"localModLightColor":-1},"modulespecific":{"loadedPreset":1,"presetName":"Init (Send)","presetIsDirty":false,"polyphonicMode":true,"paramNatural":[]}}
