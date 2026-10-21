@@ -11,13 +11,6 @@ namespace surge_mm
 {
 namespace
 {
-float tempo_round(float rate)
-{
-    float whole = std::floor(rate), fraction = std::exp2(rate - whole);
-    return whole + (fraction > 1.41f    ? std::log2(1.5f)
-                    : fraction > 1.167f ? std::log2(4.f / 3)
-                                        : 0);
-}
 float ratio(float value)
 {
     constexpr float values[]{-32, -24, -16, -12, -8, -7, -6, -5, -4, -3, -2, 1,
@@ -151,7 +144,7 @@ static void process_rack_quad_lfo(QuadLFO *e, const std::array<float, 19> &p,
                                  : (p[i] * 2 - 1) + (in[4 + i][c] / 5.f) * 2;
                 float rate = v[mode ? 0 : stage] * 13 - 5, deform = v[4 + stage];
                 if (mode && r.clock.synced)
-                    rate = float(tempo_round(rate - 1) + std::log2(double(r.clock.ratio)));
+                    rate = float(round_tempo_time(rate - 1) + std::log2(double(r.clock.ratio)));
                 if (mode == 1 && stage)
                 {
                     constexpr float ratios[12]{2, 3, 4, 5, 6, 7, 8, 12, 16, 24, 32};
@@ -283,7 +276,7 @@ void process_quad_lfo(QuadLFO *e, const std::array<float, 19> &p,
                 }
                 float rate = v[mode ? 0 : stage] * 13 - 5;
                 if (e->synced)
-                    rate = tempo_round(rate - 1) + std::log2(e->tempo_ratio);
+                    rate = round_tempo_time(rate - 1) + std::log2(e->tempo_ratio);
                 float phase = 0, amplitude = 1, deform = v[4 + stage];
                 if (mode == 1 && stage)
                     rate += ratio(v[stage]);
