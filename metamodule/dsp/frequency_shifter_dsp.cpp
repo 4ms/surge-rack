@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "frequency_shifter_dsp.h"
 #include "fx_clock.h"
-#include "FrequencyShifterKernel.h"
+#include "FrequencyShifterEffect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -9,12 +10,16 @@ namespace
 {
 struct Voice
 {
-    frequency_shifter::FrequencyShifterStorage global;
-    frequency_shifter::FrequencyShifterSettings settings;
-    std::array<frequency_shifter::FrequencyShifterValue, 5> values{};
-    frequency_shifter::FrequencyShifterKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    FrequencyShifterEffect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
     void reset()
     {
         pending = true;
@@ -29,8 +34,8 @@ struct FrequencyShifter
 {
     std::array<std::unique_ptr<Voice>, 4> voices;
     std::unique_ptr<Voice> rack_mono;
-    frequency_shifter::FrequencyShifterSettings rack_settings;
-    std::array<frequency_shifter::FrequencyShifterValue, 5> rack_values{};
+    FxStorage rack_settings;
+    std::array<pdata, n_fx_params> rack_values{};
     std::array<bool, 4> rack_created{};
     FXClock tempo;
     unsigned position{}, channels{1}, last_rack_channels{};
@@ -65,12 +70,12 @@ void frequency_shifter_rack_clock(FrequencyShifter *p, bool enabled)
         float sr = p->voices[0]->global.samplerate;
         auto fresh = [sr](std::unique_ptr<Voice> &v) {
             v = std::make_unique<Voice>();
-            v->global.set_samplerate(sr);
+            v->global.setSamplerate(sr);
         };
         fresh(p->rack_mono);
         for (auto &v : p->voices)
             fresh(v);
-        p->rack_settings = {};
+        p->rack_settings = p->rack_mono->settings;
         p->rack_values = {};
         frequency_shifter_rack_init(p, *p->rack_mono);
         p->rack_mono->kernel.init_default_values();
@@ -92,9 +97,9 @@ void frequency_shifter_samplerate(FrequencyShifter *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     p->tempo.sample_rate_changed();
     if (!p->tempo.rack_mode)
         reset_frequency_shifter(p);
@@ -180,7 +185,7 @@ void process_frequency_shifter(FrequencyShifter *p, const std::array<float, 8> &
                     v.settings.p[i].val = v.values[i];
                 if (v.pending)
                 {
-                    v.kernel.reset_native();
+                    reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                     v.pending = false;
                 }
             }

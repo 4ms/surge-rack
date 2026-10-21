@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "rotary_dsp.h"
 #include "fx_clock.h"
-#include "RotaryKernel.h"
+#include "RotarySpeakerEffect.h"
 #include <memory>
 namespace surge_mm
 {
@@ -10,7 +10,7 @@ namespace
 void initialize_shaper(sst::waveshapers::QuadWaveshaperState &state, int model)
 {
     float initial[sst::waveshapers::n_waveshaper_registers]{};
-    sst::waveshapers::initializeWaveshaperRegister(rotary::FXWaveShapers[model], initial);
+    sst::waveshapers::initializeWaveshaperRegister(FXWaveShapers[model], initial);
     for (int i = 0; i < sst::waveshapers::n_waveshaper_registers; ++i)
         state.R[i] = _mm_set1_ps(initial[i]);
     state.init = _mm_cmpeq_ps(_mm_setzero_ps(), _mm_setzero_ps());
@@ -18,23 +18,22 @@ void initialize_shaper(sst::waveshapers::QuadWaveshaperState &state, int model)
 void warm_shapers()
 {
     static const bool ready = []() {
-        for (int i = 0; i < rotary::n_fxws; ++i)
+        for (int i = 0; i < n_fxws; ++i)
         {
             sst::waveshapers::QuadWaveshaperState state{};
             initialize_shaper(state, i);
-            auto fn = sst::waveshapers::GetQuadWaveshaper(rotary::FXWaveShapers[i]);
+            auto fn = sst::waveshapers::GetQuadWaveshaper(FXWaveShapers[i]);
             fn(&state, _mm_setzero_ps(), _mm_set1_ps(1));
         }
         return true;
     }();
     (void)ready;
 }
-struct Kernel : rotary::RotaryKernel
+struct Kernel : RotarySpeakerEffect
 {
-    using rotary::RotaryKernel::RotaryKernel;
+    using RotarySpeakerEffect::RotarySpeakerEffect;
     void clear()
     {
-        nativeRateBounds = true;
         lfo.set_phase(0);
         lf_lfo.set_phase(0);
         dL = {};
@@ -51,13 +50,17 @@ struct Kernel : rotary::RotaryKernel
 };
 struct Voice
 {
-    rotary::RotaryStorage global;
-    rotary::RotarySettings settings;
-    std::array<rotary::RotaryValue, 8> values{};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
     Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
     int model{-1};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
     void reset()
     {
         pending = true;
@@ -73,8 +76,8 @@ struct Rotary
 {
     std::array<std::unique_ptr<Voice>, 4> voices;
     std::unique_ptr<Voice> rack_mono;
-    rotary::RotarySettings rack_settings;
-    std::array<rotary::RotaryValue, 8> rack_values{};
+    FxStorage rack_settings;
+    std::array<pdata, n_fx_params> rack_values{};
     std::array<bool, 4> rack_created{};
     FXClock tempo;
     unsigned position{}, channels{1}, last_rack_channels{};
@@ -99,7 +102,6 @@ void rotary_rack_init(Rotary *p, Voice &v)
     v.settings = p->rack_settings;
     v.values = p->rack_values;
     v.global.temposyncratio = p->tempo.ratio;
-    v.kernel.nativeRateBounds = false;
     v.kernel.init();
     v.pending = false;
 }
@@ -111,12 +113,12 @@ void rotary_rack_clock(Rotary *p, bool enabled)
         float sr = p->voices[0]->global.samplerate;
         auto fresh = [sr](std::unique_ptr<Voice> &v) {
             v = std::make_unique<Voice>();
-            v->global.set_samplerate(sr);
+            v->global.setSamplerate(sr);
         };
         fresh(p->rack_mono);
         for (auto &v : p->voices)
             fresh(v);
-        p->rack_settings = {};
+        p->rack_settings = p->rack_mono->settings;
         p->rack_values = {};
         rotary_rack_init(p, *p->rack_mono);
         p->rack_mono->kernel.init_default_values();
@@ -138,9 +140,9 @@ void rotary_samplerate(Rotary *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     p->tempo.sample_rate_changed();
     if (!p->tempo.rack_mode)
         reset_rotary(p);
@@ -233,6 +235,11 @@ void process_rotary(Rotary *p, const std::array<float, 11> &params,
                     initialize_shaper(v.kernel.wsState, v.model);
                 }
             }
+            // Surge applies no bound to the horn rate. Keep 2^rate finite on import, and
+            // within -32..16 octaves natively.
+            const float ratio = v.settings.p[0].temposync ? v.global.temposyncratio : 1.f;
+            v.values[0].f = imported ? std::min(v.values[0].f, 127.f / ratio)
+                                     : std::clamp(v.values[0].f, -32.f / ratio, 16.f / ratio);
             for (unsigned s = 0; s < 2; ++s)
                 std::copy_n(buffer.input[s], 8, buffer.processed[s]);
             v.kernel.process(buffer.processed[0], buffer.processed[1]);

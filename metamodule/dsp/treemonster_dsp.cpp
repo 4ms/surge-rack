@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "treemonster_dsp.h"
-#include "TreeMonsterKernel.h"
+#include "TreemonsterEffect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -8,16 +9,16 @@ namespace
 {
 struct Voice
 {
-    treemonster::TreeMonsterStorage global;
-    treemonster::TreeMonsterSettings settings;
-    std::array<treemonster::TreeMonsterValue, 8> values{};
-    treemonster::TreeMonsterKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    TreemonsterEffect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[4][8]{};
     bool pending{true};
     Voice(float sr = 48000)
     {
-        global.set_samplerate(sr);
-        kernel.initialize_previous_sample();
+        global.setSamplerate(sr);
+        kernel.init_ctrltypes();
     }
     void reset()
     {
@@ -35,7 +36,7 @@ struct TreeMonster
     unsigned position{}, channels{1};
     std::unique_ptr<Voice> rack_mono;
     std::array<bool, 4> rack_created{};
-    std::array<treemonster::TreeMonsterValue, 8> shared_values{};
+    std::array<pdata, n_fx_params> shared_values{};
     bool rack_mode{};
     unsigned last_rack_channels{};
     TreeMonster()
@@ -80,9 +81,9 @@ void treemonster_samplerate(TreeMonster *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_treemonster(p);
 }
@@ -152,7 +153,7 @@ void process_treemonster(TreeMonster *p, const std::array<float, 11> &params,
             v.settings.p[3].deactivated = params[9] < .5f;
             if (!imported && v.pending)
             {
-                v.kernel.reset_native();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             for (unsigned s = 0; s < 2; ++s)
