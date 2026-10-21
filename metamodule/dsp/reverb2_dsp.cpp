@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "reverb2_dsp.h"
-#include "Reverb2Kernel.h"
+#include "Reverb2Effect.h"
+#include "effect_host.h"
 #include <memory>
 namespace surge_mm
 {
@@ -8,12 +9,16 @@ namespace
 {
 struct Voice
 {
-    reverb2::Reverb2Storage global;
-    reverb2::Reverb2Settings settings;
-    std::array<reverb2::Reverb2Value, 10> values{};
-    reverb2::Reverb2Kernel<> kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Reverb2Effect kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
+    Voice()
+    {
+        kernel.init_ctrltypes();
+    }
     void reset()
     {
         pending = true;
@@ -55,8 +60,7 @@ void reverb2_rack_mode(Reverb2 *p, bool enabled)
         float sr = p->voices[0]->global.samplerate;
         auto fresh = [sr](std::unique_ptr<Voice> &v) {
             v = std::make_unique<Voice>();
-            v->global.set_samplerate(sr);
-            v->kernel.expand_rack_storage();
+            v->global.setSamplerate(sr);
         };
         fresh(p->rack_mono);
         p->rack_mono->kernel.init();
@@ -81,9 +85,9 @@ void reverb2_samplerate(Reverb2 *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_reverb2(p);
 }
@@ -145,7 +149,7 @@ void process_reverb2(Reverb2 *p, const std::array<float, 12> &params,
             }
             if (!imported && v.pending)
             {
-                v.kernel.reset_native();
+                reset_effect(v.kernel, &v.global, &v.settings, v.values.data());
                 v.pending = false;
             }
             for (unsigned s = 0; s < 2; ++s)

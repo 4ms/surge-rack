@@ -83,6 +83,7 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/RingModulatorEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/CHOWEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/ExciterEffect.cpp
+    ${COMMON}/dsp/effects/Reverb2Effect.cpp
     ${COMMON}/dsp/filters/VectorizedSVFilter.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp
@@ -113,7 +114,9 @@ add_library(surge-mm-dsp STATIC
 # Only the Effect base class; the port instantiates each effect directly.
 set_source_files_properties(${COMMON}/dsp/Effect.cpp PROPERTIES COMPILE_DEFINITIONS SURGE_EFFECT_BASE_ONLY)
 set_target_properties(surge-mm-dsp PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES)
-target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=1)
+# Reverb2's allpasses cover 192 kHz in 32768 samples (4.7 MB less per voice than desktop).
+target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=1
+    SURGE_REVERB2_MAX_ALLPASS_LEN=32768)
 target_include_directories(surge-mm-dsp PRIVATE
     ${SURGE_DIR}/libs/libsamplerate/include
     ${EFFECT_COMPAT} ${COMMON}/dsp/effects ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include
