@@ -83,6 +83,10 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/RingModulatorEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/CHOWEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/ExciterEffect.cpp
+    ${COMMON}/dsp/effects/chowdsp/NeuronEffect.cpp
+    ${COMMON}/dsp/effects/chowdsp/SpringReverbEffect.cpp
+    ${COMMON}/dsp/effects/chowdsp/spring_reverb/SpringReverbProc.cpp
+    ${COMMON}/dsp/effects/chowdsp/shared/StateVariableFilter.cpp
     ${COMMON}/dsp/effects/Reverb2Effect.cpp
     ${COMMON}/dsp/effects/BBDEnsembleEffect.cpp
     ${COMMON}/dsp/effects/NimbusEffect.cpp
@@ -117,9 +121,11 @@ add_library(surge-mm-dsp STATIC
 # Only the Effect base class; the port instantiates each effect directly.
 set_source_files_properties(${COMMON}/dsp/Effect.cpp PROPERTIES COMPILE_DEFINITIONS SURGE_EFFECT_BASE_ONLY)
 set_target_properties(surge-mm-dsp PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES)
-# Reverb2's allpasses cover 192 kHz in 32768 samples (4.7 MB less per voice than desktop).
+# Delay capacities sized for the 192 kHz ceiling instead of Surge's desktop ones:
+# Reverb2's allpasses (4.7 MB less per voice) and Spring's main delay and allpasses.
 target_compile_definitions(surge-mm-dsp PRIVATE SURGE_COMPILE_BLOCK_SIZE=8 TEST=1
-    SURGE_REVERB2_MAX_ALLPASS_LEN=32768)
+    SURGE_REVERB2_MAX_ALLPASS_LEN=32768 SURGE_SPRING_DELAY_SIZE=32768
+    SURGE_SPRING_ALLPASS_DELAY_SIZE=1024)
 target_include_directories(surge-mm-dsp PRIVATE
     ${SURGE_DIR}/libs/libsamplerate/include
     ${EFFECT_COMPAT} ${COMMON}/dsp/effects ${EURORACK} ${SURGE_DIR}/libs/eurorack/special_include

@@ -1,23 +1,43 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "spring_dsp.h"
-#include "spring/SpringKernel.h"
+#include "chowdsp/SpringReverbEffect.h"
 #include "rack_trigger.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+struct Kernel : chowdsp::SpringReverbEffect
+{
+    using chowdsp::SpringReverbEffect::SpringReverbEffect;
+    // Natively, every (re)initialization restarts this voice's chaos and knock random
+    // sequence from its seed; imported Rack patches continue the sequence like Rack.
+    unsigned seed{1};
+    bool native_reset{true};
+    void init() override
+    {
+        if (native_reset)
+            proc.reseed(seed);
+        SpringReverbEffect::init();
+    }
+};
 struct Voice
 {
-    spring::SpringStorage global;
-    spring::SpringSettings settings;
-    std::array<spring::SpringValue, 8> values{};
-    spring::SpringKernel<> kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{};
     explicit Voice(unsigned seed)
     {
-        kernel.proc.seed = seed;
+        kernel.seed = seed;
+        kernel.init_ctrltypes();
+        // Size the knock buffer for the highest sample rate, so a later sample rate change
+        // does not allocate on the audio thread.
+        global.setSamplerate(192000);
+        kernel.init();
+        global.setSamplerate(48000);
         kernel.init();
     }
     void reset()
@@ -57,13 +77,13 @@ void spring_rack_mode(SpringReverb *p, bool enabled)
     if (enabled && !p->rack_mono)
     {
         p->rack_mono = std::make_unique<Voice>(1);
-        p->rack_mono->global.set_samplerate(p->voices[0]->global.samplerate);
+        p->rack_mono->global.setSamplerate(p->voices[0]->global.samplerate);
         p->rack_mono->reset();
     }
     for (auto &v : p->voices)
-        v->kernel.proc.nativeReset = !enabled;
+        v->kernel.native_reset = !enabled;
     if (p->rack_mono)
-        p->rack_mono->kernel.proc.nativeReset = !enabled;
+        p->rack_mono->kernel.native_reset = !enabled;
 }
 void reset_spring_audio(SpringReverb *p)
 {
@@ -86,9 +106,9 @@ void spring_samplerate(SpringReverb *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     reset_spring(p);
 }
 void process_spring(SpringReverb *p, const std::array<float, 9> &params,

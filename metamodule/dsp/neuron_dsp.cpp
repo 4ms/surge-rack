@@ -1,25 +1,49 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "neuron_dsp.h"
 #include "fx_clock.h"
-#include "NeuronKernel.h"
+#include "chowdsp/NeuronEffect.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+struct Kernel : chowdsp::NeuronEffect
+{
+    using chowdsp::NeuronEffect::NeuronEffect;
+    // Fresh smoothing, gains and LFO; rebuilding the effect would reallocate its delays.
+    void reset_native()
+    {
+        Wf.setCurrentAndTargetValue(.5f);
+        Wh.setCurrentAndTargetValue(.5f);
+        Uf.setCurrentAndTargetValue(.5f);
+        Uh.setCurrentAndTargetValue(.5f);
+        bf.setCurrentAndTargetValue(0);
+        delay1Smooth.setCurrentAndTargetValue(0);
+        delay2Smooth.setCurrentAndTargetValue(0);
+        makeup.set_target(0);
+        makeup.instantize();
+        outgain.set_target(0);
+        outgain.instantize();
+        width.set_target(0);
+        width.instantize();
+        modLFO.resetState();
+        modLFO.setSampleRate(storage->samplerate);
+        init();
+    }
+    void set_lfo_samplerate(float sr) { modLFO.setSampleRate(sr); }
+};
 struct Voice
 {
-    neuron::NeuronStorage global;
-    neuron::NeuronSettings settings;
-    std::array<neuron::NeuronValue, 12> values{};
-    neuron::NeuronKernel kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     explicit Voice(bool imported = false, float sr = 48000)
     {
-        settings.p[8].val_min.f = -7;
-        settings.p[8].val_max.f = 9;
-        global.set_samplerate(sr);
-        kernel.modLFO.setSampleRate(sr);
+        kernel.init_ctrltypes();
+        global.setSamplerate(sr);
+        kernel.set_lfo_samplerate(sr);
         if (imported)
             kernel.init();
         else
@@ -39,8 +63,8 @@ struct Neuron
 {
     std::array<std::unique_ptr<Voice>, 4> voices;
     std::unique_ptr<Voice> rack_mono;
-    neuron::NeuronSettings rack_settings;
-    std::array<neuron::NeuronValue, 12> rack_values{};
+    FxStorage rack_settings;
+    std::array<pdata, n_fx_params> rack_values{};
     std::array<bool, 4> rack_created{};
     FXClock tempo;
     unsigned position{}, channels{1}, last_rack_channels{};
@@ -96,9 +120,9 @@ void neuron_samplerate(Neuron *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     p->tempo.sample_rate_changed();
     if (!p->tempo.rack_mode)
         reset_neuron(p);
@@ -124,7 +148,7 @@ void process_neuron(Neuron *p, const std::array<float, 15> &params,
                 if (!p->rack_created[c])
                 {
                     auto &v = *p->voices[c];
-                    v.kernel.modLFO.setSampleRate(v.global.samplerate);
+                    v.kernel.set_lfo_samplerate(v.global.samplerate);
                     neuron_rack_init(p, v);
                     p->rack_created[c] = true;
                 }
