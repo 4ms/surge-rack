@@ -1,23 +1,52 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "nimbus_dsp.h"
-#include "NimbusKernel.h"
+#include "NimbusEffect.h"
+#include "clouds/dsp/granular_processor.h"
+#include "samplerate.h"
+#include <cstring>
 #include "rack_trigger.h"
 #include <memory>
 namespace surge_mm
 {
 namespace
 {
+struct Kernel : NimbusEffect
+{
+    using NimbusEffect::NimbusEffect;
+    // A fresh granular processor and resampler state without reallocating them.
+    void reset_native()
+    {
+        std::memset(block_mem, 0, memLen);
+        std::memset(block_ccm, 0, ccmLen);
+        std::memset(static_cast<void *>(processor), 0, sizeof(*processor));
+        processor->Init(block_mem, memLen, block_ccm, ccmLen);
+        if (surgeSR_to_euroSR)
+            src_reset(surgeSR_to_euroSR);
+        if (euroSR_to_surgeSR)
+            src_reset(euroSR_to_surgeSR);
+        numStubs = 0;
+        nimbusTrigger = false;
+        old_nmb_mode = 0;
+        std::memset(stub_input, 0, sizeof(stub_input));
+        std::memset(L, 0, sizeof(L));
+        std::memset(R, 0, sizeof(R));
+        mix = lipol_ps_blocksz{};
+        init();
+    }
+};
 struct Voice
 {
-    nimbus::NimbusStorage global;
-    nimbus::NimbusSettings settings;
-    std::array<nimbus::NimbusValue, 12> values{};
-    nimbus::NimbusKernel<> kernel{&global, &settings, values.data()};
+    SurgeStorage global;
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool high{}, pending{};
     RackTrigger rack_gate;
     Voice()
     {
+        kernel.init_ctrltypes();
+        kernel.latchTrigger = true;
         kernel.init();
     }
     void reset()
@@ -57,7 +86,7 @@ void prepare_nimbus_rack(Nimbus *p)
     if (!p->rack_mono)
     {
         p->rack_mono = std::make_unique<Voice>();
-        p->rack_mono->global.set_samplerate(p->voices[0]->global.samplerate);
+        p->rack_mono->global.setSamplerate(p->voices[0]->global.samplerate);
     }
 }
 void reset_nimbus(Nimbus *p)
@@ -74,9 +103,9 @@ void nimbus_samplerate(Nimbus *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     reset_nimbus(p);
 }
 void process_nimbus(Nimbus *p, const std::array<float, 13> &params,
@@ -146,7 +175,7 @@ void process_nimbus(Nimbus *p, const std::array<float, 13> &params,
                     std::clamp(params[nimbus_cv_params[i]] + cv[i][c] * .2f, 0.f, 1.f) *
                         nimbus_range[i];
             v.values[8].f = ((params[8] > .5f || freeze[c] > 3) ? 1.f : 0.f) + cv[9][c] * .2f;
-            v.kernel.nativeTriggerLatch = !rack_trigger;
+            v.kernel.latchTrigger = !rack_trigger;
             v.kernel.setNimbusTrigger(rack_trigger ? buffer.rack_gate.process(trigger[c])
                                                    : v.pending);
             v.pending = false;
