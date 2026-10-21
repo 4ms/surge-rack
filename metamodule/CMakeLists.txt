@@ -84,6 +84,8 @@ add_library(surge-mm-dsp STATIC
     ${COMMON}/dsp/effects/chowdsp/CHOWEffect.cpp
     ${COMMON}/dsp/effects/chowdsp/ExciterEffect.cpp
     ${COMMON}/dsp/effects/Reverb2Effect.cpp
+    ${COMMON}/dsp/effects/BBDEnsembleEffect.cpp
+    ${COMMON}/dsp/effects/chowdsp/bbd_utils/BBDDelayLine.cpp
     ${COMMON}/dsp/filters/VectorizedSVFilter.cpp
     dsp/table_data.cpp
     ${COMMON}/dsp/Wavetable.cpp

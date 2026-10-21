@@ -1,26 +1,44 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ensemble_dsp.h"
-#include "EnsembleKernel.h"
+#include "BBDEnsembleEffect.h"
 namespace surge_mm
 {
 namespace
 {
-struct Voice
+struct Kernel : BBDEnsembleEffect
 {
-    ensemble::EnsembleStorage global;
-    ensemble::EnsembleSettings settings;
-    std::array<ensemble::EnsembleValue, 12> values{};
-    ensemble::EnsembleKernel kernel{&global, &settings, values.data()};
+    using BBDEnsembleEffect::BBDEnsembleEffect;
+    // Fresh delay and modulation state; rebuilding the effect would reallocate its BBDs.
+    void reset_native()
+    {
+        delL.clear();
+        delR.clear();
+        for (auto &bank : modlfos)
+            for (auto &lfo : bank)
+                lfo.resetState();
+        sampleRateReset();
+        init();
+    }
+};
+// The effect prepares its delay lines on construction, at the storage's sample rate.
+struct VoiceStorage
+{
+    SurgeStorage global;
+    explicit VoiceStorage(float sr)
+    {
+        global.setSamplerate(sr);
+    }
+};
+struct Voice : VoiceStorage
+{
+    FxStorage settings;
+    std::array<pdata, n_fx_params> values{};
+    Kernel kernel{&global, &settings, values.data()};
     alignas(16) float input[2][8]{}, processed[2][8]{};
     bool pending{true};
-    static ensemble::EnsembleStorage storage_at_rate(float sr)
+    Voice(float sr = 48000) : VoiceStorage(sr)
     {
-        ensemble::EnsembleStorage s;
-        s.set_samplerate(sr);
-        return s;
-    }
-    Voice(float sr = 48000) : global(storage_at_rate(sr))
-    {
+        kernel.init_ctrltypes();
     }
     void reset()
     {
@@ -36,8 +54,8 @@ struct Ensemble
 {
     std::array<std::unique_ptr<Voice>, 4> voices;
     std::unique_ptr<Voice> rack_mono;
-    ensemble::EnsembleSettings rack_settings;
-    std::array<ensemble::EnsembleValue, 12> rack_values{};
+    FxStorage rack_settings;
+    std::array<pdata, n_fx_params> rack_values{};
     std::array<bool, 4> rack_created{};
     bool rack_mode{};
     unsigned position{}, channels{1}, last_rack_channels{};
@@ -72,7 +90,7 @@ void ensemble_rack_mode(Ensemble *p, bool enabled)
         p->rack_mono = std::make_unique<Voice>(sr);
         for (auto &v : p->voices)
             v = std::make_unique<Voice>(sr);
-        p->rack_settings = {};
+        p->rack_settings = p->rack_mono->settings;
         p->rack_values = {};
         ensemble_rack_init(p, *p->rack_mono);
         p->rack_mono->kernel.init_default_values();
@@ -93,9 +111,9 @@ void ensemble_samplerate(Ensemble *p, float sr)
     if (!std::isfinite(sr) || sr < 8000 || sr > 192000)
         return;
     for (auto &v : p->voices)
-        v->global.set_samplerate(sr);
+        v->global.setSamplerate(sr);
     if (p->rack_mono)
-        p->rack_mono->global.set_samplerate(sr);
+        p->rack_mono->global.setSamplerate(sr);
     if (!p->rack_mode)
         reset_ensemble(p);
 }
