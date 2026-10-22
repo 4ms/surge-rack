@@ -744,6 +744,13 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
     // The size drawWidget() draws the ring in (MetaModule sets box.size to the image's)
     rack::Vec ringSize{45, 45};
 
+#ifdef METAMODULE
+    // MetaModule's screen has about 0.6 pixels per Rack pixel
+    static constexpr float arcWidth_PX = 8.f, markRadius_PX = 1.5f;
+#else
+    static constexpr float arcWidth_PX = KnobN::ringWidth_PX, markRadius_PX = 1.f;
+#endif
+
     ModRingKnob() { box.size = rack::Vec(45, 45); }
     ~ModRingKnob();
 
@@ -782,20 +789,20 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
                                underlyerParamWidget->maxAngle) -
                     M_PI_2;
         nvgArc(vg, w / 2, h / 2, radius, angle - M_PI_2, aStart, -modAngle < 0 ? NVG_CCW : NVG_CW);
-        nvgStrokeWidth(vg, Knob9::ringWidth_PX);
+        nvgStrokeWidth(vg, arcWidth_PX);
         nvgStrokeColor(vg, style()->getColor(style::XTStyle::KNOB_MOD_MINUS));
         nvgLineCap(vg, NVG_ROUND);
         nvgStroke(vg);
 
         nvgBeginPath(vg);
         nvgArc(vg, w / 2, h / 2, radius, angle - M_PI_2, aEnd, modAngle < 0 ? NVG_CCW : NVG_CW);
-        nvgStrokeWidth(vg, Knob9::ringWidth_PX);
+        nvgStrokeWidth(vg, arcWidth_PX);
         nvgStrokeColor(vg, style()->getColor(style::XTStyle::KNOB_MOD_PLUS));
         nvgLineCap(vg, NVG_ROUND);
         nvgStroke(vg);
 
         nvgBeginPath(vg);
-        nvgEllipse(vg, ox, oy, 1, 1);
+        nvgEllipse(vg, ox, oy, markRadius_PX, markRadius_PX);
         nvgFillColor(vg, style()->getColor(style::XTStyle::KNOB_MOD_MARK));
         nvgFill(vg);
     }
