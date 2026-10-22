@@ -122,6 +122,9 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
     using rack::ModuleWidget::addChild;
     void addChild(rack::widget::Widget *w)
     {
+        if (auto *sw = dynamic_cast<widgets::ActivateKnobSwitch *>(w))
+            sw->addFrames();
+
         if (dynamic_cast<rack::app::ParamWidget *>(w) || dynamic_cast<rack::app::PortWidget *>(w) ||
             dynamic_cast<rack::app::LightWidget *>(w))
             rack::ModuleWidget::addChild(w);

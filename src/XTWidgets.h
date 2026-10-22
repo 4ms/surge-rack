@@ -1100,7 +1100,12 @@ struct GroupLabel : rack::widget::TransparentWidget, style::StyleParticipant
     void onStyleChanged() override { bdw->dirty = true; }
 };
 
+#ifdef METAMODULE
+// The MetaModule draws a switch with its frames (see addFrames())
+struct ActivateKnobSwitch : rack::app::SvgSwitch, style::StyleParticipant
+#else
 struct ActivateKnobSwitch : rack::app::Switch, style::StyleParticipant
+#endif
 {
     BufferedDrawFunctionWidget *bdw{nullptr}, *bdwLight{nullptr};
     float radius;
@@ -1123,6 +1128,21 @@ struct ActivateKnobSwitch : rack::app::Switch, style::StyleParticipant
         addChild(bdw);
         addChild(bdwLight);
     }
+
+#ifdef METAMODULE
+    // Adds the off and on frames for the type (made by metamodule/scripts/activate_buttons.py),
+    // keeping the center. Call it after setting the type.
+    void addFrames()
+    {
+        static constexpr const char *names[] = {"power", "extended", "vintage"};
+        auto center = box.getCenter();
+        for (auto *state : {"off", "on"})
+            addFrame(rack::Svg::load(rack::asset::plugin(
+                pluginInstance, std::string("res/metamodule/activate-") + names[type] + "-" +
+                                    state + ".svg")));
+        box.pos = center.minus(box.size.div(2));
+    }
+#endif
 
     bool hovered{false};
     void onHover(const HoverEvent &e) override
