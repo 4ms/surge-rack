@@ -731,7 +731,7 @@ struct SQPParamLabel : rack::ui::MenuLabel
 };
 
 #ifdef METAMODULE
-// MetaModule shows each mod depth as a knob of its own, drawn with the image for its knob size
+// On MetaModule each mod depth is a knob of its own
 struct ModRingKnob : rack::app::SvgKnob, style::StyleParticipant, HasBDW
 #else
 struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
@@ -741,6 +741,8 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
 
     int modIndex{0};
     float radius{1};
+    // The size drawWidget() draws the ring in (MetaModule sets box.size to the image's)
+    rack::Vec ringSize{45, 45};
 
     ModRingKnob() { box.size = rack::Vec(45, 45); }
     ~ModRingKnob();
@@ -766,8 +768,8 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
         float angle = toAngle(uv, uq, 1.0);
         float modAngle = toAngle(pv, pq, 0.5);
 
-        auto w = box.size.y;
-        auto h = box.size.x;
+        auto w = ringSize.y;
+        auto h = ringSize.x;
 
         auto ox = std::sin(angle) * radius + w / 2;
         auto oy = h - (std::cos(angle) * radius + h / 2);
@@ -808,17 +810,19 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
         res->box.size.y = diameter + rack::mm2px(1);
         res->box.pos.x = pos.x - res->box.size.x / 2.f;
         res->box.pos.y = pos.y - res->box.size.y / 2.f;
+        res->ringSize = res->box.size;
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
 
 #ifdef METAMODULE
-        // diameter is the ring around the knob (see LayoutEngine)
+        // The knob is invisible: a ModArcDisplay draws the ring, when its Mod button is on. The
+        // image is the size of the knob it's on (diameter is the ring around it, see LayoutEngine)
         auto knobSize = (int)std::round(diameter / rack::mm2px(1) - 2 * KnobN::ringWidth_MM);
         res->minAngle = -M_PI * (180 - 40) / 180;
         res->maxAngle = M_PI * (180 - 40) / 180;
         res->setSvg(rack::Svg::load(rack::asset::plugin(
-            pluginInstance, res->style()->skinAssetDir() + "/components/knob-mod-" +
+            pluginInstance, res->style()->skinAssetDir() + "/components/knob-mod-invisible-" +
                                 std::to_string(knobSize) + ".svg")));
         res->box.pos = pos.minus(res->box.size.div(2));
 #else
@@ -962,6 +966,53 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
         }
     }
 };
+
+#ifdef METAMODULE
+// A graphic display around a knob, which draws the ring of its mod depth knob for the Mod button
+// that's on (the mod depth knobs are invisible)
+struct ModArcDisplay : rack::widget::Widget
+{
+    modules::XTModule *module{nullptr};
+    std::array<ModRingKnob *, modules::XTModule::numModButtons> rings{};
+
+    ModArcDisplay(modules::XTModule *module, const rack::Vec &center, const rack::Vec &size)
+        : module(module)
+    {
+        box.size = size;
+        box.pos = center.minus(size.div(2));
+    }
+
+    void step() override
+    {
+        if (module)
+            module->stepModButtons();
+        rack::widget::Widget::step();
+    }
+
+    void draw(const DrawArgs &args) override
+    {
+        if (!module)
+            return;
+        auto m = module->activeModButton();
+        if (m >= 0 && rings[m])
+            rings[m]->drawWidget(args.vg);
+    }
+};
+
+// The Mod 1-4 buttons, which are params on MetaModule (see XTModule::config)
+struct ModToggleParamButton : rack::app::SvgSwitch, style::StyleParticipant
+{
+    ModToggleParamButton()
+    {
+        auto compDir = style()->skinAssetDir() + "/components";
+        addFrame(rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + "/mod-button.svg")));
+        addFrame(
+            rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + "/mod-button-on.svg")));
+    }
+
+    void onStyleChanged() override {}
+};
+#endif
 
 struct GroupLabel : rack::widget::TransparentWidget, style::StyleParticipant
 {

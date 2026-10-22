@@ -51,6 +51,48 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
 
     XTModule() : rack::Module() { storage.reset(nullptr); }
 
+#ifdef METAMODULE
+    // MetaModule only has controls for params, so the Mod 1-4 buttons (which show a modulator's
+    // depths around the knobs) are params, after the module's own
+    static constexpr int numModButtons{4};
+    int modButtonParam0{-1};
+
+    void config(int numParams, int numInputs, int numOutputs, int numLights)
+    {
+        modButtonParam0 = numParams;
+        rack::Module::config(numParams + numModButtons, numInputs, numOutputs, numLights);
+        for (int i = 0; i < numModButtons; ++i)
+            configSwitch(modButtonParam0 + i, 0, 1, 0, "Show Mod " + std::to_string(i + 1),
+                         {"Off", "On"});
+    }
+
+    // As in Rack, turning a Mod button on turns the others off. Called by the GUI (ModArcDisplay),
+    // since MetaModule doesn't step the module widget
+    std::array<bool, numModButtons> modButtonWasOn{};
+    void stepModButtons()
+    {
+        for (int i = 0; i < numModButtons; ++i)
+        {
+            bool isOn = params[modButtonParam0 + i].getValue() > 0.5f;
+            if (isOn && !modButtonWasOn[i])
+                for (int j = 0; j < numModButtons; ++j)
+                    if (j != i)
+                        params[modButtonParam0 + j].setValue(0.f);
+        }
+        for (int i = 0; i < numModButtons; ++i)
+            modButtonWasOn[i] = params[modButtonParam0 + i].getValue() > 0.5f;
+    }
+
+    // The Mod button that's on, or -1
+    int activeModButton()
+    {
+        for (int i = 0; i < numModButtons; ++i)
+            if (params[modButtonParam0 + i].getValue() > 0.5f)
+                return i;
+        return -1;
+    }
+#endif
+
     std::string getBuildInfo()
     {
         char version[1024];

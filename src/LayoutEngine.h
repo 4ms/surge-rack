@@ -311,6 +311,9 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                 if (diff < 4)
                 {
                     auto rknob = static_cast<widgets::KnobN *>(knob->asWidget());
+#ifdef METAMODULE
+                    widgets::ModArcDisplay *arcs{nullptr};
+#endif
                     for (int m = 0; m < W::M::n_mod_inputs; ++m)
                     {
                         auto radius =
@@ -322,7 +325,17 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                         k->underlyerParamWidget = rknob;
                         rknob->modRings.insert(k);
                         w->addChild(k);
+#ifdef METAMODULE
+                        if (!arcs)
+                            arcs = new widgets::ModArcDisplay(
+                                static_cast<modules::XTModule *>(module), pos, k->ringSize);
+                        arcs->rings[m] = k;
+#endif
                     }
+#ifdef METAMODULE
+                    if (arcs)
+                        w->rack::app::ModuleWidget::addChild(arcs);
+#endif
                 }
                 else
                 {
@@ -657,6 +670,11 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
             auto uxp = LayoutConstants::firstColumnCenter_MM + colW_MM * i;
             auto uyp = LayoutConstants::modulationRowCenters_MM[0] + modulationRowOffset_MM;
 
+#ifdef METAMODULE
+            // The Mod buttons are the params after the module's own (see XTModule::config)
+            w->addParam(rack::createParamCentered<widgets::ModToggleParamButton>(
+                rack::mm2px(rack::Vec(uxp, uyp)), w->module, W::M::NUM_PARAMS + i));
+#else
             auto *k = rack::createWidgetCentered<widgets::ModToggleButton>(
                 rack::mm2px(rack::Vec(uxp, uyp)));
             w->toggles[i] = k;
@@ -694,6 +712,7 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
             };
 
             w->addChild(k);
+#endif
             uyp = LayoutConstants::modulationRowCenters_MM[1] + modulationRowOffset_MM;
             w->addInput(rack::createInputCentered<widgets::Port>(rack::mm2px(rack::Vec(uxp, uyp)),
                                                                  w->module, input0 + i));
