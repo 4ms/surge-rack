@@ -611,6 +611,10 @@ EGxVCAWidget::EGxVCAWidget(sst::surgext_rack::egxvca::ui::EGxVCAWidget::M *m)
     engine_t::addModulationSection(this, M::n_mod_inputs, M::MOD_INPUT_0);
     engine_t::createLeftRightInputLabels(this);
     engine_t::createInputOutputPorts(this, M::INPUT_L, M::INPUT_R, M::OUTPUT_L, M::OUTPUT_R);
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::egxvca::ui

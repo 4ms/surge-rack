@@ -22,6 +22,9 @@
 #include "XTWidgets.h"
 #include "dsp/DSPExternalAdapterUtils.h"
 #include "LayoutEngine.h"
+#ifdef METAMODULE
+#include "CoreModules/async_thread.hh"
+#endif
 
 #ifndef __EMSCRIPTEN__
 #define SURGE_VCF_WITH_THREADED_ANALYSER 1
@@ -391,7 +394,62 @@ struct FilterPlotParameters
     float freqSmoothOctaves = 1.0f / 12.0f;
 };
 
-#if SURGE_VCF_WITH_THREADED_ANALYSER
+#if SURGE_VCF_WITH_THREADED_ANALYSER && defined(METAMODULE)
+// MetaModule has no std::thread, so calculate the curve in an async task. The GUI only starts
+// the task, and only reads its curve, when it's not running, so they need no lock.
+struct FilterAnalzer
+{
+    explicit FilterAnalzer(rack::Module *module) : task(module, [this]() { runTask(); }) {}
+
+    void runTask()
+    {
+        dataCopy = surge::calculateFilterResponseCurve((sst::filters::FilterType)type,
+                                                       (sst::filters::FilterSubType)subtype,
+                                                       cutoff, resonance, gain);
+        outboundUpdates++;
+        busy.store(false, std::memory_order_release);
+    }
+
+    bool isBusy() const { return busy.load(std::memory_order_acquire); }
+
+    void request(int t, int s, float c, float r, float g)
+    {
+        next = {t, s, c, r, powf(2.f, g / 18.f)};
+        inboundUpdates++;
+        startPending();
+    }
+
+    // Starts a task for the latest request, if there's one and no task is running
+    void startPending()
+    {
+        if (inboundUpdates == startedUpdates || isBusy())
+            return;
+        type = next.type;
+        subtype = next.subtype;
+        cutoff = next.cutoff;
+        resonance = next.resonance;
+        gain = next.gain;
+        startedUpdates = inboundUpdates;
+        busy.store(true, std::memory_order_release);
+        task.run_once();
+    }
+
+    struct Request
+    {
+        int type{0}, subtype{0};
+        float cutoff{60}, resonance{0}, gain{1.f};
+    } next;
+
+    std::pair<std::vector<float>, std::vector<float>> dataCopy;
+    std::atomic<uint64_t> outboundUpdates{1};
+    uint64_t inboundUpdates{1}, startedUpdates{1};
+    int type{0}, subtype{0};
+    float cutoff{60}, resonance{0}, gain{1.f};
+    std::mutex dataLock; // The GUI locks it as for the threaded analyser, which is harmless
+    std::atomic<bool> busy{false};
+    MetaModule::AsyncThread task;
+};
+#elif SURGE_VCF_WITH_THREADED_ANALYSER
 struct FilterAnalzer
 {
     FilterAnalzer() { analysisThread = std::make_unique<std::thread>(callRunThread, this); }
@@ -497,7 +555,11 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
     {
 #if SURGE_VCF_WITH_THREADED_ANALYSER
         if (module)
+#ifdef METAMODULE
+            analyzer = std::make_unique<FilterAnalzer>(module);
+#else
             analyzer = std::make_unique<FilterAnalzer>();
+#endif
 #endif
         bdw = new widgets::BufferedDrawFunctionWidget(rack::Vec(0, 0), box.size,
                                                       [this](auto vg) { this->drawUnder(vg); });
@@ -519,7 +581,11 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
         if (!analyzer)
             return;
 
+#ifdef METAMODULE
+        if (analyzer->outboundUpdates != lastOutbound && !analyzer->isBusy())
+#else
         if (analyzer->outboundUpdates != lastOutbound)
+#endif
         {
             {
                 std::lock_guard<std::mutex> g(analyzer->dataLock);
@@ -528,6 +594,10 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
             }
             bdwPlot->dirty = true;
         }
+
+#ifdef METAMODULE
+        analyzer->startPending();
+#endif
 
         // This is how we do the 'unanimated' version
         // auto fr = module->params[VCF::FREQUENCY].getValue();
@@ -743,6 +813,10 @@ VCFWidget::VCFWidget(VCFWidget::M *module) : XTModuleWidget()
 
     engine_t::createLeftRightInputLabels(this);
     engine_t::createInputOutputPorts(this, M::INPUT_L, M::INPUT_R, M::OUTPUT_L, M::OUTPUT_R);
+
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
 
     resetStyleCouplingToModule();
 }

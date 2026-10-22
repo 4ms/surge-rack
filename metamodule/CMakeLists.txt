@@ -25,9 +25,22 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/surge-engine.cmake)
 add_library(SurgeXT STATIC)
 
 target_sources(SurgeXT PRIVATE
-    bringup_init.cpp
+    ${SURGE_RACK_DIR}/src/Delay.cpp
+    ${SURGE_RACK_DIR}/src/DelayLineByFreq.cpp
+    ${SURGE_RACK_DIR}/src/DelayLineByFreqExpanded.cpp
+    ${SURGE_RACK_DIR}/src/DigitalRingMod.cpp
+    ${SURGE_RACK_DIR}/src/EGxVCA.cpp
     ${SURGE_RACK_DIR}/src/FX.cpp
+    ${SURGE_RACK_DIR}/src/LFO.cpp
+    ${SURGE_RACK_DIR}/src/Mixer.cpp
+    ${SURGE_RACK_DIR}/src/ModMatrix.cpp
+    ${SURGE_RACK_DIR}/src/QuadAD.cpp
+    ${SURGE_RACK_DIR}/src/QuadLFO.cpp
+    ${SURGE_RACK_DIR}/src/SurgeXT.cpp
+    ${SURGE_RACK_DIR}/src/UnisonHelper.cpp
+    ${SURGE_RACK_DIR}/src/VCF.cpp
     ${SURGE_RACK_DIR}/src/VCO.cpp
+    ${SURGE_RACK_DIR}/src/Waveshaper.cpp
     ${SURGE_RACK_DIR}/src/XTModule.cpp
     ${SURGE_RACK_DIR}/src/XTModuleWidget.cpp
     ${SURGE_RACK_DIR}/src/XTStyle.cpp

@@ -320,6 +320,10 @@ MixerWidget<useKnobs>::MixerWidget(MixerWidget::M *module) : XTModuleWidget()
         engine_t::makeSpanLabelAt(bl, 2, "L - OUT - R", 2, style::XTStyle::TEXT_LABEL_OUTPUT);
     this->addChild(laylab);
 
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::mixer::ui

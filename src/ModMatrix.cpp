@@ -288,6 +288,10 @@ ModMatrixWidget::ModMatrixWidget(ModMatrixWidget::M *module) : XTModuleWidget()
         }
     }
 
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::modmatrix::ui

@@ -520,6 +520,9 @@ struct LFOTypeWidget : rack::app::ParamWidget, style::StyleParticipant
                 nvgStroke(vg);
             }
 
+#ifdef METAMODULE
+            drawGlyph(vg, i, x, w, h, pt);
+#else
             auto hn = svgs[i]->handle;
             for (auto s = hn->shapes; s; s = s->next)
             {
@@ -532,6 +535,7 @@ struct LFOTypeWidget : rack::app::ParamWidget, style::StyleParticipant
             nvgTranslate(vg, x + centerFudge, y);
             rack::svgDraw(vg, svgs[i]->handle);
             nvgRestore(vg);
+#endif
         }
         nvgBeginPath(vg);
         nvgMoveTo(vg, 0, box.size.y);
@@ -567,8 +571,96 @@ struct LFOTypeWidget : rack::app::ParamWidget, style::StyleParticipant
         }
     }
 
+#ifdef METAMODULE
+    // The MetaModule can't draw an SVG's shapes (they're converted to PNGs), so draw the
+    // shapes of the glyphs as lines: sine, triangle, square, saw, noise, S&H, envelope, step seq
+    void drawGlyph(NVGcontext *vg, int type, float x, float w, float h, NVGcolor col)
+    {
+        static constexpr float noise[] = {0.5f, 0.1f, 0.8f, 0.3f, 0.95f, 0.2f, 0.6f, 0.05f, 0.7f};
+        static constexpr float steps[] = {0.7f, 0.2f, 0.9f, 0.45f};
+        static constexpr float seq[] = {0.8f, 0.55f, 0.3f, 0.05f};
+
+        auto mx = w * 0.2f, my = h * 0.25f;
+        auto gw = w - 2 * mx, gh = h - 2 * my;
+        auto pt = [&](float px, float py) { return rack::Vec(x + mx + px * gw, my + py * gh); };
+
+        nvgBeginPath(vg);
+        auto moveTo = [&](float px, float py) {
+            auto p = pt(px, py);
+            nvgMoveTo(vg, p.x, p.y);
+        };
+        auto lineTo = [&](float px, float py) {
+            auto p = pt(px, py);
+            nvgLineTo(vg, p.x, p.y);
+        };
+
+        switch (type)
+        {
+        case 0:
+            moveTo(0, 0.5f);
+            for (int i = 1; i <= 16; ++i)
+                lineTo(i / 16.f, 0.5f - 0.5f * std::sin(2 * M_PI * i / 16.f));
+            break;
+        case 1:
+            moveTo(0, 0.5f);
+            lineTo(0.25f, 0);
+            lineTo(0.75f, 1);
+            lineTo(1, 0.5f);
+            break;
+        case 2:
+            moveTo(0, 1);
+            lineTo(0, 0);
+            lineTo(0.5f, 0);
+            lineTo(0.5f, 1);
+            lineTo(1, 1);
+            lineTo(1, 0);
+            break;
+        case 3:
+            moveTo(0, 1);
+            lineTo(1, 0);
+            lineTo(1, 1);
+            break;
+        case 4:
+            moveTo(0, noise[0]);
+            for (int i = 1; i < 9; ++i)
+                lineTo(i / 8.f, noise[i]);
+            break;
+        case 5:
+            moveTo(0, steps[0]);
+            for (int i = 0; i < 4; ++i)
+            {
+                lineTo(i / 4.f, steps[i]);
+                lineTo((i + 1) / 4.f, steps[i]);
+            }
+            break;
+        case 6:
+            moveTo(0, 1);
+            lineTo(0.15f, 0);
+            lineTo(0.35f, 0.4f);
+            lineTo(0.7f, 0.4f);
+            lineTo(1, 1);
+            break;
+        default:
+            moveTo(0, 1);
+            for (int i = 0; i < 4; ++i)
+            {
+                lineTo(i / 4.f, seq[i]);
+                lineTo((i + 1) / 4.f, seq[i]);
+            }
+            break;
+        }
+
+        nvgStrokeColor(vg, col);
+        nvgStrokeWidth(vg, 1);
+        nvgStroke(vg);
+    }
+#endif
+
     void reloadGlyphs()
     {
+#ifdef METAMODULE
+        return;
+#endif
         for (int i = 0; i < nTypes; ++i)
         {
             auto svg = rack::Svg::load(rack::asset::plugin(
@@ -1524,6 +1616,10 @@ LFOWidget::LFOWidget(LFOWidget::M *module) : XTModuleWidget()
 
     engine_t::addModulationSection(this, M::n_mod_inputs, M::LFO_MOD_INPUT, 0,
                                    layout::LayoutConstants::lfoColumnWidth_MM);
+
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
 
     resetStyleCouplingToModule();
 }

@@ -88,9 +88,8 @@ endforeach()
 # Not used by the Rack modules, and they need an OS (threads, dlfcn, sqlite's VFS) or JUCE:
 # - PatchDB (patch browser database, sqlite)
 # - SurgeSynthesizer (the synth itself, threads)
-# - DSPExternalAdapterUtils (filter/waveshaper plots in VCF and Waveshaper widgets, JUCE)
 # - sst-plugininfra's platform code (paths, misc); its filesystem, tinyxml and strnatcmp are kept
-# - sst-filters-extras (filter plotting with JUCE)
+# - sst-filters-extras (filter plotting with JUCE; its header is used with the compat JUCE)
 foreach(prop LINK_LIBRARIES INTERFACE_LINK_LIBRARIES)
     get_target_property(libs surge-common ${prop})
     list(REMOVE_ITEM libs surge::sqlite sst-plugininfra sst-filters-extras)
@@ -102,7 +101,6 @@ list(REMOVE_ITEM srcs
     PatchDBQueryParser.cpp
     SurgeSynthesizer.cpp
     SurgeSynthesizerIO.cpp
-    dsp/DSPExternalAdapterUtils.cpp
 )
 set_target_properties(surge-common PROPERTIES SOURCES "${srcs}")
 target_include_directories(surge-common PUBLIC ${SURGE_RACK_DIR}/surge/libs/sst/sst-plugininfra/include)
@@ -121,6 +119,10 @@ endif()
 
 # A few chowdsp effects (Spring Reverb, Neuron) use JUCE's delay line types
 target_include_directories(surge-common PUBLIC ${SURGE_MM_COMPAT_DIR})
+
+# The VCF's response curve (DSPExternalAdapterUtils) uses sst-filters' FilterPlotter, with the
+# compat juce::dsp::FFT
+target_include_directories(surge-common PRIVATE ${SURGE_RACK_DIR}/surge/libs/sst/sst-filters/include-extras)
 
 # Same warning suppressions as the Rack build
 target_compile_options(surge-common PRIVATE -Wno-sign-compare -Wno-ignored-qualifiers -Wno-unused-value -Wno-uninitialized

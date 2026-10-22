@@ -14,7 +14,7 @@ import json, os, re, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 PLUGIN_MM_JSON = os.path.join(HERE, '..', 'plugin-mm.json')
 
-MOD_PARAM = re.compile(r'^Mod(\d+) to (.+)$')
+MOD_PARAM = re.compile(r'^Mod ?(\d+) to (.+)$')
 
 SHORT_NAMES = {
     'Left (or Mono merged) Out': 'Left/Mono Out',

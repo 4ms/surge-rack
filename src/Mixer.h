@@ -144,6 +144,11 @@ struct Mixer : modules::XTModule, sst::rackhelpers::module_connector::NeighborCo
 
             configParamNoRand<modules::DecibelModulatorParamQuantity<Mixer>>(MIXER_MOD_PARAM_0 + i,
                                                                              -1, 1, 0, name);
+#ifdef METAMODULE
+            // The MetaModule shows the name, not the label, which says what's modulated
+            paramQuantities[MIXER_MOD_PARAM_0 + i]->name =
+                paramQuantities[MIXER_MOD_PARAM_0 + i]->getLabel();
+#endif
         }
 
         for (int i = 0; i < n_mod_inputs; ++i)

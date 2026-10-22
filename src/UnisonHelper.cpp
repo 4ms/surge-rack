@@ -152,6 +152,10 @@ UnisonHelperWidget::UnisonHelperWidget(
     engine_t::addModulationSection(this, M::n_mod_inputs, M::MOD_INPUT_0);
     engine_t::createLeftRightInputLabels(this, "V/OCT", "");
     engine_t::createInputOutputPorts(this, M::INPUT_VOCT, -1, M::OUTPUT_L, M::OUTPUT_R);
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 
@@ -262,6 +266,10 @@ UnisonHelperCVExpanderWidget::UnisonHelperCVExpanderWidget(UnisonHelperCVExpande
             yp += rack::mm2px(15);
         }
     }
+
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
 
     resetStyleCouplingToModule();
 }

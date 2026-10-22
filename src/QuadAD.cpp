@@ -546,6 +546,10 @@ QuadADWidget::QuadADWidget(sst::surgext_rack::quadad::ui::QuadADWidget::M *modul
         kc++;
     }
 
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::quadad::ui

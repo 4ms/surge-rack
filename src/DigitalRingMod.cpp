@@ -185,6 +185,10 @@ DigitalRingModWidget::DigitalRingModWidget(DigitalRingModWidget::M *module) : XT
             addChild(light);
         }
     }
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::digitalrm::ui

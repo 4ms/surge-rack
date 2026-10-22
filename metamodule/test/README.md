@@ -9,6 +9,7 @@ Patches for checking the Surge modules in the MetaModule headless simulator
 | `chorus_mix0.yml` | Mix at 0: output is the input, delayed by 7 samples |
 | `chorus_mod1_rate.yml` | In 2 into Mod 1, Mod 1 to Rate at full depth |
 | `chorus_rack_state.yml` | Module state as the Rack plugin saves it (`vcvModuleStates`) |
+| `unison.yml` | UnisonHelper driving a Sine VCO as its sub VCO 1 (Out 1), and a CV Expander on its right (an expander connection) spreading In 2 (Out 2) |
 
 ## Building the simulator with this plugin
 
@@ -51,8 +52,9 @@ To check every module in `plugin-mm.json` (or just the slugs given), from the sa
 python3 <surge-rack>/metamodule/test/smoke.py <sim-build>/simulator [SLUG ...]
 ```
 
-It runs each FX on a stereo sine and each VCO unpatched, and fails a module whose output is
-silent or has NaN/inf.
+It runs each FX on a stereo sine, each VCO unpatched, and the other modules as set up in its
+`SETUPS` (e.g. the envelopes get a gate), and fails a module whose output is silent or has
+NaN/inf.
 
 To print a module's elements (what the MetaModule shows and can map), and its heap use:
 
