@@ -1002,6 +1002,11 @@ struct LFOWaveform : rack::Widget, style::StyleParticipant
         {
             if (isuni && i == 1)
                 continue;
+#ifdef METAMODULE
+            // MetaModule draws gradients as solid fills, so only the curve is drawn there
+            if (i < 2)
+                continue;
+#endif
             bool first{true};
             nvgBeginPath(vg);
 

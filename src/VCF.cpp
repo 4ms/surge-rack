@@ -730,6 +730,8 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
 
         auto col = style()->getColor(style::XTStyle::PLOT_CURVE);
 
+        // MetaModule draws gradients as solid fills, so only the curve is drawn there
+#ifndef METAMODULE
         auto ff = makePath();
         nvgLineTo(vg, ff.second, box.size.y);
         nvgLineTo(vg, ff.first, box.size.y);
@@ -743,6 +745,7 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
         // nvgFillColor(vg, nvgRGBA(255, 0, 0, 80));
         nvgFillPaint(vg, gr);
         nvgFill(vg);
+#endif
 
         makePath();
         nvgStrokeColor(vg, col);

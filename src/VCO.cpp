@@ -1209,6 +1209,8 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
 
             bool first{true};
 
+            // MetaModule draws gradients as solid fills, so only the curve is drawn there
+#ifndef METAMODULE
             if (!is3D)
             {
                 nvgBeginPath(vg);
@@ -1252,6 +1254,7 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
                     vg, nvgLinearGradient(vg, 0, box.size.y * 0.5, 0, box.size.y * 0.9, gcn, gcp));
                 nvgFill(vg);
             }
+#endif
 
             nvgBeginPath(vg);
             first = true;

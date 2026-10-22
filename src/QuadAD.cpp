@@ -361,6 +361,8 @@ struct ADARCurveDraw : public rack::Widget, style::StyleParticipant
         nvgStrokeWidth(vg, 1.25);
         nvgStroke(vg);
 
+        // MetaModule draws gradients as solid fills, so only the curve is drawn there
+#ifndef METAMODULE
         auto col = style()->getColor(style::XTStyle::PLOT_CURVE);
         auto gcp = col;
         gcp.a = 0.5;
@@ -368,6 +370,7 @@ struct ADARCurveDraw : public rack::Widget, style::StyleParticipant
         gcn.a = 0.0;
         nvgFillPaint(vg, nvgLinearGradient(vg, 0, 0, 0, box.size.y * 0.9, gcp, gcn));
         nvgFill(vg);
+#endif
     }
 
     void onStyleChanged() override
