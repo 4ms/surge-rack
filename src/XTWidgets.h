@@ -476,13 +476,18 @@ struct KnobN : public rack::componentlibrary::RoundKnob, style::StyleParticipant
             rack::asset::plugin(pluginInstance, compDir + "/" + knobBackgroundAsset)));
         // bg->visible = false;
 
+        auto omm = rack::mm2px(ringWidth_MM * 2 + ringPad_MM);
+        auto hmm = omm * 0.5;
+#ifndef METAMODULE
         // SetSVG changes box.size
         box.size = rack::mm2px(rack::Vec(knobSize_MM, knobSize_MM));
 
-        auto omm = rack::mm2px(ringWidth_MM * 2 + ringPad_MM);
-        auto hmm = omm * 0.5;
         box.size.x += omm;
         box.size.y += omm;
+#else
+        // MetaModule draws the pointer image (the whole knob) at the box's corner, and has no
+        // value ring, so keep the box the size of the image
+#endif
 
         if (!bw)
         {
@@ -725,7 +730,12 @@ struct SQPParamLabel : rack::ui::MenuLabel
     }
 };
 
+#ifdef METAMODULE
+// MetaModule shows each mod depth as a knob of its own, drawn with the image for its knob size
+struct ModRingKnob : rack::app::SvgKnob, style::StyleParticipant, HasBDW
+#else
 struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
+#endif
 {
     rack::app::Knob *underlyerParamWidget{nullptr};
 
@@ -802,9 +812,20 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
         res->paramId = paramId;
         res->initParamQuantity();
 
+#ifdef METAMODULE
+        // diameter is the ring around the knob (see LayoutEngine)
+        auto knobSize = (int)std::round(diameter / rack::mm2px(1) - 2 * KnobN::ringWidth_MM);
+        res->minAngle = -M_PI * (180 - 40) / 180;
+        res->maxAngle = M_PI * (180 - 40) / 180;
+        res->setSvg(rack::Svg::load(rack::asset::plugin(
+            pluginInstance, res->style()->skinAssetDir() + "/components/knob-mod-" +
+                                std::to_string(knobSize) + ".svg")));
+        res->box.pos = pos.minus(res->box.size.div(2));
+#else
         res->bdw = new BufferedDrawFunctionWidgetOnLayer(
             rack::Vec(0, 0), res->box.size, [res](NVGcontext *vg) { res->drawWidget(vg); });
         res->addChild(res->bdw);
+#endif
 
         return res;
     }
@@ -2153,7 +2174,8 @@ inline void KnobN::onChange(const rack::widget::Widget::ChangeEvent &e)
     bwValue->dirty = true;
     for (auto *m : modRings)
     {
-        m->bdw->dirty = true;
+        if (m->bdw)
+            m->bdw->dirty = true;
     }
     SvgKnob::onChange(e);
 }
@@ -2498,6 +2520,37 @@ struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
 
 struct VerticalSliderModulator;
 
+#ifdef METAMODULE
+// MetaModule draws sliders from their background and handle images
+struct VerticalSlider : rack::app::SvgSlider, style::StyleParticipant, ModulatableKnob
+{
+    std::unordered_set<VerticalSliderModulator *> modSliders;
+
+    static VerticalSlider *createCentered(const rack::Vec &pos, float height,
+                                          modules::XTModule *module, int paramId,
+                                          const std::string bgsvg = "fader_bg.svg")
+    {
+        auto res = new VerticalSlider();
+
+        auto compDir = res->style()->skinAssetDir() + "/components";
+        res->setBackgroundSvg(
+            rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + "/" + bgsvg)));
+        res->setHandleSvg(
+            rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + "/fader_handle.svg")));
+        res->box.pos = pos.minus(res->box.size.div(2));
+
+        res->module = module;
+        res->paramId = paramId;
+        res->initParamQuantity();
+
+        return res;
+    }
+
+    void onStyleChanged() override {}
+    Widget *asWidget() override { return this; }
+    void setIsModEditing(bool b) override {}
+};
+#else
 struct VerticalSlider : rack::app::SliderKnob, style::StyleParticipant, ModulatableKnob
 {
     rack::widget::FramebufferWidget *baseFB{nullptr}, *handleFB{nullptr};
@@ -2780,6 +2833,7 @@ struct VerticalSlider : rack::app::SliderKnob, style::StyleParticipant, Modulata
         bdwLight->dirty = true;
     }
 };
+#endif
 
 struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasBDW
 {
@@ -2976,6 +3030,7 @@ struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasB
     }
 };
 
+#ifndef METAMODULE
 inline void VerticalSlider::onChange(const rack::widget::Widget::ChangeEvent &e)
 {
     bdw->dirty = true;
@@ -2992,6 +3047,7 @@ inline void VerticalSlider::onChange(const rack::widget::Widget::ChangeEvent &e)
 
     SliderKnob::onChange(e);
 }
+#endif
 
 struct OutputDecoration : rack::Widget, style::StyleParticipant
 {

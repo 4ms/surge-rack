@@ -676,7 +676,7 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                         {
                             ob[toggleIdx]->setVisible(true);
                             auto w = dynamic_cast<widgets::HasBDW *>(ob[toggleIdx]);
-                            if (w)
+                            if (w && w->bdw)
                             {
                                 w->bdw->dirty = true;
                             }
