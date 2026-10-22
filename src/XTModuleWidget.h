@@ -96,6 +96,21 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
     // it (preset selector, plots, LCD params). Call it after adding all the children.
     void addLCDDisplays()
     {
+        // In Rack, the LCD background of the VCO panel (used by the VCOs, VCF and Waveshaper) is
+        // in the panel SVG. This is its rect there, in px.
+        bool hasVCOPanel = false;
+        for (auto *c : children)
+            if (auto *bg = dynamic_cast<widgets::Background *>(c))
+                hasVCOPanel = hasVCOPanel || bg->panelName == "BlankVCO";
+        if (hasVCOPanel)
+        {
+            auto svgToPx = rack::app::RACK_GRID_WIDTH * layout::LayoutConstants::numberOfScrews / 172.8f;
+            auto x = 12.08506f * svgToPx;
+            addChild(widgets::LCDBackground::createAtYPosition(
+                25.408199f * svgToPx, 106.22314f * svgToPx, layout::LayoutConstants::numberOfScrews,
+                widgets::LCDBackground::posx - x));
+        }
+
         std::vector<widgets::LCDDisplay *> lcds;
         for (auto *c : children)
             if (auto *bg = dynamic_cast<widgets::LCDBackground *>(c))
