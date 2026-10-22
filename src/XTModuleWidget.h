@@ -80,8 +80,8 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
 
 #ifdef METAMODULE
     // MetaModule makes a graphic display of each child widget that isn't a param, port, or
-    // light. The panel art (background, labels, LCD frames) is in the faceplate image there,
-    // so add those widgets as plain children.
+    // light. The panel art (background, labels) is in the faceplate image there, and the LCDs
+    // are drawn by addLCDDisplays(), so add those widgets as plain children.
     using rack::ModuleWidget::addChild;
     void addChild(rack::widget::Widget *w)
     {
@@ -90,6 +90,31 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
             rack::ModuleWidget::addChild(w);
         else
             rack::widget::Widget::addChild(w);
+    }
+
+    // Adds a graphic display for each LCDBackground, which draws it and the widgets centered on
+    // it (preset selector, plots, LCD params). Call it after adding all the children.
+    void addLCDDisplays()
+    {
+        std::vector<widgets::LCDDisplay *> lcds;
+        for (auto *c : children)
+            if (auto *bg = dynamic_cast<widgets::LCDBackground *>(c))
+                lcds.push_back(new widgets::LCDDisplay(bg));
+
+        for (auto *c : children)
+        {
+            for (auto *lcd : lcds)
+            {
+                if (c != lcd->layers.front() && lcd->box.contains(c->box.getCenter()))
+                {
+                    lcd->layers.push_back(c);
+                    break;
+                }
+            }
+        }
+
+        for (auto *lcd : lcds)
+            rack::ModuleWidget::addChild(lcd);
     }
 #endif
 

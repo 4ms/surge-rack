@@ -68,6 +68,9 @@ file(COPY
     ${SURGE_RACK_DIR}/surge/resources/data/fx_presets
     ${SURGE_RACK_DIR}/res/surge_extra_data/fx_presets
     DESTINATION ${SURGE_MM_ASSETS}/build/surge-data)
+# The font the LCDs draw text with (the firmware loads TrueType fonts only)
+file(COPY ${SURGE_RACK_DIR}/res/xt/fonts/quicksand/Quicksand-Bold.ttf
+    DESTINATION ${SURGE_MM_ASSETS}/xt/fonts/quicksand)
 
 # create_plugin() makes a presets/ dir next to the plugin.json it is given,
 # so give it a copy in the build dir instead of the Rack plugin's plugin.json.

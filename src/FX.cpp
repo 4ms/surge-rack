@@ -264,6 +264,10 @@ template <int fxType> FXWidget<fxType>::FXWidget(FXWidget<fxType>::M *module)
     engine_t::createLeftRightInputLabels(this);
     engine_t::createInputOutputPorts(this, M::INPUT_L, M::INPUT_R, M::OUTPUT_L, M::OUTPUT_R);
 
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 } // namespace sst::surgext_rack::fx::ui

@@ -2271,6 +2271,58 @@ struct LCDBackground : public rack::widget::TransparentWidget, style::StyleParti
     void onStyleChanged() override { bdw->dirty = true; }
 };
 
+#ifdef METAMODULE
+// The MetaModule draws an LCD as one graphic display: the LCDBackground and the widgets on it.
+// Those stay children of the module widget (params must, for their positions), so this draws
+// them without owning them.
+struct LCDDisplay : public rack::widget::Widget
+{
+    std::vector<rack::widget::Widget *> layers;
+
+    explicit LCDDisplay(LCDBackground *bg)
+    {
+        box = bg->box;
+        layers.push_back(bg);
+    }
+
+    // The firmware's Widget::step() doesn't step the children, so the module widget doesn't
+    // step these (and the plots compute their curves in step())
+    void step() override
+    {
+        for (auto *w : layers)
+            w->step();
+    }
+
+    void draw(const DrawArgs &args) override { drawLayers(args, 0); }
+    void drawLayer(const DrawArgs &args, int layer) override { drawLayers(args, layer); }
+
+    void drawLayers(const DrawArgs &args, int layer)
+    {
+        for (auto *w : layers)
+        {
+            if (!w->isVisible())
+                continue;
+
+            auto childArgs = args;
+            childArgs.clipBox = w->box.zeroPos();
+            nvgSave(args.vg);
+            nvgTranslate(args.vg, w->box.pos.x - box.pos.x, w->box.pos.y - box.pos.y);
+
+            // The firmware's ParamWidget::draw() doesn't draw its children, which is where
+            // the LCD params draw their text
+            bool isParam = dynamic_cast<rack::app::ParamWidget *>(w) != nullptr;
+            if (layer == 0)
+                isParam ? w->rack::widget::Widget::draw(childArgs) : w->draw(childArgs);
+            else
+                isParam ? w->rack::widget::Widget::drawLayer(childArgs, layer)
+                        : w->drawLayer(childArgs, layer);
+
+            nvgRestore(args.vg);
+        }
+    }
+};
+#endif
+
 template <int nLights = 4>
 struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
 {

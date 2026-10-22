@@ -1298,6 +1298,17 @@ VCOWidget<oscType>::VCOWidget(VCOWidget<oscType>::M *module) : XTModuleWidget()
     auto bg = new widgets::Background(box.size, panelLabel, "vco", "BlankVCO");
     addChild(bg);
 
+#ifdef METAMODULE
+    // In Rack, the LCD background is in the panel SVG. This is its rect there, in px.
+    {
+        auto svgToPx = rack::app::RACK_GRID_WIDTH * layout::LayoutConstants::numberOfScrews / 172.8f;
+        auto x = 12.08506f * svgToPx;
+        addChild(widgets::LCDBackground::createAtYPosition(
+            25.408199f * svgToPx, 106.22314f * svgToPx, layout::LayoutConstants::numberOfScrews,
+            widgets::LCDBackground::posx - x));
+    }
+#endif
+
     float plotStartX = rack::mm2px(layout::LayoutConstants::VCOplotCX_MM -
                                    layout::LayoutConstants::VCOplotW_MM * 0.5);
     float plotStartY = rack::mm2px(layout::LayoutConstants::VCOplotCY_MM -
@@ -1438,6 +1449,11 @@ VCOWidget<oscType>::VCOWidget(VCOWidget<oscType>::M *module) : XTModuleWidget()
         };
         addChild(lab);
     }
+
+#ifdef METAMODULE
+    addLCDDisplays();
+#endif
+
     resetStyleCouplingToModule();
 }
 
