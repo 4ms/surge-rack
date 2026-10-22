@@ -1475,7 +1475,22 @@ struct ToggleParamButton : GlowOverlayHoverButton<rack::app::ParamWidget>
     }
 };
 
-struct LabeledPlotAreaControl : public rack::app::Knob, style::StyleParticipant
+#ifdef METAMODULE
+// The LCD controls draw themselves in the LCD, which the MetaModule doesn't draw yet, and it
+// would draw a plain rack::app::Knob as a default knob. As an SvgKnob with a transparent image,
+// they're listed and can be mapped, but aren't drawn. (The switches aren't drawn either way.)
+struct PlotAreaKnob : public rack::app::SvgKnob
+{
+    PlotAreaKnob()
+    {
+        setSvg(rack::Svg::load(rack::asset::plugin(pluginInstance, "res/metamodule/lcd-param.svg")));
+    }
+};
+#else
+using PlotAreaKnob = rack::app::Knob;
+#endif
+
+struct LabeledPlotAreaControl : public PlotAreaKnob, style::StyleParticipant
 {
     static constexpr float padTop_MM = 1.4;
     static constexpr float padBot_MM = 1.6;
@@ -1498,11 +1513,6 @@ struct LabeledPlotAreaControl : public rack::app::Knob, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
-#ifdef METAMODULE
-        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
-        // listed and mappable but not drawn as a knob
-        res->hide();
-#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1643,11 +1653,6 @@ struct PlotAreaSwitch : public rack::app::Switch, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
-#ifdef METAMODULE
-        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
-        // listed and mappable but not drawn as a knob
-        res->hide();
-#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1702,7 +1707,7 @@ struct PlotAreaSwitch : public rack::app::Switch, style::StyleParticipant
     }
 };
 
-struct PlotAreaMenuItem : public rack::app::Knob, style::StyleParticipant
+struct PlotAreaMenuItem : public PlotAreaKnob, style::StyleParticipant
 {
     static constexpr float padTop_MM = 1.4;
     static constexpr float padBot_MM = 1.6;
@@ -1726,11 +1731,6 @@ struct PlotAreaMenuItem : public rack::app::Knob, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
-#ifdef METAMODULE
-        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
-        // listed and mappable but not drawn as a knob
-        res->hide();
-#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1914,11 +1914,6 @@ struct PlotAreaToggleClick : public rack::app::Switch, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
-#ifdef METAMODULE
-        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
-        // listed and mappable but not drawn as a knob
-        res->hide();
-#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
