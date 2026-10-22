@@ -8,10 +8,10 @@
             "slug": "SurgeXTOSCClassic",
             "name": "Classic VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Shape", "Mod1 to Width 1", "Mod1 to Width 2", "Mod1 to Sub Mix", "Mod1 to Sync", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Shape", "Mod2 to Width 1", "Mod2 to Width 2", "Mod2 to Sub Mix", "Mod2 to Sync", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Shape", "Mod3 to Width 1", "Mod3 to Width 2", "Mod3 to Sub Mix", "Mod3 to Sync", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Shape", "Mod4 to Width 1", "Mod4 to Width 2", "Mod4 to Sub Mix", "Mod4 to Sync", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Shape", "Mod1 to Width 1", "Mod1 to Width 2", "Mod1 to Unison Detune", "Mod1 to Sub Mix", "Mod1 to Sync", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Shape", "Mod2 to Width 1", "Mod2 to Width 2", "Mod2 to Unison Detune", "Mod2 to Sub Mix", "Mod2 to Sync", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Shape", "Mod3 to Width 1", "Mod3 to Width 2", "Mod3 to Unison Detune", "Mod3 to Sub Mix", "Mod3 to Sync", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Shape", "Mod4 to Width 1", "Mod4 to Width 2", "Mod4 to Unison Detune", "Mod4 to Sub Mix", "Mod4 to Sync", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -42,17 +42,30 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Shape Mod Display",
+                "Display 2": "Width 1 Mod Display",
+                "Display 3": "Width 2 Mod Display",
+                "Display 4": "Unison Detune Mod Display",
+                "Display 5": "Sub Mix Mod Display",
+                "Display 6": "Sync Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Shape", "Width 1", "Width 2", "Unison Detune", "Sub Mix", "Sync", "Extend Unison", "Octave Shift", "Unison Voices", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTOSCModern",
             "name": "Modern VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Sawtooth", "Mod1 to Pulse", "Mod1 to Triangle", "Mod1 to Width", "Mod1 to Sync", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Sawtooth", "Mod2 to Pulse", "Mod2 to Triangle", "Mod2 to Width", "Mod2 to Sync", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Sawtooth", "Mod3 to Pulse", "Mod3 to Triangle", "Mod3 to Width", "Mod3 to Sync", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Sawtooth", "Mod4 to Pulse", "Mod4 to Triangle", "Mod4 to Width", "Mod4 to Sync", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Sawtooth", "Mod1 to Pulse", "Mod1 to Triangle", "Mod1 to Unison Detune", "Mod1 to Width", "Mod1 to Sync", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Sawtooth", "Mod2 to Pulse", "Mod2 to Triangle", "Mod2 to Unison Detune", "Mod2 to Width", "Mod2 to Sync", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Sawtooth", "Mod3 to Pulse", "Mod3 to Triangle", "Mod3 to Unison Detune", "Mod3 to Width", "Mod3 to Sync", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Sawtooth", "Mod4 to Pulse", "Mod4 to Triangle", "Mod4 to Unison Detune", "Mod4 to Width", "Mod4 to Sync", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -83,17 +96,30 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Sawtooth Mod Display",
+                "Display 2": "Pulse Mod Display",
+                "Display 3": "Triangle Mod Display",
+                "Display 4": "Unison Detune Mod Display",
+                "Display 5": "Width Mod Display",
+                "Display 6": "Sync Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Sawtooth", "Pulse", "Triangle", "Unison Detune", "Width", "Sync", "Extend Unison", "Octave Shift", "Unison Voices", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTOSCWavetable",
             "name": "Wavetable VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Morph", "Mod1 to Skew Vertical", "Mod1 to Saturate", "Mod1 to Formant", "Mod1 to Skew Horizontal", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Morph", "Mod2 to Skew Vertical", "Mod2 to Saturate", "Mod2 to Formant", "Mod2 to Skew Horizontal", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Morph", "Mod3 to Skew Vertical", "Mod3 to Saturate", "Mod3 to Formant", "Mod3 to Skew Horizontal", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Morph", "Mod4 to Skew Vertical", "Mod4 to Saturate", "Mod4 to Formant", "Mod4 to Skew Horizontal", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Morph", "Mod1 to Saturate", "Mod1 to Formant", "Mod1 to Unison Detune", "Mod1 to Skew Vertical", "Mod1 to Skew Horizontal", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Morph", "Mod2 to Saturate", "Mod2 to Formant", "Mod2 to Unison Detune", "Mod2 to Skew Vertical", "Mod2 to Skew Horizontal", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Morph", "Mod3 to Saturate", "Mod3 to Formant", "Mod3 to Unison Detune", "Mod3 to Skew Vertical", "Mod3 to Skew Horizontal", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Morph", "Mod4 to Saturate", "Mod4 to Formant", "Mod4 to Unison Detune", "Mod4 to Skew Vertical", "Mod4 to Skew Horizontal", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -124,17 +150,30 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Morph Mod Display",
+                "Display 2": "Saturate Mod Display",
+                "Display 3": "Formant Mod Display",
+                "Display 4": "Unison Detune Mod Display",
+                "Display 5": "Skew Vertical Mod Display",
+                "Display 6": "Skew Horizontal Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Morph", "Saturate", "Formant", "Unison Detune", "Skew Vertical", "Skew Horizontal", "Extend Unison", "Octave Shift", "Unison Voices", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTOSCWindow",
             "name": "Window VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Morph", "Mod1 to Formant", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Morph", "Mod2 to Formant", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Morph", "Mod3 to Formant", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Morph", "Mod4 to Formant", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Morph", "Mod1 to Formant", "Mod1 to Unison Detune", "Mod1 to Low Cut", "Mod1 to High Cut", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Morph", "Mod2 to Formant", "Mod2 to Unison Detune", "Mod2 to Low Cut", "Mod2 to High Cut", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Morph", "Mod3 to Formant", "Mod3 to Unison Detune", "Mod3 to Low Cut", "Mod3 to High Cut", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Morph", "Mod4 to Formant", "Mod4 to Unison Detune", "Mod4 to Low Cut", "Mod4 to High Cut", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -161,17 +200,29 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Morph Mod Display",
+                "Display 2": "Formant Mod Display",
+                "Display 3": "Unison Detune Mod Display",
+                "Display 4": "Low Cut Mod Display",
+                "Display 5": "High Cut Mod Display",
+                "Display 6": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Morph", "Formant", "Unison Detune", "Low Cut", "High Cut", "Extend Unison", "Enable Low Cut", "Enable High Cut", "Octave Shift", "Unison Voices", "Window", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 6"]
         },
         {
             "slug": "SurgeXTOSCSine",
             "name": "Sine VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Feedback", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Feedback", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Feedback", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Feedback", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Feedback", "Mod1 to Unison Detune", "Mod1 to Low Cut", "Mod1 to High Cut", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Feedback", "Mod2 to Unison Detune", "Mod2 to Low Cut", "Mod2 to High Cut", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Feedback", "Mod3 to Unison Detune", "Mod3 to Low Cut", "Mod3 to High Cut", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Feedback", "Mod4 to Unison Detune", "Mod4 to Low Cut", "Mod4 to High Cut", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -194,17 +245,28 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Feedback Mod Display",
+                "Display 2": "Unison Detune Mod Display",
+                "Display 3": "Low Cut Mod Display",
+                "Display 4": "High Cut Mod Display",
+                "Display 5": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Feedback", "Unison Detune", "Low Cut", "High Cut", "Enable Vintage Feedback", "Extend Unison", "Enable Low Cut", "Enable High Cut", "Octave Shift", "Unison Voices", "Shape", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 5"]
         },
         {
             "slug": "SurgeXTOSCFM2",
             "name": "FM2 VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to M1 Amount", "Mod1 to M1 Ratio", "Mod1 to M2 Amount", "Mod1 to M2 Ratio", "Mod1 to M1/2 Offset", "Mod1 to M1/2 Phase", "Mod1 to Feedback"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to M1 Amount", "Mod2 to M1 Ratio", "Mod2 to M2 Amount", "Mod2 to M2 Ratio", "Mod2 to M1/2 Offset", "Mod2 to M1/2 Phase", "Mod2 to Feedback"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to M1 Amount", "Mod3 to M1 Ratio", "Mod3 to M2 Amount", "Mod3 to M2 Ratio", "Mod3 to M1/2 Offset", "Mod3 to M1/2 Phase", "Mod3 to Feedback"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to M1 Amount", "Mod4 to M1 Ratio", "Mod4 to M2 Amount", "Mod4 to M2 Ratio", "Mod4 to M1/2 Offset", "Mod4 to M1/2 Phase", "Mod4 to Feedback"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Feedback", "Mod1 to M1 Amount", "Mod1 to M1 Ratio", "Mod1 to M1/2 Offset", "Mod1 to M1/2 Phase", "Mod1 to M2 Amount", "Mod1 to M2 Ratio", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Feedback", "Mod2 to M1 Amount", "Mod2 to M1 Ratio", "Mod2 to M1/2 Offset", "Mod2 to M1/2 Phase", "Mod2 to M2 Amount", "Mod2 to M2 Ratio", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Feedback", "Mod3 to M1 Amount", "Mod3 to M1 Ratio", "Mod3 to M1/2 Offset", "Mod3 to M1/2 Phase", "Mod3 to M2 Amount", "Mod3 to M2 Ratio", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Feedback", "Mod4 to M1 Amount", "Mod4 to M1 Ratio", "Mod4 to M1/2 Offset", "Mod4 to M1/2 Phase", "Mod4 to M2 Amount", "Mod4 to M2 Ratio", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -239,17 +301,31 @@
                 "Mod2 to Feedback": "Feedback",
                 "Mod3 to Feedback": "Feedback",
                 "Mod4 to Feedback": "Feedback",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Feedback Mod Display",
+                "Display 2": "M1 Amount Mod Display",
+                "Display 3": "M1 Ratio Mod Display",
+                "Display 4": "M1/2 Offset Mod Display",
+                "Display 5": "M1/2 Phase Mod Display",
+                "Display 6": "M2 Amount Mod Display",
+                "Display 7": "M2 Ratio Mod Display",
+                "Display 8": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Feedback", "M1 Amount", "M1 Ratio", "M1/2 Offset", "M1/2 Phase", "M2 Amount", "M2 Ratio", "Enable Vintage Feedback", "Extend Feedback", "Octave Shift", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTOSCFM3",
             "name": "FM3 VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to M1 Amount", "Mod1 to M1 Ratio", "Mod1 to M2 Amount", "Mod1 to M2 Ratio", "Mod1 to M3 Amount", "Mod1 to M3 Frequency", "Mod1 to Feedback"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to M1 Amount", "Mod2 to M1 Ratio", "Mod2 to M2 Amount", "Mod2 to M2 Ratio", "Mod2 to M3 Amount", "Mod2 to M3 Frequency", "Mod2 to Feedback"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to M1 Amount", "Mod3 to M1 Ratio", "Mod3 to M2 Amount", "Mod3 to M2 Ratio", "Mod3 to M3 Amount", "Mod3 to M3 Frequency", "Mod3 to Feedback"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to M1 Amount", "Mod4 to M1 Ratio", "Mod4 to M2 Amount", "Mod4 to M2 Ratio", "Mod4 to M3 Amount", "Mod4 to M3 Frequency", "Mod4 to Feedback"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Feedback", "Mod1 to M1 Amount", "Mod1 to M1 Ratio", "Mod1 to M2 Amount", "Mod1 to M2 Ratio", "Mod1 to M3 Amount", "Mod1 to M3 Frequency", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Feedback", "Mod2 to M1 Amount", "Mod2 to M1 Ratio", "Mod2 to M2 Amount", "Mod2 to M2 Ratio", "Mod2 to M3 Amount", "Mod2 to M3 Frequency", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Feedback", "Mod3 to M1 Amount", "Mod3 to M1 Ratio", "Mod3 to M2 Amount", "Mod3 to M2 Ratio", "Mod3 to M3 Amount", "Mod3 to M3 Frequency", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Feedback", "Mod4 to M1 Amount", "Mod4 to M1 Ratio", "Mod4 to M2 Amount", "Mod4 to M2 Ratio", "Mod4 to M3 Amount", "Mod4 to M3 Frequency", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -284,17 +360,31 @@
                 "Mod2 to Feedback": "Feedback",
                 "Mod3 to Feedback": "Feedback",
                 "Mod4 to Feedback": "Feedback",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Feedback Mod Display",
+                "Display 2": "M1 Amount Mod Display",
+                "Display 3": "M1 Ratio Mod Display",
+                "Display 4": "M2 Amount Mod Display",
+                "Display 5": "M2 Ratio Mod Display",
+                "Display 6": "M3 Amount Mod Display",
+                "Display 7": "M3 Frequency Mod Display",
+                "Display 8": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Feedback", "M1 Amount", "M1 Ratio", "M2 Amount", "M2 Ratio", "M3 Amount", "M3 Frequency", "Enable Vintage Feedback", "Extend Feedback", "Octave Shift", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTOSCSHNoise",
             "name": "S&H Noise VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Correlation", "Mod1 to Width", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Sync", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Correlation", "Mod2 to Width", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Sync", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Correlation", "Mod3 to Width", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Sync", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Correlation", "Mod4 to Width", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Sync", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Correlation", "Mod1 to Width", "Mod1 to Sync", "Mod1 to Unison Detune", "Mod1 to Low Cut", "Mod1 to High Cut", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Correlation", "Mod2 to Width", "Mod2 to Sync", "Mod2 to Unison Detune", "Mod2 to Low Cut", "Mod2 to High Cut", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Correlation", "Mod3 to Width", "Mod3 to Sync", "Mod3 to Unison Detune", "Mod3 to Low Cut", "Mod3 to High Cut", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Correlation", "Mod4 to Width", "Mod4 to Sync", "Mod4 to Unison Detune", "Mod4 to Low Cut", "Mod4 to High Cut", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -325,17 +415,30 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Correlation Mod Display",
+                "Display 2": "Width Mod Display",
+                "Display 3": "Sync Mod Display",
+                "Display 4": "Unison Detune Mod Display",
+                "Display 5": "Low Cut Mod Display",
+                "Display 6": "High Cut Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Correlation", "Width", "Sync", "Unison Detune", "Low Cut", "High Cut", "Extend Unison", "Enable Low Cut", "Enable High Cut", "Octave Shift", "Unison Voices", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTOSCAlias",
             "name": "Alias VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Wrap", "Mod1 to Mask", "Mod1 to Threshold", "Mod1 to Bitcrush", "Mod1 to Unison Detune"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Wrap", "Mod2 to Mask", "Mod2 to Threshold", "Mod2 to Bitcrush", "Mod2 to Unison Detune"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Wrap", "Mod3 to Mask", "Mod3 to Threshold", "Mod3 to Bitcrush", "Mod3 to Unison Detune"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Wrap", "Mod4 to Mask", "Mod4 to Threshold", "Mod4 to Bitcrush", "Mod4 to Unison Detune"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Wrap", "Mod1 to Mask", "Mod1 to Unison Detune", "Mod1 to Threshold", "Mod1 to Bitcrush", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Wrap", "Mod2 to Mask", "Mod2 to Unison Detune", "Mod2 to Threshold", "Mod2 to Bitcrush", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Wrap", "Mod3 to Mask", "Mod3 to Unison Detune", "Mod3 to Threshold", "Mod3 to Bitcrush", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Wrap", "Mod4 to Mask", "Mod4 to Unison Detune", "Mod4 to Threshold", "Mod4 to Bitcrush", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -362,17 +465,29 @@
                 "Mod2 to Unison Detune": "Unison Detune",
                 "Mod3 to Unison Detune": "Unison Detune",
                 "Mod4 to Unison Detune": "Unison Detune",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Wrap Mod Display",
+                "Display 2": "Mask Mod Display",
+                "Display 3": "Unison Detune Mod Display",
+                "Display 4": "Threshold Mod Display",
+                "Display 5": "Bitcrush Mod Display",
+                "Display 6": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Wrap", "Mask", "Unison Detune", "Threshold", "Bitcrush", "Extend Unison", "Octave Shift", "Unison Voices", "Shape", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Audio In", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 6"]
         },
         {
             "slug": "SurgeXTOSCString",
             "name": "String VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Exciter Level", "Mod1 to String 1 Decay", "Mod1 to String 2 Decay", "Mod1 to String 2 Detune", "Mod1 to String Balance", "Mod1 to Stiffness"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Exciter Level", "Mod2 to String 1 Decay", "Mod2 to String 2 Decay", "Mod2 to String 2 Detune", "Mod2 to String Balance", "Mod2 to Stiffness"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Exciter Level", "Mod3 to String 1 Decay", "Mod3 to String 2 Decay", "Mod3 to String 2 Detune", "Mod3 to String Balance", "Mod3 to Stiffness"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Exciter Level", "Mod4 to String 1 Decay", "Mod4 to String 2 Decay", "Mod4 to String 2 Detune", "Mod4 to String Balance", "Mod4 to Stiffness"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Exciter Level", "Mod1 to String 1 Decay", "Mod1 to String 2 Decay", "Mod1 to String 2 Detune", "Mod1 to String Balance", "Mod1 to Stiffness", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Exciter Level", "Mod2 to String 1 Decay", "Mod2 to String 2 Decay", "Mod2 to String 2 Detune", "Mod2 to String Balance", "Mod2 to Stiffness", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Exciter Level", "Mod3 to String 1 Decay", "Mod3 to String 2 Decay", "Mod3 to String 2 Detune", "Mod3 to String Balance", "Mod3 to Stiffness", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Exciter Level", "Mod4 to String 1 Decay", "Mod4 to String 2 Decay", "Mod4 to String 2 Detune", "Mod4 to String Balance", "Mod4 to Stiffness", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -403,17 +518,30 @@
                 "Mod2 to Stiffness": "Stiffness",
                 "Mod3 to Stiffness": "Stiffness",
                 "Mod4 to Stiffness": "Stiffness",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Exciter Level Mod Display",
+                "Display 2": "String 1 Decay Mod Display",
+                "Display 3": "String 2 Decay Mod Display",
+                "Display 4": "String 2 Detune Mod Display",
+                "Display 5": "String Balance Mod Display",
+                "Display 6": "Stiffness Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Exciter Level", "String 1 Decay", "String 2 Decay", "String 2 Detune", "String Balance", "Stiffness", "Octave Shift", "Enable 2X Internal Oversampling", "Exciter", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Audio In", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTOSCTwist",
             "name": "Twist VCO",
             "groups": {
-                "Mod 1": ["Mod1 to Pitch", "Mod1 to Detune", "Mod1 to Square Shape", "Mod1 to Saw Shape", "Mod1 to Sync Mix", "Mod1 to LPG Response", "Mod1 to LPG Decay"],
-                "Mod 2": ["Mod2 to Pitch", "Mod2 to Detune", "Mod2 to Square Shape", "Mod2 to Saw Shape", "Mod2 to Sync Mix", "Mod2 to LPG Response", "Mod2 to LPG Decay"],
-                "Mod 3": ["Mod3 to Pitch", "Mod3 to Detune", "Mod3 to Square Shape", "Mod3 to Saw Shape", "Mod3 to Sync Mix", "Mod3 to LPG Response", "Mod3 to LPG Decay"],
-                "Mod 4": ["Mod4 to Pitch", "Mod4 to Detune", "Mod4 to Square Shape", "Mod4 to Saw Shape", "Mod4 to Sync Mix", "Mod4 to LPG Response", "Mod4 to LPG Decay"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Detune", "Mod1 to Square Shape", "Mod1 to LPG Response", "Mod1 to LPG Decay", "Mod1 to Saw Shape", "Mod1 to Sync Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Detune", "Mod2 to Square Shape", "Mod2 to LPG Response", "Mod2 to LPG Decay", "Mod2 to Saw Shape", "Mod2 to Sync Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Detune", "Mod3 to Square Shape", "Mod3 to LPG Response", "Mod3 to LPG Decay", "Mod3 to Saw Shape", "Mod3 to Sync Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Detune", "Mod4 to Square Shape", "Mod4 to LPG Response", "Mod4 to LPG Decay", "Mod4 to Saw Shape", "Mod4 to Sync Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pitch": "Pitch",
@@ -444,17 +572,30 @@
                 "Mod2 to LPG Decay": "LPG Decay",
                 "Mod3 to LPG Decay": "LPG Decay",
                 "Mod4 to LPG Decay": "LPG Decay",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Detune Mod Display",
+                "Display 2": "Square Shape Mod Display",
+                "Display 3": "LPG Response Mod Display",
+                "Display 4": "LPG Decay Mod Display",
+                "Display 5": "Saw Shape Mod Display",
+                "Display 6": "Sync Mix Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch (v/oct)", "Detune", "Square Shape", "LPG Response", "LPG Decay", "Saw Shape", "Sync Mix", "Enable LPG on Trigger", "Octave Shift", "Engine", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct In", "Reset/Retrigger In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTFXReverb",
             "name": "Reverb",
             "groups": {
-                "Mod 1": ["Mod1 to Pre-Delay", "Mod1 to Size", "Mod1 to Decay Time", "Mod1 to HF Damping", "Mod1 to Low Cut", "Mod1 to Peak Freq", "Mod1 to Peak Gain", "Mod1 to High Cut", "Mod1 to Mix", "Mod1 to Width"],
-                "Mod 2": ["Mod2 to Pre-Delay", "Mod2 to Size", "Mod2 to Decay Time", "Mod2 to HF Damping", "Mod2 to Low Cut", "Mod2 to Peak Freq", "Mod2 to Peak Gain", "Mod2 to High Cut", "Mod2 to Mix", "Mod2 to Width"],
-                "Mod 3": ["Mod3 to Pre-Delay", "Mod3 to Size", "Mod3 to Decay Time", "Mod3 to HF Damping", "Mod3 to Low Cut", "Mod3 to Peak Freq", "Mod3 to Peak Gain", "Mod3 to High Cut", "Mod3 to Mix", "Mod3 to Width"],
-                "Mod 4": ["Mod4 to Pre-Delay", "Mod4 to Size", "Mod4 to Decay Time", "Mod4 to HF Damping", "Mod4 to Low Cut", "Mod4 to Peak Freq", "Mod4 to Peak Gain", "Mod4 to High Cut", "Mod4 to Mix", "Mod4 to Width"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Size", "Mod1 to Decay Time", "Mod1 to Low Cut", "Mod1 to Peak Freq", "Mod1 to Peak Gain", "Mod1 to High Cut", "Mod1 to Pre-Delay", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Size", "Mod2 to Decay Time", "Mod2 to Low Cut", "Mod2 to Peak Freq", "Mod2 to Peak Gain", "Mod2 to High Cut", "Mod2 to Pre-Delay", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Size", "Mod3 to Decay Time", "Mod3 to Low Cut", "Mod3 to Peak Freq", "Mod3 to Peak Gain", "Mod3 to High Cut", "Mod3 to Pre-Delay", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Size", "Mod4 to Decay Time", "Mod4 to Low Cut", "Mod4 to Peak Freq", "Mod4 to Peak Gain", "Mod4 to High Cut", "Mod4 to Pre-Delay", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pre-Delay": "Pre-Delay",
@@ -497,17 +638,33 @@
                 "Mod2 to Width": "Width",
                 "Mod3 to Width": "Width",
                 "Mod4 to Width": "Width",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Size Mod Display",
+                "Display 1": "Decay Time Mod Display",
+                "Display 2": "Low Cut Mod Display",
+                "Display 3": "Peak Freq Mod Display",
+                "Display 4": "Peak Gain Mod Display",
+                "Display 5": "High Cut Mod Display",
+                "Display 6": "Pre-Delay Mod Display",
+                "Display 7": "HF Damping Mod Display",
+                "Display 8": "Width Mod Display",
+                "Display 9": "Mix Mod Display",
+                "Display 10": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Size", "Room Shape", "Decay Time", "Low Cut", "Peak Freq", "Peak Gain", "High Cut", "Pre-Delay", "HF Damping", "Width", "Mix", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXPhaser",
             "name": "Phaser",
             "groups": {
-                "Mod 1": ["Mod1 to Center", "Mod1 to Feedback", "Mod1 to Sharpness", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Stereo", "Mod1 to Mix", "Mod1 to Width", "Mod1 to Spread", "Mod1 to Tone"],
-                "Mod 2": ["Mod2 to Center", "Mod2 to Feedback", "Mod2 to Sharpness", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Stereo", "Mod2 to Mix", "Mod2 to Width", "Mod2 to Spread", "Mod2 to Tone"],
-                "Mod 3": ["Mod3 to Center", "Mod3 to Feedback", "Mod3 to Sharpness", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Stereo", "Mod3 to Mix", "Mod3 to Width", "Mod3 to Spread", "Mod3 to Tone"],
-                "Mod 4": ["Mod4 to Center", "Mod4 to Feedback", "Mod4 to Sharpness", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Stereo", "Mod4 to Mix", "Mod4 to Width", "Mod4 to Spread", "Mod4 to Tone"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Stereo", "Mod1 to Tone", "Mod1 to Spread", "Mod1 to Center", "Mod1 to Sharpness", "Mod1 to Feedback", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Stereo", "Mod2 to Tone", "Mod2 to Spread", "Mod2 to Center", "Mod2 to Sharpness", "Mod2 to Feedback", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Stereo", "Mod3 to Tone", "Mod3 to Spread", "Mod3 to Center", "Mod3 to Sharpness", "Mod3 to Feedback", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Stereo", "Mod4 to Tone", "Mod4 to Spread", "Mod4 to Center", "Mod4 to Sharpness", "Mod4 to Feedback", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Center": "Center",
@@ -550,17 +707,33 @@
                 "Mod2 to Tone": "Tone",
                 "Mod3 to Tone": "Tone",
                 "Mod4 to Tone": "Tone",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Rate Mod Display",
+                "Display 1": "Depth Mod Display",
+                "Display 2": "Stereo Mod Display",
+                "Display 3": "Tone Mod Display",
+                "Display 4": "Spread Mod Display",
+                "Display 5": "Center Mod Display",
+                "Display 6": "Sharpness Mod Display",
+                "Display 7": "Feedback Mod Display",
+                "Display 8": "Width Mod Display",
+                "Display 9": "Mix Mod Display",
+                "Display 10": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Rate", "Depth", "Stereo", "Tone", "Spread", "Center", "Sharpness", "Feedback", "Width", "Mix", "Enable Tone Filter", "Waveform", "Count", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXRotarySpeaker",
             "name": "RotarySpeaker",
             "groups": {
-                "Mod 1": ["Mod1 to Horn Rate", "Mod1 to Doppler", "Mod1 to Tremolo", "Mod1 to Rotor Rate", "Mod1 to Drive", "Mod1 to Width", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Horn Rate", "Mod2 to Doppler", "Mod2 to Tremolo", "Mod2 to Rotor Rate", "Mod2 to Drive", "Mod2 to Width", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Horn Rate", "Mod3 to Doppler", "Mod3 to Tremolo", "Mod3 to Rotor Rate", "Mod3 to Drive", "Mod3 to Width", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Horn Rate", "Mod4 to Doppler", "Mod4 to Tremolo", "Mod4 to Rotor Rate", "Mod4 to Drive", "Mod4 to Width", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Horn Rate", "Mod1 to Rotor Rate", "Mod1 to Drive", "Mod1 to Doppler", "Mod1 to Tremolo", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Horn Rate", "Mod2 to Rotor Rate", "Mod2 to Drive", "Mod2 to Doppler", "Mod2 to Tremolo", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Horn Rate", "Mod3 to Rotor Rate", "Mod3 to Drive", "Mod3 to Doppler", "Mod3 to Tremolo", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Horn Rate", "Mod4 to Rotor Rate", "Mod4 to Drive", "Mod4 to Doppler", "Mod4 to Tremolo", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Horn Rate": "Horn Rate",
@@ -591,17 +764,30 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Horn Rate Mod Display",
+                "Display 1": "Rotor Rate Mod Display",
+                "Display 2": "Drive Mod Display",
+                "Display 3": "Doppler Mod Display",
+                "Display 4": "Tremolo Mod Display",
+                "Display 5": "Width Mod Display",
+                "Display 6": "Mix Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Horn Rate", "Rotor Rate", "Drive", "Doppler", "Tremolo", "Width", "Mix", "Enable Drive", "Model", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTFXDistortion",
             "name": "Distortion",
             "groups": {
-                "Mod 1": ["param:12", "param:16", "param:20", "param:24", "Mod1 to Drive", "Mod1 to Feedback", "param:36", "param:40", "param:44", "param:48"],
-                "Mod 2": ["param:13", "param:17", "param:21", "param:25", "Mod2 to Drive", "Mod2 to Feedback", "param:37", "param:41", "param:45", "param:49"],
-                "Mod 3": ["param:14", "param:18", "param:22", "param:26", "Mod3 to Drive", "Mod3 to Feedback", "param:38", "param:42", "param:46", "param:50"],
-                "Mod 4": ["param:15", "param:19", "param:23", "param:27", "Mod4 to Drive", "Mod4 to Feedback", "param:39", "param:43", "param:47", "param:51"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Drive", "Mod1 to Feedback", "param:12", "param:16", "param:20", "param:24", "param:36", "param:40", "param:44", "param:48", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Drive", "Mod2 to Feedback", "param:13", "param:17", "param:21", "param:25", "param:37", "param:41", "param:45", "param:49", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Drive", "Mod3 to Feedback", "param:14", "param:18", "param:22", "param:26", "param:38", "param:42", "param:46", "param:50", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Drive", "Mod4 to Feedback", "param:15", "param:19", "param:23", "param:27", "param:39", "param:43", "param:47", "param:51", "Modulation Signal 4 In"]
             },
             "names": {
                 "param:12": "Gain",
@@ -644,17 +830,33 @@
                 "param:49": "High Cut",
                 "param:50": "High Cut",
                 "param:51": "High Cut",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Drive Mod Display",
+                "Display 1": "Feedback Mod Display",
+                "Display 2": "Gain Mod Display",
+                "Display 3": "Frequency Mod Display",
+                "Display 4": "Bandwidth Mod Display",
+                "Display 5": "High Cut Mod Display",
+                "Display 6": "Gain Mod Display",
+                "Display 7": "Frequency Mod Display",
+                "Display 8": "Bandwidth Mod Display",
+                "Display 9": "High Cut Mod Display",
+                "Display 10": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Drive", "Feedback", "param:0", "param:1", "param:2", "param:3", "param:6", "param:7", "param:8", "param:9", "Enable Pre High Cut", "Enable Post High Cut", "Model", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXFrequencyShifter",
             "name": "FrequencyShifter",
             "groups": {
-                "Mod 1": ["Mod1 to Left", "Mod1 to Right", "Mod1 to Time", "Mod1 to Feedback", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Left", "Mod2 to Right", "Mod2 to Time", "Mod2 to Feedback", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Left", "Mod3 to Right", "Mod3 to Time", "Mod3 to Feedback", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Left", "Mod4 to Right", "Mod4 to Time", "Mod4 to Feedback", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Left", "Mod1 to Right", "Mod1 to Time", "Mod1 to Feedback", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Left", "Mod2 to Right", "Mod2 to Time", "Mod2 to Feedback", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Left", "Mod3 to Right", "Mod3 to Time", "Mod3 to Feedback", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Left", "Mod4 to Right", "Mod4 to Time", "Mod4 to Feedback", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Left": "Left",
@@ -677,17 +879,28 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Left Mod Display",
+                "Display 1": "Right Mod Display",
+                "Display 2": "Time Mod Display",
+                "Display 3": "Feedback Mod Display",
+                "Display 4": "Mix Mod Display",
+                "Display 5": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Left", "Right", "Time", "Feedback", "Mix", "Extend Frequency", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 5"]
         },
         {
             "slug": "SurgeXTFXChorus",
             "name": "Chorus",
             "groups": {
-                "Mod 1": ["Mod1 to Time", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Feedback", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Mix", "Mod1 to Width"],
-                "Mod 2": ["Mod2 to Time", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Feedback", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Mix", "Mod2 to Width"],
-                "Mod 3": ["Mod3 to Time", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Feedback", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Mix", "Mod3 to Width"],
-                "Mod 4": ["Mod4 to Time", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Feedback", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Mix", "Mod4 to Width"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Time", "Mod1 to Feedback", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Time", "Mod2 to Feedback", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Time", "Mod3 to Feedback", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Time", "Mod4 to Feedback", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Time": "Time",
@@ -722,17 +935,31 @@
                 "Mod2 to Width": "Width",
                 "Mod3 to Width": "Width",
                 "Mod4 to Width": "Width",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Rate Mod Display",
+                "Display 1": "Depth Mod Display",
+                "Display 2": "Time Mod Display",
+                "Display 3": "Feedback Mod Display",
+                "Display 4": "Low Cut Mod Display",
+                "Display 5": "High Cut Mod Display",
+                "Display 6": "Width Mod Display",
+                "Display 7": "Mix Mod Display",
+                "Display 8": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Rate", "Depth", "Time", "Feedback", "Low Cut", "High Cut", "Width", "Mix", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTFXVocoder",
             "name": "Vocoder",
             "groups": {
-                "Mod 1": ["Mod1 to Gain", "Mod1 to Gate", "Mod1 to Env Follow", "Mod1 to Q", "Mod1 to Min Frequency", "Mod1 to Max Frequency", "Mod1 to Range", "Mod1 to Center", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Gain", "Mod2 to Gate", "Mod2 to Env Follow", "Mod2 to Q", "Mod2 to Min Frequency", "Mod2 to Max Frequency", "Mod2 to Range", "Mod2 to Center", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Gain", "Mod3 to Gate", "Mod3 to Env Follow", "Mod3 to Q", "Mod3 to Min Frequency", "Mod3 to Max Frequency", "Mod3 to Range", "Mod3 to Center", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Gain", "Mod4 to Gate", "Mod4 to Env Follow", "Mod4 to Q", "Mod4 to Min Frequency", "Mod4 to Max Frequency", "Mod4 to Range", "Mod4 to Center", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Gain", "Mod1 to Gate", "Mod1 to Min Frequency", "Mod1 to Max Frequency", "Mod1 to Range", "Mod1 to Center", "Mod1 to Env Follow", "Mod1 to Q", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Gain", "Mod2 to Gate", "Mod2 to Min Frequency", "Mod2 to Max Frequency", "Mod2 to Range", "Mod2 to Center", "Mod2 to Env Follow", "Mod2 to Q", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Gain", "Mod3 to Gate", "Mod3 to Min Frequency", "Mod3 to Max Frequency", "Mod3 to Range", "Mod3 to Center", "Mod3 to Env Follow", "Mod3 to Q", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Gain", "Mod4 to Gate", "Mod4 to Min Frequency", "Mod4 to Max Frequency", "Mod4 to Range", "Mod4 to Center", "Mod4 to Env Follow", "Mod4 to Q", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Gain": "Gain",
@@ -771,17 +998,32 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Gain Mod Display",
+                "Display 1": "Gate Mod Display",
+                "Display 2": "Min Frequency Mod Display",
+                "Display 3": "Max Frequency Mod Display",
+                "Display 4": "Range Mod Display",
+                "Display 5": "Center Mod Display",
+                "Display 6": "Env Follow Mod Display",
+                "Display 7": "Q Mod Display",
+                "Display 8": "Mix Mod Display",
+                "Display 9": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Gain", "Gate", "Min Frequency", "Max Frequency", "Range", "Center", "Env Follow", "Q", "Mix", "Bands", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left Sideband In", "Right Sideband In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
         },
         {
             "slug": "SurgeXTFXReverb2",
             "name": "Reverb2",
             "groups": {
-                "Mod 1": ["Mod1 to Pre-Delay", "Mod1 to Room Size", "Mod1 to Decay Time", "Mod1 to Diffusion", "Mod1 to Buildup", "Mod1 to Modulation", "Mod1 to LF Damping", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Pre-Delay", "Mod2 to Room Size", "Mod2 to Decay Time", "Mod2 to Diffusion", "Mod2 to Buildup", "Mod2 to Modulation", "Mod2 to LF Damping", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Pre-Delay", "Mod3 to Room Size", "Mod3 to Decay Time", "Mod3 to Diffusion", "Mod3 to Buildup", "Mod3 to Modulation", "Mod3 to LF Damping", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Pre-Delay", "Mod4 to Room Size", "Mod4 to Decay Time", "Mod4 to Diffusion", "Mod4 to Buildup", "Mod4 to Modulation", "Mod4 to LF Damping", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Room Size", "Mod1 to Decay Time", "Mod1 to Diffusion", "Mod1 to Modulation", "Mod1 to LF Damping", "Mod1 to HF Damping", "Mod1 to Pre-Delay", "Mod1 to Buildup", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Room Size", "Mod2 to Decay Time", "Mod2 to Diffusion", "Mod2 to Modulation", "Mod2 to LF Damping", "Mod2 to HF Damping", "Mod2 to Pre-Delay", "Mod2 to Buildup", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Room Size", "Mod3 to Decay Time", "Mod3 to Diffusion", "Mod3 to Modulation", "Mod3 to LF Damping", "Mod3 to HF Damping", "Mod3 to Pre-Delay", "Mod3 to Buildup", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Room Size", "Mod4 to Decay Time", "Mod4 to Diffusion", "Mod4 to Modulation", "Mod4 to LF Damping", "Mod4 to HF Damping", "Mod4 to Pre-Delay", "Mod4 to Buildup", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Pre-Delay": "Pre-Delay",
@@ -824,17 +1066,33 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Room Size Mod Display",
+                "Display 1": "Decay Time Mod Display",
+                "Display 2": "Diffusion Mod Display",
+                "Display 3": "Modulation Mod Display",
+                "Display 4": "Pre-Delay Mod Display",
+                "Display 5": "Buildup Mod Display",
+                "Display 6": "LF Damping Mod Display",
+                "Display 7": "HF Damping Mod Display",
+                "Display 8": "Width Mod Display",
+                "Display 9": "Mix Mod Display",
+                "Display 10": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Room Size", "Decay Time", "Diffusion", "Modulation", "LF Damping", "HF Damping", "Pre-Delay", "Buildup", "Width", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXFlanger",
             "name": "Flanger",
             "groups": {
-                "Mod 1": ["Mod1 to Rate", "Mod1 to Depth", "Mod1 to Count", "Mod1 to Base Pitch", "Mod1 to Spacing", "Mod1 to Feedback", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Rate", "Mod2 to Depth", "Mod2 to Count", "Mod2 to Base Pitch", "Mod2 to Spacing", "Mod2 to Feedback", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Rate", "Mod3 to Depth", "Mod3 to Count", "Mod3 to Base Pitch", "Mod3 to Spacing", "Mod3 to Feedback", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Rate", "Mod4 to Depth", "Mod4 to Count", "Mod4 to Base Pitch", "Mod4 to Spacing", "Mod4 to Feedback", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Count", "Mod1 to Base Pitch", "Mod1 to Spacing", "Mod1 to Feedback", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Count", "Mod2 to Base Pitch", "Mod2 to Spacing", "Mod2 to Feedback", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Count", "Mod3 to Base Pitch", "Mod3 to Spacing", "Mod3 to Feedback", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Count", "Mod4 to Base Pitch", "Mod4 to Spacing", "Mod4 to Feedback", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Rate": "Rate",
@@ -873,17 +1131,32 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Rate Mod Display",
+                "Display 1": "Depth Mod Display",
+                "Display 2": "Count Mod Display",
+                "Display 3": "Base Pitch Mod Display",
+                "Display 4": "Spacing Mod Display",
+                "Display 5": "Feedback Mod Display",
+                "Display 6": "HF Damping Mod Display",
+                "Display 7": "Width Mod Display",
+                "Display 8": "Mix Mod Display",
+                "Display 9": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Rate", "Depth", "Count", "Base Pitch", "Spacing", "Feedback", "HF Damping", "Width", "Mix", "Mode", "Waveform", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
         },
         {
             "slug": "SurgeXTFXRingMod",
             "name": "RingMod",
             "groups": {
-                "Mod 1": ["Mod1 to Frequency", "Mod1 to Unison Detune", "Mod1 to Forward Bias", "Mod1 to Linear Region", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Frequency", "Mod2 to Unison Detune", "Mod2 to Forward Bias", "Mod2 to Linear Region", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Frequency", "Mod3 to Unison Detune", "Mod3 to Forward Bias", "Mod3 to Linear Region", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Frequency", "Mod4 to Unison Detune", "Mod4 to Forward Bias", "Mod4 to Linear Region", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Frequency", "Mod1 to Forward Bias", "Mod1 to Linear Region", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Unison Detune", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Frequency", "Mod2 to Forward Bias", "Mod2 to Linear Region", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Unison Detune", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Frequency", "Mod3 to Forward Bias", "Mod3 to Linear Region", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Unison Detune", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Frequency", "Mod4 to Forward Bias", "Mod4 to Linear Region", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Unison Detune", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Frequency": "Frequency",
@@ -914,17 +1187,30 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Frequency Mod Display",
+                "Display 1": "Forward Bias Mod Display",
+                "Display 2": "Linear Region Mod Display",
+                "Display 3": "Low Cut Mod Display",
+                "Display 4": "High Cut Mod Display",
+                "Display 5": "Unison Detune Mod Display",
+                "Display 6": "Mix Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Frequency", "Forward Bias", "Linear Region", "Low Cut", "High Cut", "Unison Detune", "Mix", "Enable Low Cut", "Enable High Cut", "Shape", "Unison Voices", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left Sideband In", "Right Sideband In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTFXNeuron",
             "name": "Neuron",
             "groups": {
-                "Mod 1": ["Mod1 to Drive", "Mod1 to Squash", "Mod1 to Stab", "Mod1 to Asymmetry", "Mod1 to Bias", "Mod1 to Frequency", "Mod1 to Separation", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Width", "Mod1 to Gain"],
-                "Mod 2": ["Mod2 to Drive", "Mod2 to Squash", "Mod2 to Stab", "Mod2 to Asymmetry", "Mod2 to Bias", "Mod2 to Frequency", "Mod2 to Separation", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Width", "Mod2 to Gain"],
-                "Mod 3": ["Mod3 to Drive", "Mod3 to Squash", "Mod3 to Stab", "Mod3 to Asymmetry", "Mod3 to Bias", "Mod3 to Frequency", "Mod3 to Separation", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Width", "Mod3 to Gain"],
-                "Mod 4": ["Mod4 to Drive", "Mod4 to Squash", "Mod4 to Stab", "Mod4 to Asymmetry", "Mod4 to Bias", "Mod4 to Frequency", "Mod4 to Separation", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Width", "Mod4 to Gain"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Drive", "Mod1 to Squash", "Mod1 to Stab", "Mod1 to Asymmetry", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Bias", "Mod1 to Frequency", "Mod1 to Separation", "Mod1 to Width", "Mod1 to Gain", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Drive", "Mod2 to Squash", "Mod2 to Stab", "Mod2 to Asymmetry", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Bias", "Mod2 to Frequency", "Mod2 to Separation", "Mod2 to Width", "Mod2 to Gain", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Drive", "Mod3 to Squash", "Mod3 to Stab", "Mod3 to Asymmetry", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Bias", "Mod3 to Frequency", "Mod3 to Separation", "Mod3 to Width", "Mod3 to Gain", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Drive", "Mod4 to Squash", "Mod4 to Stab", "Mod4 to Asymmetry", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Bias", "Mod4 to Frequency", "Mod4 to Separation", "Mod4 to Width", "Mod4 to Gain", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Drive": "Drive",
@@ -971,17 +1257,34 @@
                 "Mod2 to Gain": "Gain",
                 "Mod3 to Gain": "Gain",
                 "Mod4 to Gain": "Gain",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Drive Mod Display",
+                "Display 1": "Squash Mod Display",
+                "Display 2": "Stab Mod Display",
+                "Display 3": "Asymmetry Mod Display",
+                "Display 4": "Rate Mod Display",
+                "Display 5": "Depth Mod Display",
+                "Display 6": "Bias Mod Display",
+                "Display 7": "Frequency Mod Display",
+                "Display 8": "Separation Mod Display",
+                "Display 9": "Width Mod Display",
+                "Display 10": "Gain Mod Display",
+                "Display 11": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Drive", "Squash", "Stab", "Asymmetry", "Rate", "Depth", "Bias", "Frequency", "Separation", "Width", "Gain", "Waveform", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 11"]
         },
         {
             "slug": "SurgeXTFXResonator",
             "name": "Resonator",
             "groups": {
-                "Mod 1": ["Mod1 to Frequency 1", "Mod1 to Resonance 1", "Mod1 to Gain 1", "Mod1 to Frequency 2", "Mod1 to Resonance 2", "Mod1 to Gain 2", "Mod1 to Frequency 3", "Mod1 to Resonance 3", "Mod1 to Gain 3", "Mod1 to Gain", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Frequency 1", "Mod2 to Resonance 1", "Mod2 to Gain 1", "Mod2 to Frequency 2", "Mod2 to Resonance 2", "Mod2 to Gain 2", "Mod2 to Frequency 3", "Mod2 to Resonance 3", "Mod2 to Gain 3", "Mod2 to Gain", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Frequency 1", "Mod3 to Resonance 1", "Mod3 to Gain 1", "Mod3 to Frequency 2", "Mod3 to Resonance 2", "Mod3 to Gain 2", "Mod3 to Frequency 3", "Mod3 to Resonance 3", "Mod3 to Gain 3", "Mod3 to Gain", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Frequency 1", "Mod4 to Resonance 1", "Mod4 to Gain 1", "Mod4 to Frequency 2", "Mod4 to Resonance 2", "Mod4 to Gain 2", "Mod4 to Frequency 3", "Mod4 to Resonance 3", "Mod4 to Gain 3", "Mod4 to Gain", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Frequency 1", "Mod1 to Resonance 1", "Mod1 to Gain 1", "Mod1 to Frequency 2", "Mod1 to Resonance 2", "Mod1 to Gain 2", "Mod1 to Gain", "Mod1 to Frequency 3", "Mod1 to Resonance 3", "Mod1 to Gain 3", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Frequency 1", "Mod2 to Resonance 1", "Mod2 to Gain 1", "Mod2 to Frequency 2", "Mod2 to Resonance 2", "Mod2 to Gain 2", "Mod2 to Gain", "Mod2 to Frequency 3", "Mod2 to Resonance 3", "Mod2 to Gain 3", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Frequency 1", "Mod3 to Resonance 1", "Mod3 to Gain 1", "Mod3 to Frequency 2", "Mod3 to Resonance 2", "Mod3 to Gain 2", "Mod3 to Gain", "Mod3 to Frequency 3", "Mod3 to Resonance 3", "Mod3 to Gain 3", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Frequency 1", "Mod4 to Resonance 1", "Mod4 to Gain 1", "Mod4 to Frequency 2", "Mod4 to Resonance 2", "Mod4 to Gain 2", "Mod4 to Gain", "Mod4 to Frequency 3", "Mod4 to Resonance 3", "Mod4 to Gain 3", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Frequency 1": "Frequency 1",
@@ -1028,17 +1331,34 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Frequency 1 Mod Display",
+                "Display 1": "Resonance 1 Mod Display",
+                "Display 2": "Gain 1 Mod Display",
+                "Display 3": "Frequency 2 Mod Display",
+                "Display 4": "Resonance 2 Mod Display",
+                "Display 5": "Gain 2 Mod Display",
+                "Display 6": "Frequency 3 Mod Display",
+                "Display 7": "Resonance 3 Mod Display",
+                "Display 8": "Gain 3 Mod Display",
+                "Display 9": "Gain Mod Display",
+                "Display 10": "Mix Mod Display",
+                "Display 11": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Frequency 1", "Resonance 1", "Gain 1", "Frequency 2", "Resonance 2", "Gain 2", "Gain", "Frequency 3", "Resonance 3", "Gain 3", "Mix", "Extend Band 1 Frequency", "Extend Band 2 Frequency", "Extend Band 3 Frequency", "Mode", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 11"]
         },
         {
             "slug": "SurgeXTFXChow",
             "name": "Chow",
             "groups": {
-                "Mod 1": ["Mod1 to Threshold", "Mod1 to Ratio", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Threshold", "Mod2 to Ratio", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Threshold", "Mod3 to Ratio", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Threshold", "Mod4 to Ratio", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Threshold", "Mod1 to Ratio", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Threshold", "Mod2 to Ratio", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Threshold", "Mod3 to Ratio", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Threshold", "Mod4 to Ratio", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Threshold": "Threshold",
@@ -1053,17 +1373,26 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Threshold Mod Display",
+                "Display 1": "Ratio Mod Display",
+                "Display 2": "Mix Mod Display",
+                "Display 3": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Threshold", "Ratio", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate to Flip It! In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 3"]
         },
         {
             "slug": "SurgeXTFXExciter",
             "name": "Exciter",
             "groups": {
-                "Mod 1": ["Mod1 to Drive", "Mod1 to Tone", "Mod1 to Attack", "Mod1 to Release", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Drive", "Mod2 to Tone", "Mod2 to Attack", "Mod2 to Release", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Drive", "Mod3 to Tone", "Mod3 to Attack", "Mod3 to Release", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Drive", "Mod4 to Tone", "Mod4 to Attack", "Mod4 to Release", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Drive", "Mod1 to Attack", "Mod1 to Release", "Mod1 to Tone", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Drive", "Mod2 to Attack", "Mod2 to Release", "Mod2 to Tone", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Drive", "Mod3 to Attack", "Mod3 to Release", "Mod3 to Tone", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Drive", "Mod4 to Attack", "Mod4 to Release", "Mod4 to Tone", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Drive": "Drive",
@@ -1086,17 +1415,28 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Drive Mod Display",
+                "Display 1": "Attack Mod Display",
+                "Display 2": "Release Mod Display",
+                "Display 3": "Tone Mod Display",
+                "Display 4": "Mix Mod Display",
+                "Display 5": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Drive", "Attack", "Release", "Tone", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 5"]
         },
         {
             "slug": "SurgeXTFXEnsemble",
             "name": "Ensemble",
             "groups": {
-                "Mod 1": ["Mod1 to Anti-Alias Filter", "Mod1 to Frequency 1", "Mod1 to Depth 1", "Mod1 to Frequency 2", "Mod1 to Depth 2", "Mod1 to Clock Rate", "Mod1 to Saturation", "Mod1 to Feedback", "Mod1 to Width", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Anti-Alias Filter", "Mod2 to Frequency 1", "Mod2 to Depth 1", "Mod2 to Frequency 2", "Mod2 to Depth 2", "Mod2 to Clock Rate", "Mod2 to Saturation", "Mod2 to Feedback", "Mod2 to Width", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Anti-Alias Filter", "Mod3 to Frequency 1", "Mod3 to Depth 1", "Mod3 to Frequency 2", "Mod3 to Depth 2", "Mod3 to Clock Rate", "Mod3 to Saturation", "Mod3 to Feedback", "Mod3 to Width", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Anti-Alias Filter", "Mod4 to Frequency 1", "Mod4 to Depth 1", "Mod4 to Frequency 2", "Mod4 to Depth 2", "Mod4 to Clock Rate", "Mod4 to Saturation", "Mod4 to Feedback", "Mod4 to Width", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Frequency 1", "Mod1 to Frequency 2", "Mod1 to Anti-Alias Filter", "Mod1 to Clock Rate", "Mod1 to Depth 1", "Mod1 to Depth 2", "Mod1 to Feedback", "Mod1 to Saturation", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Frequency 1", "Mod2 to Frequency 2", "Mod2 to Anti-Alias Filter", "Mod2 to Clock Rate", "Mod2 to Depth 1", "Mod2 to Depth 2", "Mod2 to Feedback", "Mod2 to Saturation", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Frequency 1", "Mod3 to Frequency 2", "Mod3 to Anti-Alias Filter", "Mod3 to Clock Rate", "Mod3 to Depth 1", "Mod3 to Depth 2", "Mod3 to Feedback", "Mod3 to Saturation", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Frequency 1", "Mod4 to Frequency 2", "Mod4 to Anti-Alias Filter", "Mod4 to Clock Rate", "Mod4 to Depth 1", "Mod4 to Depth 2", "Mod4 to Feedback", "Mod4 to Saturation", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Anti-Alias Filter": "Anti-Alias Filter",
@@ -1139,17 +1479,33 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Frequency 1 Mod Display",
+                "Display 1": "Frequency 2 Mod Display",
+                "Display 2": "Anti-Alias Filter Mod Display",
+                "Display 3": "Clock Rate Mod Display",
+                "Display 4": "Depth 1 Mod Display",
+                "Display 5": "Depth 2 Mod Display",
+                "Display 6": "Feedback Mod Display",
+                "Display 7": "Saturation Mod Display",
+                "Display 8": "Width Mod Display",
+                "Display 9": "Mix Mod Display",
+                "Display 10": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Frequency 1", "Frequency 2", "Anti-Alias Filter", "Clock Rate", "Depth 1", "Depth 2", "Feedback", "Saturation", "Width", "Mix", "Type", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXCombulator",
             "name": "Combulator",
             "groups": {
-                "Mod 1": ["Mod1 to Extra Noise", "Mod1 to Center", "Mod1 to Offset 2", "Mod1 to Offset 3", "Mod1 to Feedback", "Mod1 to Tone", "Mod1 to Comb 1", "Mod1 to Comb 2", "Mod1 to Comb 3", "Mod1 to Pan 2", "Mod1 to Pan 3", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Extra Noise", "Mod2 to Center", "Mod2 to Offset 2", "Mod2 to Offset 3", "Mod2 to Feedback", "Mod2 to Tone", "Mod2 to Comb 1", "Mod2 to Comb 2", "Mod2 to Comb 3", "Mod2 to Pan 2", "Mod2 to Pan 3", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Extra Noise", "Mod3 to Center", "Mod3 to Offset 2", "Mod3 to Offset 3", "Mod3 to Feedback", "Mod3 to Tone", "Mod3 to Comb 1", "Mod3 to Comb 2", "Mod3 to Comb 3", "Mod3 to Pan 2", "Mod3 to Pan 3", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Extra Noise", "Mod4 to Center", "Mod4 to Offset 2", "Mod4 to Offset 3", "Mod4 to Feedback", "Mod4 to Tone", "Mod4 to Comb 1", "Mod4 to Comb 2", "Mod4 to Comb 3", "Mod4 to Pan 2", "Mod4 to Pan 3", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Extra Noise", "Mod1 to Center", "Mod1 to Offset 2", "Mod1 to Offset 3", "Mod1 to Feedback", "Mod1 to Comb 1", "Mod1 to Comb 2", "Mod1 to Comb 3", "Mod1 to Tone", "Mod1 to Pan 2", "Mod1 to Pan 3", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Extra Noise", "Mod2 to Center", "Mod2 to Offset 2", "Mod2 to Offset 3", "Mod2 to Feedback", "Mod2 to Comb 1", "Mod2 to Comb 2", "Mod2 to Comb 3", "Mod2 to Tone", "Mod2 to Pan 2", "Mod2 to Pan 3", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Extra Noise", "Mod3 to Center", "Mod3 to Offset 2", "Mod3 to Offset 3", "Mod3 to Feedback", "Mod3 to Comb 1", "Mod3 to Comb 2", "Mod3 to Comb 3", "Mod3 to Tone", "Mod3 to Pan 2", "Mod3 to Pan 3", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Extra Noise", "Mod4 to Center", "Mod4 to Offset 2", "Mod4 to Offset 3", "Mod4 to Feedback", "Mod4 to Comb 1", "Mod4 to Comb 2", "Mod4 to Comb 3", "Mod4 to Tone", "Mod4 to Pan 2", "Mod4 to Pan 3", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Extra Noise": "Extra Noise",
@@ -1200,17 +1556,35 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Extra Noise Mod Display",
+                "Display 1": "Center Mod Display",
+                "Display 2": "Offset 2 Mod Display",
+                "Display 3": "Offset 3 Mod Display",
+                "Display 4": "Feedback Mod Display",
+                "Display 5": "Comb 1 Mod Display",
+                "Display 6": "Comb 2 Mod Display",
+                "Display 7": "Comb 3 Mod Display",
+                "Display 8": "Tone Mod Display",
+                "Display 9": "Pan 2 Mod Display",
+                "Display 10": "Pan 3 Mod Display",
+                "Display 11": "Mix Mod Display",
+                "Display 12": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Extra Noise", "Center", "Offset 2", "Offset 3", "Feedback", "Comb 1", "Comb 2", "Comb 3", "Tone", "Pan 2", "Pan 3", "Mix", "Enable Tone Filter", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 12"]
         },
         {
             "slug": "SurgeXTFXSpringReverb",
             "name": "SpringReverb",
             "groups": {
-                "Mod 1": ["Mod1 to Size", "Mod1 to Decay", "Mod1 to Reflections", "Mod1 to HF Damping", "Mod1 to Spin", "Mod1 to Chaos", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Size", "Mod2 to Decay", "Mod2 to Reflections", "Mod2 to HF Damping", "Mod2 to Spin", "Mod2 to Chaos", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Size", "Mod3 to Decay", "Mod3 to Reflections", "Mod3 to HF Damping", "Mod3 to Spin", "Mod3 to Chaos", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Size", "Mod4 to Decay", "Mod4 to Reflections", "Mod4 to HF Damping", "Mod4 to Spin", "Mod4 to Chaos", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Size", "Mod1 to Decay", "Mod1 to Reflections", "Mod1 to Spin", "Mod1 to Chaos", "Mod1 to HF Damping", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Size", "Mod2 to Decay", "Mod2 to Reflections", "Mod2 to Spin", "Mod2 to Chaos", "Mod2 to HF Damping", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Size", "Mod3 to Decay", "Mod3 to Reflections", "Mod3 to Spin", "Mod3 to Chaos", "Mod3 to HF Damping", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Size", "Mod4 to Decay", "Mod4 to Reflections", "Mod4 to Spin", "Mod4 to Chaos", "Mod4 to HF Damping", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Size": "Size",
@@ -1241,17 +1615,30 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Size Mod Display",
+                "Display 1": "Decay Mod Display",
+                "Display 2": "Reflections Mod Display",
+                "Display 3": "Spin Mod Display",
+                "Display 4": "Chaos Mod Display",
+                "Display 5": "HF Damping Mod Display",
+                "Display 6": "Mix Mod Display",
+                "Display 7": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Size", "Decay", "Reflections", "Spin", "Chaos", "HF Damping", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger to Knock Spring In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTFXTreeMonster",
             "name": "TreeMonster",
             "groups": {
-                "Mod 1": ["Mod1 to Threshold", "Mod1 to Speed", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Pitch", "Mod1 to Ring Modulation", "Mod1 to Width", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Threshold", "Mod2 to Speed", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Pitch", "Mod2 to Ring Modulation", "Mod2 to Width", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Threshold", "Mod3 to Speed", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Pitch", "Mod3 to Ring Modulation", "Mod3 to Width", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Threshold", "Mod4 to Speed", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Pitch", "Mod4 to Ring Modulation", "Mod4 to Width", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Pitch", "Mod1 to Ring Modulation", "Mod1 to Threshold", "Mod1 to Speed", "Mod1 to Low Cut", "Mod1 to High Cut", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Pitch", "Mod2 to Ring Modulation", "Mod2 to Threshold", "Mod2 to Speed", "Mod2 to Low Cut", "Mod2 to High Cut", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Pitch", "Mod3 to Ring Modulation", "Mod3 to Threshold", "Mod3 to Speed", "Mod3 to Low Cut", "Mod3 to High Cut", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Pitch", "Mod4 to Ring Modulation", "Mod4 to Threshold", "Mod4 to Speed", "Mod4 to Low Cut", "Mod4 to High Cut", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Threshold": "Threshold",
@@ -1286,17 +1673,31 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Pitch Mod Display",
+                "Display 1": "Ring Modulation Mod Display",
+                "Display 2": "Threshold Mod Display",
+                "Display 3": "Speed Mod Display",
+                "Display 4": "Low Cut Mod Display",
+                "Display 5": "High Cut Mod Display",
+                "Display 6": "Width Mod Display",
+                "Display 7": "Mix Mod Display",
+                "Display 8": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Pitch", "Ring Modulation", "Threshold", "Speed", "Low Cut", "High Cut", "Width", "Mix", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "V/Oct Pitch Detection Out", "Envelope Follower Out", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTFXBonsai",
             "name": "Bonsai",
             "groups": {
-                "Mod 1": ["param:12", "param:16", "Mod1 to Distort", "param:32", "Mod1 to Sensitivity", "param:40", "Mod1 to Dull", "param:48", "Mod1 to Mix"],
-                "Mod 2": ["param:13", "param:17", "Mod2 to Distort", "param:33", "Mod2 to Sensitivity", "param:41", "Mod2 to Dull", "param:49", "Mod2 to Mix"],
-                "Mod 3": ["param:14", "param:18", "Mod3 to Distort", "param:34", "Mod3 to Sensitivity", "param:42", "Mod3 to Dull", "param:50", "Mod3 to Mix"],
-                "Mod 4": ["param:15", "param:19", "Mod4 to Distort", "param:35", "Mod4 to Sensitivity", "param:43", "Mod4 to Dull", "param:51", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "param:32", "Mod1 to Dull", "param:16", "Mod1 to Distort", "Mod1 to Sensitivity", "param:40", "param:12", "param:48", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "param:33", "Mod2 to Dull", "param:17", "Mod2 to Distort", "Mod2 to Sensitivity", "param:41", "param:13", "param:49", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "param:34", "Mod3 to Dull", "param:18", "Mod3 to Distort", "Mod3 to Sensitivity", "param:42", "param:14", "param:50", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "param:35", "Mod4 to Dull", "param:19", "Mod4 to Distort", "Mod4 to Sensitivity", "param:43", "param:15", "param:51", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "param:12": "Gain",
@@ -1335,17 +1736,32 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Amount Mod Display",
+                "Display 1": "Dull Mod Display",
+                "Display 2": "Amount Mod Display",
+                "Display 3": "Distort Mod Display",
+                "Display 4": "Sensitivity Mod Display",
+                "Display 5": "Gain Mod Display",
+                "Display 6": "Gain Mod Display",
+                "Display 7": "Gain Mod Display",
+                "Display 8": "Mix Mod Display",
+                "Display 9": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["param:5", "Dull", "param:1", "Distort", "Sensitivity", "param:7", "param:0", "param:9", "Mix", "Bias Filter", "Type", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
         },
         {
             "slug": "SurgeXTFXNimbus",
             "name": "Nimbus",
             "groups": {
-                "Mod 1": ["Mod1 to Position", "Mod1 to Size", "Mod1 to Pitch", "Mod1 to Density", "Mod1 to Texture", "Mod1 to Spread", "Mod1 to Feedback", "Mod1 to Reverb", "Mod1 to Mix"],
-                "Mod 2": ["Mod2 to Position", "Mod2 to Size", "Mod2 to Pitch", "Mod2 to Density", "Mod2 to Texture", "Mod2 to Spread", "Mod2 to Feedback", "Mod2 to Reverb", "Mod2 to Mix"],
-                "Mod 3": ["Mod3 to Position", "Mod3 to Size", "Mod3 to Pitch", "Mod3 to Density", "Mod3 to Texture", "Mod3 to Spread", "Mod3 to Feedback", "Mod3 to Reverb", "Mod3 to Mix"],
-                "Mod 4": ["Mod4 to Position", "Mod4 to Size", "Mod4 to Pitch", "Mod4 to Density", "Mod4 to Texture", "Mod4 to Spread", "Mod4 to Feedback", "Mod4 to Reverb", "Mod4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Position", "Mod1 to Size", "Mod1 to Pitch", "Mod1 to Density", "Mod1 to Feedback", "Mod1 to Texture", "Mod1 to Spread", "Mod1 to Reverb", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Position", "Mod2 to Size", "Mod2 to Pitch", "Mod2 to Density", "Mod2 to Feedback", "Mod2 to Texture", "Mod2 to Spread", "Mod2 to Reverb", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Position", "Mod3 to Size", "Mod3 to Pitch", "Mod3 to Density", "Mod3 to Feedback", "Mod3 to Texture", "Mod3 to Spread", "Mod3 to Reverb", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Position", "Mod4 to Size", "Mod4 to Pitch", "Mod4 to Density", "Mod4 to Feedback", "Mod4 to Texture", "Mod4 to Spread", "Mod4 to Reverb", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Position": "Position",
@@ -1384,17 +1800,32 @@
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
                 "Mod4 to Mix": "Mix",
-                "Left (or Mono merged) Out": "Left/Mono Out"
-            }
+                "Left (or Mono merged) Out": "Left/Mono Out",
+                "Display 0": "Position Mod Display",
+                "Display 1": "Size Mod Display",
+                "Display 2": "Pitch Mod Display",
+                "Display 3": "Density Mod Display",
+                "Display 4": "Feedback Mod Display",
+                "Display 5": "Texture Mod Display",
+                "Display 6": "Spread Mod Display",
+                "Display 7": "Reverb Mod Display",
+                "Display 8": "Mix Mod Display",
+                "Display 9": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Position", "Size", "Pitch", "Density", "Feedback", "Texture", "Spread", "Reverb", "Mix", "Mode", "Quality", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger In", "Gate to Freeze In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
         },
         {
             "slug": "SurgeXTVCF",
             "name": "VCF",
             "groups": {
-                "Mod 1": ["Mod 1 to Frequency", "Mod 1 to Resonance", "Mod 1 to Pre-Filter Gain", "Mod 1 to Mix", "Mod 1 to Gain"],
-                "Mod 2": ["Mod 2 to Frequency", "Mod 2 to Resonance", "Mod 2 to Pre-Filter Gain", "Mod 2 to Mix", "Mod 2 to Gain"],
-                "Mod 3": ["Mod 3 to Frequency", "Mod 3 to Resonance", "Mod 3 to Pre-Filter Gain", "Mod 3 to Mix", "Mod 3 to Gain"],
-                "Mod 4": ["Mod 4 to Frequency", "Mod 4 to Resonance", "Mod 4 to Pre-Filter Gain", "Mod 4 to Mix", "Mod 4 to Gain"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Resonance", "Mod 1 to Mix", "Mod 1 to Frequency", "Mod 1 to Pre-Filter Gain", "Mod 1 to Gain", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Resonance", "Mod 2 to Mix", "Mod 2 to Frequency", "Mod 2 to Pre-Filter Gain", "Mod 2 to Gain", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Resonance", "Mod 3 to Mix", "Mod 3 to Frequency", "Mod 3 to Pre-Filter Gain", "Mod 3 to Gain", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Resonance", "Mod 4 to Mix", "Mod 4 to Frequency", "Mod 4 to Pre-Filter Gain", "Mod 4 to Gain", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod 1 to Frequency": "Frequency",
@@ -1416,17 +1847,28 @@
                 "Mod 1 to Gain": "Gain",
                 "Mod 2 to Gain": "Gain",
                 "Mod 3 to Gain": "Gain",
-                "Mod 4 to Gain": "Gain"
-            }
+                "Mod 4 to Gain": "Gain",
+                "Display 0": "Frequency Mod Display",
+                "Display 1": "Resonance Mod Display",
+                "Display 2": "Mix Mod Display",
+                "Display 3": "Pre-Filter Gain Mod Display",
+                "Display 4": "Gain Mod Display",
+                "Display 5": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Resonance", "Mix", "Frequency", "Pre-Filter Gain", "Gain", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left Out", "Right Out", "Display 5"]
         },
         {
             "slug": "SurgeXTWaveshaper",
             "name": "Waveshaper",
             "groups": {
-                "Mod 1": ["Mod 1 to Drive", "Mod 1 to Bias", "Mod 1 to Gain", "Mod 1 to Low Cut", "Mod 1 to High Cut"],
-                "Mod 2": ["Mod 2 to Drive", "Mod 2 to Bias", "Mod 2 to Gain", "Mod 2 to Low Cut", "Mod 2 to High Cut"],
-                "Mod 3": ["Mod 3 to Drive", "Mod 3 to Bias", "Mod 3 to Gain", "Mod 3 to Low Cut", "Mod 3 to High Cut"],
-                "Mod 4": ["Mod 4 to Drive", "Mod 4 to Bias", "Mod 4 to Gain", "Mod 4 to Low Cut", "Mod 4 to High Cut"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Bias", "Mod 1 to Gain", "Mod 1 to Drive", "Mod 1 to Low Cut", "Mod 1 to High Cut", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Bias", "Mod 2 to Gain", "Mod 2 to Drive", "Mod 2 to Low Cut", "Mod 2 to High Cut", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Bias", "Mod 3 to Gain", "Mod 3 to Drive", "Mod 3 to Low Cut", "Mod 3 to High Cut", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Bias", "Mod 4 to Gain", "Mod 4 to Drive", "Mod 4 to Low Cut", "Mod 4 to High Cut", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod 1 to Drive": "Drive",
@@ -1448,17 +1890,28 @@
                 "Mod 1 to High Cut": "High Cut",
                 "Mod 2 to High Cut": "High Cut",
                 "Mod 3 to High Cut": "High Cut",
-                "Mod 4 to High Cut": "High Cut"
-            }
+                "Mod 4 to High Cut": "High Cut",
+                "Display 0": "Drive Mod Display",
+                "Display 1": "Bias Mod Display",
+                "Display 2": "Gain Mod Display",
+                "Display 3": "Low Cut Mod Display",
+                "Display 4": "High Cut Mod Display",
+                "Display 5": "LCD Display",
+                "Modulation Signal 1 In": "Mod 1 In",
+                "Modulation Signal 2 In": "Mod 2 In",
+                "Modulation Signal 3 In": "Mod 3 In",
+                "Modulation Signal 4 In": "Mod 4 In"
+            },
+            "order": ["Bias", "Gain", "Drive", "Low Cut", "High Cut", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left Out", "Right Out", "Display 5"]
         },
         {
             "slug": "SurgeXTLFO",
             "name": "LFO",
             "groups": {
-                "Mod 1": ["Mod 1 to Rate", "Mod 1 to Phase", "Mod 1 to Deform", "Mod 1 to Amplitude", "Mod 1 to Delay", "Mod 1 to Attack", "Mod 1 to Hold", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release"],
-                "Mod 2": ["Mod 2 to Rate", "Mod 2 to Phase", "Mod 2 to Deform", "Mod 2 to Amplitude", "Mod 2 to Delay", "Mod 2 to Attack", "Mod 2 to Hold", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release"],
-                "Mod 3": ["Mod 3 to Rate", "Mod 3 to Phase", "Mod 3 to Deform", "Mod 3 to Amplitude", "Mod 3 to Delay", "Mod 3 to Attack", "Mod 3 to Hold", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release"],
-                "Mod 4": ["Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Rate", "Mod 1 to Phase", "Mod 1 to Deform", "Mod 1 to Amplitude", "Mod 1 to Delay", "Mod 1 to Attack", "Mod 1 to Hold", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release", "Mod 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Rate", "Mod 2 to Phase", "Mod 2 to Deform", "Mod 2 to Amplitude", "Mod 2 to Delay", "Mod 2 to Attack", "Mod 2 to Hold", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release", "Mod 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Rate", "Mod 3 to Phase", "Mod 3 to Deform", "Mod 3 to Amplitude", "Mod 3 to Delay", "Mod 3 to Attack", "Mod 3 to Hold", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release", "Mod 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to Rate": "Rate",
@@ -1500,17 +1953,27 @@
                 "Mod 1 to Release": "Release",
                 "Mod 2 to Release": "Release",
                 "Mod 3 to Release": "Release",
-                "Mod 4 to Release": "Release"
-            }
+                "Mod 4 to Release": "Release",
+                "Display 0": "Rate Mod Display",
+                "Display 1": "Phase Mod Display",
+                "Display 2": "Deform Mod Display",
+                "Display 3": "Amplitude Mod Display",
+                "Display 4": "LCD Display",
+                "Mod 1 In": "Mod 1 In",
+                "Mod 2 In": "Mod 2 In",
+                "Mod 3 In": "Mod 3 In",
+                "Mod 4 In": "Mod 4 In"
+            },
+            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 4"]
         },
         {
             "slug": "SurgeXTDelay",
             "name": "Delay",
             "groups": {
-                "Mod 1": ["Mod 1 to Left Delay", "Mod 1 to Right Delay", "Mod 1 to Time Tweak", "Mod 1 to Feedback", "Mod 1 to CrossFeed", "Mod 1 to LoCut", "Mod 1 to HiCut", "Mod 1 to ModRate", "Mod 1 to ModDepth", "Mod 1 to Mix"],
-                "Mod 2": ["Mod 2 to Left Delay", "Mod 2 to Right Delay", "Mod 2 to Time Tweak", "Mod 2 to Feedback", "Mod 2 to CrossFeed", "Mod 2 to LoCut", "Mod 2 to HiCut", "Mod 2 to ModRate", "Mod 2 to ModDepth", "Mod 2 to Mix"],
-                "Mod 3": ["Mod 3 to Left Delay", "Mod 3 to Right Delay", "Mod 3 to Time Tweak", "Mod 3 to Feedback", "Mod 3 to CrossFeed", "Mod 3 to LoCut", "Mod 3 to HiCut", "Mod 3 to ModRate", "Mod 3 to ModDepth", "Mod 3 to Mix"],
-                "Mod 4": ["Mod 4 to Left Delay", "Mod 4 to Right Delay", "Mod 4 to Time Tweak", "Mod 4 to Feedback", "Mod 4 to CrossFeed", "Mod 4 to LoCut", "Mod 4 to HiCut", "Mod 4 to ModRate", "Mod 4 to ModDepth", "Mod 4 to Mix"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Left Delay", "Mod 1 to Time Tweak", "Mod 1 to Right Delay", "Mod 1 to Feedback", "Mod 1 to CrossFeed", "Mod 1 to LoCut", "Mod 1 to HiCut", "Mod 1 to ModRate", "Mod 1 to ModDepth", "Mod 1 to Mix", "Mod 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Left Delay", "Mod 2 to Time Tweak", "Mod 2 to Right Delay", "Mod 2 to Feedback", "Mod 2 to CrossFeed", "Mod 2 to LoCut", "Mod 2 to HiCut", "Mod 2 to ModRate", "Mod 2 to ModDepth", "Mod 2 to Mix", "Mod 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Left Delay", "Mod 3 to Time Tweak", "Mod 3 to Right Delay", "Mod 3 to Feedback", "Mod 3 to CrossFeed", "Mod 3 to LoCut", "Mod 3 to HiCut", "Mod 3 to ModRate", "Mod 3 to ModDepth", "Mod 3 to Mix", "Mod 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Left Delay", "Mod 4 to Time Tweak", "Mod 4 to Right Delay", "Mod 4 to Feedback", "Mod 4 to CrossFeed", "Mod 4 to LoCut", "Mod 4 to HiCut", "Mod 4 to ModRate", "Mod 4 to ModDepth", "Mod 4 to Mix", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to Left Delay": "Left Delay",
@@ -1552,21 +2015,38 @@
                 "Mod 1 to Mix": "Mix",
                 "Mod 2 to Mix": "Mix",
                 "Mod 3 to Mix": "Mix",
-                "Mod 4 to Mix": "Mix"
-            }
+                "Mod 4 to Mix": "Mix",
+                "Display 0": "Left Delay Mod Display",
+                "Display 1": "Right Delay Mod Display",
+                "Display 2": "Time Tweak Mod Display",
+                "Display 3": "Feedback Mod Display",
+                "Display 4": "CrossFeed Mod Display",
+                "Display 5": "LoCut Mod Display",
+                "Display 6": "HiCut Mod Display",
+                "Display 7": "ModRate Mod Display",
+                "Display 8": "ModDepth Mod Display",
+                "Display 9": "Mix Mod Display",
+                "Display 10": "LCD Display",
+                "Mod 1 In": "Mod 1 In",
+                "Mod 2 In": "Mod 2 In",
+                "Mod 3 In": "Mod 3 In",
+                "Mod 4 In": "Mod 4 In"
+            },
+            "order": ["Left Delay", "Time Tweak", "Right Delay", "Feedback", "CrossFeed", "LoCut", "HiCut", "ModRate", "ModDepth", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/BPM In", "Left In", "Right In", "Left Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTDelayLineByFreq",
-            "name": "Tuned Delay Line by Frequency"
+            "name": "Tuned Delay Line by Frequency",
+            "order": ["V/Oct Center", "Sample Correction", "Delay Time as Frequency in v/oct", "In Left", "In Right", "Out Left", "Out Right"]
         },
         {
             "slug": "SurgeXTDelayLineByFreqExpanded",
             "name": "Tuned Delay +",
             "groups": {
-                "Mod 1": ["Mod 1 to V/Oct Center", "param:15", "param:19", "Mod 1 to Feedback Level", "Mod 1 to LP Cutoff to Pitch Offset", "Mod 1 to HP Cutoff to Pitch Offset", "Mod 1 to Signal/Filter Wet/Dry Mix"],
-                "Mod 2": ["Mod 2 to V/Oct Center", "param:16", "param:20", "Mod 2 to Feedback Level", "Mod 2 to LP Cutoff to Pitch Offset", "Mod 2 to HP Cutoff to Pitch Offset", "Mod 2 to Signal/Filter Wet/Dry Mix"],
-                "Mod 3": ["Mod 3 to V/Oct Center", "param:17", "param:21", "Mod 3 to Feedback Level", "Mod 3 to LP Cutoff to Pitch Offset", "Mod 3 to HP Cutoff to Pitch Offset", "Mod 3 to Signal/Filter Wet/Dry Mix"],
-                "Mod 4": ["Mod 4 to V/Oct Center", "param:18", "param:22", "Mod 4 to Feedback Level", "Mod 4 to LP Cutoff to Pitch Offset", "Mod 4 to HP Cutoff to Pitch Offset", "Mod 4 to Signal/Filter Wet/Dry Mix"]
+                "Mod 1": ["Show Mod 1", "param:15", "Mod 1 to V/Oct Center", "param:19", "Mod 1 to LP Cutoff to Pitch Offset", "Mod 1 to HP Cutoff to Pitch Offset", "Mod 1 to Signal/Filter Wet/Dry Mix", "Mod 1 to Feedback Level", "Mod 1 In"],
+                "Mod 2": ["Show Mod 2", "param:16", "Mod 2 to V/Oct Center", "param:20", "Mod 2 to LP Cutoff to Pitch Offset", "Mod 2 to HP Cutoff to Pitch Offset", "Mod 2 to Signal/Filter Wet/Dry Mix", "Mod 2 to Feedback Level", "Mod 2 In"],
+                "Mod 3": ["Show Mod 3", "param:17", "Mod 3 to V/Oct Center", "param:21", "Mod 3 to LP Cutoff to Pitch Offset", "Mod 3 to HP Cutoff to Pitch Offset", "Mod 3 to Signal/Filter Wet/Dry Mix", "Mod 3 to Feedback Level", "Mod 3 In"],
+                "Mod 4": ["Show Mod 4", "param:18", "Mod 4 to V/Oct Center", "param:22", "Mod 4 to LP Cutoff to Pitch Offset", "Mod 4 to HP Cutoff to Pitch Offset", "Mod 4 to Signal/Filter Wet/Dry Mix", "Mod 4 to Feedback Level", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to V/Oct Center": "V/Oct Center",
@@ -1596,17 +2076,30 @@
                 "Mod 1 to Signal/Filter Wet/Dry Mix": "Signal/Filter Wet/Dry Mix",
                 "Mod 2 to Signal/Filter Wet/Dry Mix": "Signal/Filter Wet/Dry Mix",
                 "Mod 3 to Signal/Filter Wet/Dry Mix": "Signal/Filter Wet/Dry Mix",
-                "Mod 4 to Signal/Filter Wet/Dry Mix": "Signal/Filter Wet/Dry Mix"
-            }
+                "Mod 4 to Signal/Filter Wet/Dry Mix": "Signal/Filter Wet/Dry Mix",
+                "Display 0": "Feedback Level Mod Display",
+                "Display 1": "Fine Left Tune Mod Display",
+                "Display 2": "Fine Left Tune Mod Display",
+                "Display 3": "V/Oct Center Mod Display",
+                "Display 4": "LP Cutoff to Pitch Offset Mod Display",
+                "Display 5": "HP Cutoff to Pitch Offset Mod Display",
+                "Display 6": "Signal/Filter Wet/Dry Mix Mod Display",
+                "Display 7": "LCD Display",
+                "Mod 1 In": "Mod 1 In",
+                "Mod 2 In": "Mod 2 In",
+                "Mod 3 In": "Mod 3 In",
+                "Mod 4 In": "Mod 4 In"
+            },
+            "order": ["Sample Correction", "param:1", "V/Oct Center", "param:2", "LP Cutoff to Pitch Offset", "HP Cutoff to Pitch Offset", "Signal/Filter Wet/Dry Mix", "Feedback Level", "LowPass Filter Active", "HighPass Filter Active", "Feedback Range", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Noise Source Amplitude In", "Delay Time as Frequency in v/oct", "Feedback Left In", "Feedback Right In", "Left In", "Right In", "Out Left", "Out Right", "Display 7"]
         },
         {
             "slug": "SurgeXTEGxVCA",
             "name": "EG x VCA",
             "groups": {
-                "Mod 1": ["Mod 1 to Level", "Mod 1 to Pan", "Mod 1 to Linear/Exponential", "Mod 1 to Attack", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release"],
-                "Mod 2": ["Mod 2 to Level", "Mod 2 to Pan", "Mod 2 to Linear/Exponential", "Mod 2 to Attack", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release"],
-                "Mod 3": ["Mod 3 to Level", "Mod 3 to Pan", "Mod 3 to Linear/Exponential", "Mod 3 to Attack", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release"],
-                "Mod 4": ["Mod 4 to Level", "Mod 4 to Pan", "Mod 4 to Linear/Exponential", "Mod 4 to Attack", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Pan", "Mod 1 to Attack", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release", "Mod 1 to Level", "Mod 1 to Linear/Exponential", "Mod Input 1"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Pan", "Mod 2 to Attack", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release", "Mod 2 to Level", "Mod 2 to Linear/Exponential", "Mod Input 2"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Pan", "Mod 3 to Attack", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release", "Mod 3 to Level", "Mod 3 to Linear/Exponential", "Mod Input 3"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Pan", "Mod 4 to Attack", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 to Level", "Mod 4 to Linear/Exponential", "Mod Input 4"]
             },
             "names": {
                 "Mod 1 to Level": "Level",
@@ -1636,17 +2129,26 @@
                 "Mod 1 to Release": "Release",
                 "Mod 2 to Release": "Release",
                 "Mod 3 to Release": "Release",
-                "Mod 4 to Release": "Release"
-            }
+                "Mod 4 to Release": "Release",
+                "Display 0": "Level Mod Display",
+                "Display 1": "Pan Mod Display",
+                "Display 2": "Linear/Exponential Mod Display",
+                "Display 3": "LCD Display",
+                "Mod Input 1": "Mod 1 In",
+                "Mod Input 2": "Mod 2 In",
+                "Mod Input 3": "Mod 3 In",
+                "Mod Input 4": "Mod 4 In"
+            },
+            "order": ["Pan", "Attack", "Decay", "Sustain", "Release", "Level", "Linear/Exponential", "Mode", "Attack Curve", "Decay Curve", "Release Curve", "Fast or Slow", "Curve", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate/Trig In", "Clock In", "End of Cycle Out", "Envelope Out", "Left In", "Right In", "Left Out", "Right Out", "Display 3"]
         },
         {
             "slug": "SurgeXTQuadAD",
             "name": "Quad AD",
             "groups": {
-                "Mod 1": ["Mod 1 to Attack 1", "Mod 1 to Attack 2", "Mod 1 to Attack 3", "Mod 1 to Attack 4", "Mod 1 to Decay 1", "Mod 1 to Decay 2", "Mod 1 to Decay 3", "Mod 1 to Decay 4"],
-                "Mod 2": ["Mod 2 to Attack 1", "Mod 2 to Attack 2", "Mod 2 to Attack 3", "Mod 2 to Attack 4", "Mod 2 to Decay 1", "Mod 2 to Decay 2", "Mod 2 to Decay 3", "Mod 2 to Decay 4"],
-                "Mod 3": ["Mod 3 to Attack 1", "Mod 3 to Attack 2", "Mod 3 to Attack 3", "Mod 3 to Attack 4", "Mod 3 to Decay 1", "Mod 3 to Decay 2", "Mod 3 to Decay 3", "Mod 3 to Decay 4"],
-                "Mod 4": ["Mod 4 to Attack 1", "Mod 4 to Attack 2", "Mod 4 to Attack 3", "Mod 4 to Attack 4", "Mod 4 to Decay 1", "Mod 4 to Decay 2", "Mod 4 to Decay 3", "Mod 4 to Decay 4"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Attack 1", "Mod 1 to Attack 2", "Mod 1 to Attack 3", "Mod 1 to Attack 4", "Mod 1 to Decay 1", "Mod 1 to Decay 2", "Mod 1 to Decay 3", "Mod 1 to Decay 4", "Mod 0 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Attack 1", "Mod 2 to Attack 2", "Mod 2 to Attack 3", "Mod 2 to Attack 4", "Mod 2 to Decay 1", "Mod 2 to Decay 2", "Mod 2 to Decay 3", "Mod 2 to Decay 4", "Mod 1 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Attack 1", "Mod 3 to Attack 2", "Mod 3 to Attack 3", "Mod 3 to Attack 4", "Mod 3 to Decay 1", "Mod 3 to Decay 2", "Mod 3 to Decay 3", "Mod 3 to Decay 4", "Mod 2 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Attack 1", "Mod 4 to Attack 2", "Mod 4 to Attack 3", "Mod 4 to Attack 4", "Mod 4 to Decay 1", "Mod 4 to Decay 2", "Mod 4 to Decay 3", "Mod 4 to Decay 4", "Mod 3 In"]
             },
             "names": {
                 "Mod 1 to Attack 1": "Attack 1",
@@ -1680,17 +2182,31 @@
                 "Mod 1 to Decay 4": "Decay 4",
                 "Mod 2 to Decay 4": "Decay 4",
                 "Mod 3 to Decay 4": "Decay 4",
-                "Mod 4 to Decay 4": "Decay 4"
-            }
+                "Mod 4 to Decay 4": "Decay 4",
+                "Display 0": "Attack 1 Mod Display",
+                "Display 1": "Decay 1 Mod Display",
+                "Display 2": "Attack 2 Mod Display",
+                "Display 3": "Decay 2 Mod Display",
+                "Display 4": "Attack 3 Mod Display",
+                "Display 5": "Decay 3 Mod Display",
+                "Display 6": "Attack 4 Mod Display",
+                "Display 7": "Decay 4 Mod Display",
+                "Display 8": "LCD Display",
+                "Mod 0 In": "Mod 1 In",
+                "Mod 1 In": "Mod 2 In",
+                "Mod 2 In": "Mod 3 In",
+                "Mod 3 In": "Mod 4 In"
+            },
+            "order": ["Attack 0", "Attack 1", "Attack 2", "Attack 3", "Decay 0", "Decay 1", "Decay 2", "Decay 3", "Link 1 EOC to 2 Attack", "Link 2 EOC to 3 Attack", "Link 3 EOC to 4 Attack", "Link 4 EOC to 1 Attack", "Sum 1 ENV to 2 Output", "Sum 2 ENV to 3 Output", "Sum 3 ENV to 4 Output", "param:20", "param:21", "param:22", "param:23", "param:12", "param:8", "param:16", "param:13", "param:9", "param:17", "param:14", "param:10", "param:18", "param:15", "param:11", "param:19", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger/Gate 0 In", "Trigger/Gate 1 In", "Trigger/Gate 2 In", "Trigger/Gate 3 In", "ENV 0 Out", "ENV 1 Out", "ENV 2 Out", "ENV 3 Out", "Display 8"]
         },
         {
             "slug": "SurgeXTQuadLFO",
             "name": "Quad LFO",
             "groups": {
-                "Mod 1": ["Mod 1 to Rate 1", "Mod 1 to Rate 2", "Mod 1 to Rate 3", "Mod 1 to Rate 4", "Mod 1 to Deform 1", "Mod 1 to Deform 2", "Mod 1 to Deform 3", "Mod 1 to Deform 4"],
-                "Mod 2": ["Mod 2 to Rate 1", "Mod 2 to Rate 2", "Mod 2 to Rate 3", "Mod 2 to Rate 4", "Mod 2 to Deform 1", "Mod 2 to Deform 2", "Mod 2 to Deform 3", "Mod 2 to Deform 4"],
-                "Mod 3": ["Mod 3 to Rate 1", "Mod 3 to Rate 2", "Mod 3 to Rate 3", "Mod 3 to Rate 4", "Mod 3 to Deform 1", "Mod 3 to Deform 2", "Mod 3 to Deform 3", "Mod 3 to Deform 4"],
-                "Mod 4": ["Mod 4 to Rate 1", "Mod 4 to Rate 2", "Mod 4 to Rate 3", "Mod 4 to Rate 4", "Mod 4 to Deform 1", "Mod 4 to Deform 2", "Mod 4 to Deform 3", "Mod 4 to Deform 4"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Rate 1", "Mod 1 to Rate 2", "Mod 1 to Rate 3", "Mod 1 to Rate 4", "Mod 1 to Deform 1", "Mod 1 to Deform 2", "Mod 1 to Deform 3", "Mod 1 to Deform 4", "Mod 0 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Rate 1", "Mod 2 to Rate 2", "Mod 2 to Rate 3", "Mod 2 to Rate 4", "Mod 2 to Deform 1", "Mod 2 to Deform 2", "Mod 2 to Deform 3", "Mod 2 to Deform 4", "Mod 1 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Rate 1", "Mod 3 to Rate 2", "Mod 3 to Rate 3", "Mod 3 to Rate 4", "Mod 3 to Deform 1", "Mod 3 to Deform 2", "Mod 3 to Deform 3", "Mod 3 to Deform 4", "Mod 2 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Rate 1", "Mod 4 to Rate 2", "Mod 4 to Rate 3", "Mod 4 to Rate 4", "Mod 4 to Deform 1", "Mod 4 to Deform 2", "Mod 4 to Deform 3", "Mod 4 to Deform 4", "Mod 3 In"]
             },
             "names": {
                 "Mod 1 to Rate 1": "Rate 1",
@@ -1724,17 +2240,31 @@
                 "Mod 1 to Deform 4": "Deform 4",
                 "Mod 2 to Deform 4": "Deform 4",
                 "Mod 3 to Deform 4": "Deform 4",
-                "Mod 4 to Deform 4": "Deform 4"
-            }
+                "Mod 4 to Deform 4": "Deform 4",
+                "Display 0": "Rate 1 Mod Display",
+                "Display 1": "Deform 1 Mod Display",
+                "Display 2": "Rate 2 Mod Display",
+                "Display 3": "Deform 2 Mod Display",
+                "Display 4": "Rate 3 Mod Display",
+                "Display 5": "Deform 3 Mod Display",
+                "Display 6": "Rate 4 Mod Display",
+                "Display 7": "Deform 4 Mod Display",
+                "Display 8": "LCD Display",
+                "Mod 0 In": "Mod 1 In",
+                "Mod 1 In": "Mod 2 In",
+                "Mod 2 In": "Mod 3 In",
+                "Mod 3 In": "Mod 4 In"
+            },
+            "order": ["Rate 1", "Rate 2", "Rate 3", "Rate 4", "Deform 1", "Deform 2", "Deform 3", "Deform 4", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger 1 In", "Trigger 2 In", "Trigger 3 In", "Trigger 4 In", "LFO 1 Out", "LFO 2 Out", "LFO 3 Out", "LFO 4 Out", "Display 8"]
         },
         {
             "slug": "SurgeXTMixer",
             "name": "Mixer",
             "groups": {
-                "Mod 1": ["Mod 1 to Input 1 Level", "Mod 1 to Input 2 Level", "Mod 1 to Input 3 Level", "Mod 1 to Noise Level", "Mod 1 to RingMod 1X2 Level", "Mod 1 to RingMod 2x3 Level", "Mod 1 to Noise Color", "Mod 1 to Gain"],
-                "Mod 2": ["Mod 2 to Input 1 Level", "Mod 2 to Input 2 Level", "Mod 2 to Input 3 Level", "Mod 2 to Noise Level", "Mod 2 to RingMod 1X2 Level", "Mod 2 to RingMod 2x3 Level", "Mod 2 to Noise Color", "Mod 2 to Gain"],
-                "Mod 3": ["Mod 3 to Input 1 Level", "Mod 3 to Input 2 Level", "Mod 3 to Input 3 Level", "Mod 3 to Noise Level", "Mod 3 to RingMod 1X2 Level", "Mod 3 to RingMod 2x3 Level", "Mod 3 to Noise Color", "Mod 3 to Gain"],
-                "Mod 4": ["Mod 4 to Input 1 Level", "Mod 4 to Input 2 Level", "Mod 4 to Input 3 Level", "Mod 4 to Noise Level", "Mod 4 to RingMod 1X2 Level", "Mod 4 to RingMod 2x3 Level", "Mod 4 to Noise Color", "Mod 4 to Gain"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Input 1 Level", "Mod 1 to Input 2 Level", "Mod 1 to Input 3 Level", "Mod 1 to Noise Level", "Mod 1 to RingMod 1X2 Level", "Mod 1 to RingMod 2x3 Level", "Mod 1 to Noise Color", "Mod 1 to Gain", "Modulator 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Input 1 Level", "Mod 2 to Input 2 Level", "Mod 2 to Input 3 Level", "Mod 2 to Noise Level", "Mod 2 to RingMod 1X2 Level", "Mod 2 to RingMod 2x3 Level", "Mod 2 to Noise Color", "Mod 2 to Gain", "Modulator 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Input 1 Level", "Mod 3 to Input 2 Level", "Mod 3 to Input 3 Level", "Mod 3 to Noise Level", "Mod 3 to RingMod 1X2 Level", "Mod 3 to RingMod 2x3 Level", "Mod 3 to Noise Color", "Mod 3 to Gain", "Modulator 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Input 1 Level", "Mod 4 to Input 2 Level", "Mod 4 to Input 3 Level", "Mod 4 to Noise Level", "Mod 4 to RingMod 1X2 Level", "Mod 4 to RingMod 2x3 Level", "Mod 4 to Noise Color", "Mod 4 to Gain", "Modulator 4 In"]
             },
             "names": {
                 "Mod 1 to Input 1 Level": "Input 1 Level",
@@ -1768,17 +2298,31 @@
                 "Mod 1 to Gain": "Gain",
                 "Mod 2 to Gain": "Gain",
                 "Mod 3 to Gain": "Gain",
-                "Mod 4 to Gain": "Gain"
-            }
+                "Mod 4 to Gain": "Gain",
+                "Display 0": "Input 1 Level Mod Display",
+                "Display 1": "Input 2 Level Mod Display",
+                "Display 2": "Input 3 Level Mod Display",
+                "Display 3": "Noise Level Mod Display",
+                "Display 4": "RingMod 1X2 Level Mod Display",
+                "Display 5": "RingMod 2x3 Level Mod Display",
+                "Display 6": "Noise Color Mod Display",
+                "Display 7": "Gain Mod Display",
+                "Display 8": "LCD Display",
+                "Modulator 1 In": "Mod 1 In",
+                "Modulator 2 In": "Mod 2 In",
+                "Modulator 3 In": "Mod 3 In",
+                "Modulator 4 In": "Mod 4 In"
+            },
+            "order": ["Input 1 Level", "Input 2 Level", "Input 3 Level", "Noise Level", "RingMod 1X2 Level", "RingMod 2x3 Level", "Noise Color", "Gain", "Input 1 Mute", "Input 1 Solo", "Input 2 Mute", "Input 2 Solo", "Input 3 Mute", "Input 3 Solo", "Noise Mute", "Noise Solo", "RingMod 1X2 Mute", "RingMod 1X2 Solo", "RingMod 2x3 Mute", "RingMod 2x3 Solo", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Input 1 Left", "Input 1 Right", "Input 2 Left", "Input 2 Right", "Input 3 Left", "Input 3 Right", "Left Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTMixerSlider",
             "name": "Mixer with Sliders",
             "groups": {
-                "Mod 1": ["Mod 1 to Input 1 Level", "Mod 1 to Input 2 Level", "Mod 1 to Input 3 Level", "Mod 1 to Noise Level", "Mod 1 to RingMod 1X2 Level", "Mod 1 to RingMod 2x3 Level", "Mod 1 to Noise Color", "Mod 1 to Gain"],
-                "Mod 2": ["Mod 2 to Input 1 Level", "Mod 2 to Input 2 Level", "Mod 2 to Input 3 Level", "Mod 2 to Noise Level", "Mod 2 to RingMod 1X2 Level", "Mod 2 to RingMod 2x3 Level", "Mod 2 to Noise Color", "Mod 2 to Gain"],
-                "Mod 3": ["Mod 3 to Input 1 Level", "Mod 3 to Input 2 Level", "Mod 3 to Input 3 Level", "Mod 3 to Noise Level", "Mod 3 to RingMod 1X2 Level", "Mod 3 to RingMod 2x3 Level", "Mod 3 to Noise Color", "Mod 3 to Gain"],
-                "Mod 4": ["Mod 4 to Input 1 Level", "Mod 4 to Input 2 Level", "Mod 4 to Input 3 Level", "Mod 4 to Noise Level", "Mod 4 to RingMod 1X2 Level", "Mod 4 to RingMod 2x3 Level", "Mod 4 to Noise Color", "Mod 4 to Gain"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Input 1 Level", "Mod 1 to Input 2 Level", "Mod 1 to Input 3 Level", "Mod 1 to Noise Level", "Mod 1 to RingMod 1X2 Level", "Mod 1 to RingMod 2x3 Level", "Mod 1 to Noise Color", "Mod 1 to Gain", "Modulator 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Input 1 Level", "Mod 2 to Input 2 Level", "Mod 2 to Input 3 Level", "Mod 2 to Noise Level", "Mod 2 to RingMod 1X2 Level", "Mod 2 to RingMod 2x3 Level", "Mod 2 to Noise Color", "Mod 2 to Gain", "Modulator 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Input 1 Level", "Mod 3 to Input 2 Level", "Mod 3 to Input 3 Level", "Mod 3 to Noise Level", "Mod 3 to RingMod 1X2 Level", "Mod 3 to RingMod 2x3 Level", "Mod 3 to Noise Color", "Mod 3 to Gain", "Modulator 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Input 1 Level", "Mod 4 to Input 2 Level", "Mod 4 to Input 3 Level", "Mod 4 to Noise Level", "Mod 4 to RingMod 1X2 Level", "Mod 4 to RingMod 2x3 Level", "Mod 4 to Noise Color", "Mod 4 to Gain", "Modulator 4 In"]
             },
             "names": {
                 "Mod 1 to Input 1 Level": "Input 1 Level",
@@ -1812,21 +2356,28 @@
                 "Mod 1 to Gain": "Gain",
                 "Mod 2 to Gain": "Gain",
                 "Mod 3 to Gain": "Gain",
-                "Mod 4 to Gain": "Gain"
-            }
+                "Mod 4 to Gain": "Gain",
+                "Display 0": "LCD Display",
+                "Modulator 1 In": "Mod 1 In",
+                "Modulator 2 In": "Mod 2 In",
+                "Modulator 3 In": "Mod 3 In",
+                "Modulator 4 In": "Mod 4 In"
+            },
+            "order": ["Input 1 Level", "Input 2 Level", "Input 3 Level", "Noise Level", "RingMod 1X2 Level", "RingMod 2x3 Level", "Noise Color", "Gain", "Input 1 Mute", "Input 1 Solo", "Input 2 Mute", "Input 2 Solo", "Input 3 Mute", "Input 3 Solo", "Noise Mute", "Noise Solo", "RingMod 1X2 Mute", "RingMod 1X2 Solo", "RingMod 2x3 Mute", "RingMod 2x3 Solo", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Input 1 Left", "Input 1 Right", "Input 2 Left", "Input 2 Right", "Input 3 Left", "Input 3 Right", "Left Out", "Right Out", "Display 0"]
         },
         {
             "slug": "SurgeXTDigitalRingMod",
-            "name": "Digital RingModulators and Combinators"
+            "name": "Digital RingModulators and Combinators",
+            "order": ["Link Second A to First Output", "CXOR 1 Algorithm", "CXOR 2 Algorithm", "CXOR 1 A Left In", "CXOR 1 A Right In", "CXOR 1 B Left In", "CXOR 1 B Right In", "CXOR 1 Left Out", "CXOR 1 Right Out", "CXOR 2 A Left In", "CXOR 2 A Right In", "CXOR 2 B Left In", "CXOR 2 B Right In", "CXOR 2 Left Out", "CXOR 2 Right Out"]
         },
         {
             "slug": "SurgeXTModMatrix",
             "name": "ModMatrix",
             "groups": {
-                "Mod 1": ["Mod 1 to Target 1", "Mod 1 to Target 2", "Mod 1 to Target 3", "Mod 1 to Target 4", "Mod 1 to Target 5", "Mod 1 to Target 6", "Mod 1 to Target 7", "Mod 1 to Target 8"],
-                "Mod 2": ["Mod 2 to Target 1", "Mod 2 to Target 2", "Mod 2 to Target 3", "Mod 2 to Target 4", "Mod 2 to Target 5", "Mod 2 to Target 6", "Mod 2 to Target 7", "Mod 2 to Target 8"],
-                "Mod 3": ["Mod 3 to Target 1", "Mod 3 to Target 2", "Mod 3 to Target 3", "Mod 3 to Target 4", "Mod 3 to Target 5", "Mod 3 to Target 6", "Mod 3 to Target 7", "Mod 3 to Target 8"],
-                "Mod 4": ["Mod 4 to Target 1", "Mod 4 to Target 2", "Mod 4 to Target 3", "Mod 4 to Target 4", "Mod 4 to Target 5", "Mod 4 to Target 6", "Mod 4 to Target 7", "Mod 4 to Target 8"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Target 1", "Mod 1 to Target 2", "Mod 1 to Target 3", "Mod 1 to Target 4", "Mod 1 to Target 5", "Mod 1 to Target 6", "Mod 1 to Target 7", "Mod 1 to Target 8", "Modulator 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Target 1", "Mod 2 to Target 2", "Mod 2 to Target 3", "Mod 2 to Target 4", "Mod 2 to Target 5", "Mod 2 to Target 6", "Mod 2 to Target 7", "Mod 2 to Target 8", "Modulator 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Target 1", "Mod 3 to Target 2", "Mod 3 to Target 3", "Mod 3 to Target 4", "Mod 3 to Target 5", "Mod 3 to Target 6", "Mod 3 to Target 7", "Mod 3 to Target 8", "Modulator 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Target 1", "Mod 4 to Target 2", "Mod 4 to Target 3", "Mod 4 to Target 4", "Mod 4 to Target 5", "Mod 4 to Target 6", "Mod 4 to Target 7", "Mod 4 to Target 8", "Modulator 4 In"]
             },
             "names": {
                 "Mod 1 to Target 1": "Target 1",
@@ -1860,17 +2411,31 @@
                 "Mod 1 to Target 8": "Target 8",
                 "Mod 2 to Target 8": "Target 8",
                 "Mod 3 to Target 8": "Target 8",
-                "Mod 4 to Target 8": "Target 8"
-            }
+                "Mod 4 to Target 8": "Target 8",
+                "Display 0": "Target 1 Mod Display",
+                "Display 1": "Target 2 Mod Display",
+                "Display 2": "Target 3 Mod Display",
+                "Display 3": "Target 4 Mod Display",
+                "Display 4": "Target 5 Mod Display",
+                "Display 5": "Target 6 Mod Display",
+                "Display 6": "Target 7 Mod Display",
+                "Display 7": "Target 8 Mod Display",
+                "Display 8": "LCD Display",
+                "Modulator 1 In": "Mod 1 In",
+                "Modulator 2 In": "Mod 2 In",
+                "Modulator 3 In": "Mod 3 In",
+                "Modulator 4 In": "Mod 4 In"
+            },
+            "order": ["Target 1", "Target 2", "Target 3", "Target 4", "Target 5", "Target 6", "Target 7", "Target 8", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Modulated Target 1 Out", "Modulated Target 2 Out", "Modulated Target 3 Out", "Modulated Target 4 Out", "Modulated Target 5 Out", "Modulated Target 6 Out", "Modulated Target 7 Out", "Modulated Target 8 Out", "Display 8"]
         },
         {
             "slug": "SurgeXTUnisonHelper",
             "name": "UnisonHelper",
             "groups": {
-                "Mod 1": ["Mod 1 to Detune", "Mod 1 to Drift", "Mod 1 to Low Cut", "Mod 1 to High Cut"],
-                "Mod 2": ["Mod 2 to Detune", "Mod 2 to Drift", "Mod 2 to Low Cut", "Mod 2 to High Cut"],
-                "Mod 3": ["Mod 3 to Detune", "Mod 3 to Drift", "Mod 3 to Low Cut", "Mod 3 to High Cut"],
-                "Mod 4": ["Mod 4 to Detune", "Mod 4 to Drift", "Mod 4 to Low Cut", "Mod 4 to High Cut"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Detune", "Mod 1 to Drift", "Mod 1 to Low Cut", "Mod 1 to High Cut", "Mod 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Detune", "Mod 2 to Drift", "Mod 2 to Low Cut", "Mod 2 to High Cut", "Mod 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Detune", "Mod 3 to Drift", "Mod 3 to Low Cut", "Mod 3 to High Cut", "Mod 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Detune", "Mod 4 to Drift", "Mod 4 to Low Cut", "Mod 4 to High Cut", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to Detune": "Detune",
@@ -1888,12 +2453,26 @@
                 "Mod 1 to High Cut": "High Cut",
                 "Mod 2 to High Cut": "High Cut",
                 "Mod 3 to High Cut": "High Cut",
-                "Mod 4 to High Cut": "High Cut"
-            }
+                "Mod 4 to High Cut": "High Cut",
+                "Display 0": "Detune Mod Display",
+                "Display 1": "Drift Mod Display",
+                "Display 2": "Low Cut Mod Display",
+                "Display 3": "High Cut Mod Display",
+                "Display 4": "LCD Display",
+                "Mod 1 In": "Mod 1 In",
+                "Mod 2 In": "Mod 2 In",
+                "Mod 3 In": "Mod 3 In",
+                "Mod 4 In": "Mod 4 In"
+            },
+            "order": ["Detune", "Drift", "Voice Count", "Low Cut", "High Cut", "Detune Range", "Enable Low Cut", "Enable High Cut", "Character Filter", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Audio from Sub VCO 1 In", "Audio from Sub VCO 2 In", "Audio from Sub VCO 3 In", "Audio from Sub VCO 4 In", "V/Oct to Sub VCO 1 Out", "V/Oct to Sub VCO 2 Out", "V/Oct to Sub VCO 3 Out", "V/Oct to Sub VCO 4 Out", "V/Oct for pre-unison source In", "Left Out", "Right Out", "Display 4"]
         },
         {
             "slug": "SurgeXTUnisonHelperCVExpander",
-            "name": "UnisonHelper CV Expander"
+            "name": "UnisonHelper CV Expander",
+            "names": {
+                "Display 0": "LCD Display"
+            },
+            "order": ["In 1", "In 2", "Out 1", "Out 5", "Out 2", "Out 6", "Out 3", "Out 7", "Out 4", "Out 8", "Display 0"]
         }
     ]
 }
