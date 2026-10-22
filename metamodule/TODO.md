@@ -5,11 +5,6 @@ Check our submodules: any overlap with upstream?
   - Look for anything that would be useful as an issue or PR
 
 
-LCD params: turn into AltParams or ctx menu params, or at least snapped switches
-  - actually nice having them as mappable params
-  - need to snap
-  - as normal invisible params, they are auto-mapped, and do not snap
-
 Mod Buttons:
   - could be AltParamAction? So just click, no mapping. Would need to redraw them (blue light when on), which AltParams don't support
 
@@ -19,7 +14,8 @@ Reverb:
 LFO: 
   - can't change waveshape (clickable buttons at top of LCD)
 
-Get lots of console errors with paths:
+Fix lots of console errors with paths:
+ - can't we just add those files to the plugin?
 stat() on file SurgeXTUserDefaults.xml on vol 2 failed
 stat(SurgeXTUserDefaults.xml) returned -1
 stat() on file configuration.xml on vol 2 failed
@@ -34,4 +30,4 @@ stat() on file fx_presets on vol 2 failed
 stat(fx_presets) returned -1
 
 
-Get compile warnings
+Fix compile warnings
