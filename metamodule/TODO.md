@@ -1,20 +1,37 @@
 TODO
 
-- Check our submodules: any overlap with upstream?
+Check our submodules: any overlap with upstream?
   - upstream uses c++20?
   - Look for anything that would be useful as an issue or PR
 
-Graphics:
-- generate panels? Or do it like airwindows and draw live text
-- Deal with gap between mod buttons
-  - Maybe move Mod jacks up?
-  - Or use that space for jack/pot labels?
-- Need our own graphics for pots and sliders
-- Mod Depth pots:
-  - use diferent color
-  - consider using graphic display
-- Sliders: 
-  - need custom artwork
-  - How do mod depth pots work with these?
-- LCD params: turn into AltPArams or ctx menu params. 
+
+LCD params: turn into AltParams or ctx menu params, or at least snapped switches
+  - actually nice having them as mappable params
+  - need to snap
   - as normal invisible params, they are auto-mapped, and do not snap
+
+Mod Buttons:
+  - could be AltParamAction? So just click, no mapping. Would need to redraw them (blue light when on), which AltParams don't support
+
+Reverb: 
+  - Room Size "slider" should be a multi-pos switch
+
+LFO: 
+  - can't change waveshape (clickable buttons at top of LCD)
+
+Get lots of console errors with paths:
+stat() on file SurgeXTUserDefaults.xml on vol 2 failed
+stat(SurgeXTUserDefaults.xml) returned -1
+stat() on file configuration.xml on vol 2 failed
+stat(configuration.xml) returned -1
+stat() on file SurgeMIDIDefaults.xml on vol 2 failed
+stat(SurgeMIDIDefaults.xml) returned -1
+stat() on file windows.wt on vol 2 failed
+stat(windows.wt) returned -1
+stat() on file FX Presets on vol 2 failed
+stat(FX Presets) returned -1
+stat() on file fx_presets on vol 2 failed
+stat(fx_presets) returned -1
+
+
+Get compile warnings
