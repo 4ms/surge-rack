@@ -312,7 +312,7 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                 {
                     auto rknob = static_cast<widgets::KnobN *>(knob->asWidget());
 #ifdef METAMODULE
-                    widgets::ModArcDisplay *arcs{nullptr};
+                    widgets::ModArcDisplay<widgets::ModRingKnob> *arcs{nullptr};
 #endif
                     for (int m = 0; m < W::M::n_mod_inputs; ++m)
                     {
@@ -327,7 +327,7 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                         w->addChild(k);
 #ifdef METAMODULE
                         if (!arcs)
-                            arcs = new widgets::ModArcDisplay(
+                            arcs = new widgets::ModArcDisplay<widgets::ModRingKnob>(
                                 static_cast<modules::XTModule *>(module), pos, k->ringSize);
                         arcs->rings[m] = k;
 #endif
@@ -340,6 +340,9 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                 else
                 {
                     auto rknob = static_cast<widgets::VerticalSlider *>(knob->asWidget());
+#ifdef METAMODULE
+                    widgets::ModArcDisplay<widgets::VerticalSliderModulator> *arcs{nullptr};
+#endif
                     for (int m = 0; m < W::M::n_mod_inputs; ++m)
                     {
                         int id = W::M::modulatorIndexFor(lay.parId + param0, m);
@@ -350,7 +353,17 @@ template <typename W, int param0, int clockId = -1> struct LayoutEngine
                         k->underlyerParamWidget = rknob;
                         rknob->modSliders.insert(k);
                         w->addChild(k);
+#ifdef METAMODULE
+                        if (!arcs)
+                            arcs = new widgets::ModArcDisplay<widgets::VerticalSliderModulator>(
+                                static_cast<modules::XTModule *>(module), pos, k->barsSize);
+                        arcs->rings[m] = k;
+#endif
                     }
+#ifdef METAMODULE
+                    if (arcs)
+                        w->rack::app::ModuleWidget::addChild(arcs);
+#endif
                 }
             }
         }

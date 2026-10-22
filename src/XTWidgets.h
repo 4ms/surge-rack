@@ -975,12 +975,13 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
 };
 
 #ifdef METAMODULE
-// A graphic display around a knob, which draws the ring of its mod depth knob for the Mod button
-// that's on (the mod depth knobs are invisible)
-struct ModArcDisplay : rack::widget::Widget
+// A graphic display around a knob or slider, which draws the ring (or bars) of its mod depth
+// knob (a ModRingKnob, or a VerticalSliderModulator) for the Mod button that's on (the mod depth
+// knobs are invisible)
+template <typename ModKnob> struct ModArcDisplay : rack::widget::Widget
 {
     modules::XTModule *module{nullptr};
-    std::array<ModRingKnob *, modules::XTModule::numModButtons> rings{};
+    std::array<ModKnob *, modules::XTModule::numModButtons> rings{};
 
     ModArcDisplay(modules::XTModule *module, const rack::Vec &center, const rack::Vec &size)
         : module(module)
@@ -2893,11 +2894,25 @@ struct VerticalSlider : rack::app::SliderKnob, style::StyleParticipant, Modulata
 };
 #endif
 
+#ifdef METAMODULE
+// On MetaModule each mod depth is a slider of its own
+struct VerticalSliderModulator : rack::app::SvgSlider, style::StyleParticipant, HasBDW
+#else
 struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasBDW
+#endif
 {
     VerticalSlider *underlyerParamWidget{nullptr};
 
     int modIndex{0};
+    // The size drawWidget() draws the bars in (MetaModule sets box.size to the image's)
+    rack::Vec barsSize{45, 45};
+
+#ifdef METAMODULE
+    // MetaModule's screen has about 0.6 pixels per Rack pixel
+    static constexpr float barWidth_MM = 1.5f;
+#else
+    static constexpr float barWidth_MM = 1.f;
+#endif
 
     VerticalSliderModulator() { box.size = rack::Vec(45, 45); }
     ~VerticalSliderModulator();
@@ -2909,8 +2924,18 @@ struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasB
         if (!pq || !uq)
             return;
 
+        auto hs = underlyerParamWidget->handle->box.size;
+        auto size = barsSize;
+#ifdef METAMODULE
+        // The slider is centered in barsSize. MetaModule moves the handle's center from half its
+        // height below the top of the slider to half its height above the bottom.
+        auto sliderHeight = underlyerParamWidget->box.size.y;
+        auto off = (size.y - sliderHeight + hs.y) / 2;
+        auto span = sliderHeight - hs.y;
+#else
         auto off = rack::mm2px(0.4);
-        auto span = box.size.y - 2 * off;
+        auto span = size.y - 2 * off;
+#endif
 
         auto uv = (uq->getValue() - uq->getMinValue()) / (uq->getMaxValue() - uq->getMinValue());
 
@@ -2920,39 +2945,42 @@ struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasB
         auto mp = std::clamp(1.f - (uv + mv), 0.f, 1.f) * span + off;
         auto dp = std::clamp(1.f - (uv - mv), 0.f, 1.f) * span + off;
 
+#ifdef METAMODULE
+        auto hp = rack::Vec(0, np - hs.y / 2);
+#else
         auto hp = underlyerParamWidget->handle->box.pos;
-        auto hs = underlyerParamWidget->handle->box.size;
+#endif
 
         for (const auto &[v, h, c] : {std::make_tuple(mp, mp - np, style::XTStyle::KNOB_MOD_PLUS),
                                       std::make_tuple(dp, np - dp, style::XTStyle::KNOB_MOD_MINUS)})
         {
             auto start = std::min(v, np);
             auto height = fabs(h);
-            auto inset = rack::mm2px(1.5f);
+            auto inset = (size.x - rack::mm2px(barWidth_MM)) / 2;
 
             // Draw above the handle
             nvgSave(vg);
-            nvgScissor(vg, 0, 0, box.size.x, hp.y);
+            nvgScissor(vg, 0, 0, size.x, hp.y);
             nvgBeginPath(vg);
-            nvgRect(vg, inset, start, box.size.x - 2 * inset, height);
+            nvgRect(vg, inset, start, size.x - 2 * inset, height);
             nvgFillColor(vg, style()->getColor(c));
             nvgFill(vg);
             nvgRestore(vg);
 
             // And below
             nvgSave(vg);
-            nvgScissor(vg, 0, hp.y + hs.y, box.size.x, box.size.y - hp.y - hs.y);
+            nvgScissor(vg, 0, hp.y + hs.y, size.x, size.y - hp.y - hs.y);
             nvgBeginPath(vg);
-            nvgRect(vg, inset, start, box.size.x - 2 * inset, height);
+            nvgRect(vg, inset, start, size.x - 2 * inset, height);
             nvgFillColor(vg, style()->getColor(c));
             nvgFill(vg);
             nvgRestore(vg);
 
             // And on transparently
             nvgSave(vg);
-            nvgScissor(vg, 0, hp.y, box.size.x, hs.y);
+            nvgScissor(vg, 0, hp.y, size.x, hs.y);
             nvgBeginPath(vg);
-            nvgRect(vg, inset, start, box.size.x - 2 * inset, height);
+            nvgRect(vg, inset, start, size.x - 2 * inset, height);
             auto co = style()->getColor(c);
             co.a = 0.3;
             nvgFillColor(vg, co);
@@ -2984,9 +3012,21 @@ struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasB
         res->box.pos.x -= width / 2;
         res->box.pos.y -= height / 2;
         res->box.size = rack::Vec(width, height);
+        res->barsSize = res->box.size;
+#ifdef METAMODULE
+        // The slider is invisible, and the size of the slider it's on: a ModArcDisplay draws
+        // the bars, when its Mod button is on
+        auto compDir = res->style()->skinAssetDir() + "/components";
+        auto bg = heightMM > 19 ? "/fader-mod-invisible-25.svg" : "/fader-mod-invisible.svg";
+        res->setBackgroundSvg(rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + bg)));
+        res->setHandleSvg(rack::Svg::load(
+            rack::asset::plugin(pluginInstance, compDir + "/fader-handle-mod-invisible.svg")));
+        res->box.pos = pos.minus(res->box.size.div(2));
+#else
         res->bdw = new BufferedDrawFunctionWidgetOnLayer(rack::Vec(0, 0), res->box.size,
                                                          [res](auto *vg) { res->drawWidget(vg); });
         res->addChild(res->bdw);
+#endif
 
         res->module = module;
         res->paramId = paramId;

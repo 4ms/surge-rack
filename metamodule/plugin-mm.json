@@ -1958,13 +1958,19 @@
                 "Display 1": "Phase Mod Display",
                 "Display 2": "Deform Mod Display",
                 "Display 3": "Amplitude Mod Display",
-                "Display 4": "LCD Display",
+                "Display 4": "Delay Mod Display",
+                "Display 5": "Attack Mod Display",
+                "Display 6": "Hold Mod Display",
+                "Display 7": "Decay Mod Display",
+                "Display 8": "Sustain Mod Display",
+                "Display 9": "Release Mod Display",
+                "Display 10": "LCD Display",
                 "Mod 1 In": "Mod 1 In",
                 "Mod 2 In": "Mod 2 In",
                 "Mod 3 In": "Mod 3 In",
                 "Mod 4 In": "Mod 4 In"
             },
-            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 4"]
+            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 10"]
         },
         {
             "slug": "SurgeXTDelay",
@@ -2133,13 +2139,17 @@
                 "Display 0": "Level Mod Display",
                 "Display 1": "Pan Mod Display",
                 "Display 2": "Linear/Exponential Mod Display",
-                "Display 3": "LCD Display",
+                "Display 3": "Attack Mod Display",
+                "Display 4": "Decay Mod Display",
+                "Display 5": "Sustain Mod Display",
+                "Display 6": "Release Mod Display",
+                "Display 7": "LCD Display",
                 "Mod Input 1": "Mod 1 In",
                 "Mod Input 2": "Mod 2 In",
                 "Mod Input 3": "Mod 3 In",
                 "Mod Input 4": "Mod 4 In"
             },
-            "order": ["Pan", "Attack", "Decay", "Sustain", "Release", "Level", "Linear/Exponential", "Mode", "Attack Curve", "Decay Curve", "Release Curve", "Fast or Slow", "Curve", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate/Trig In", "Clock In", "End of Cycle Out", "Envelope Out", "Left In", "Right In", "Left Out", "Right Out", "Display 3"]
+            "order": ["Pan", "Attack", "Decay", "Sustain", "Release", "Level", "Linear/Exponential", "Mode", "Attack Curve", "Decay Curve", "Release Curve", "Fast or Slow", "Curve", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate/Trig In", "Clock In", "End of Cycle Out", "Envelope Out", "Left In", "Right In", "Left Out", "Right Out", "Display 7"]
         },
         {
             "slug": "SurgeXTQuadAD",
@@ -2357,13 +2367,21 @@
                 "Mod 2 to Gain": "Gain",
                 "Mod 3 to Gain": "Gain",
                 "Mod 4 to Gain": "Gain",
-                "Display 0": "LCD Display",
+                "Display 0": "Input 1 Level Mod Display",
+                "Display 1": "Input 2 Level Mod Display",
+                "Display 2": "Input 3 Level Mod Display",
+                "Display 3": "Noise Level Mod Display",
+                "Display 4": "RingMod 1X2 Level Mod Display",
+                "Display 5": "RingMod 2x3 Level Mod Display",
+                "Display 6": "Noise Color Mod Display",
+                "Display 7": "Gain Mod Display",
+                "Display 8": "LCD Display",
                 "Modulator 1 In": "Mod 1 In",
                 "Modulator 2 In": "Mod 2 In",
                 "Modulator 3 In": "Mod 3 In",
                 "Modulator 4 In": "Mod 4 In"
             },
-            "order": ["Input 1 Level", "Input 2 Level", "Input 3 Level", "Noise Level", "RingMod 1X2 Level", "RingMod 2x3 Level", "Noise Color", "Gain", "Input 1 Mute", "Input 1 Solo", "Input 2 Mute", "Input 2 Solo", "Input 3 Mute", "Input 3 Solo", "Noise Mute", "Noise Solo", "RingMod 1X2 Mute", "RingMod 1X2 Solo", "RingMod 2x3 Mute", "RingMod 2x3 Solo", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Input 1 Left", "Input 1 Right", "Input 2 Left", "Input 2 Right", "Input 3 Left", "Input 3 Right", "Left Out", "Right Out", "Display 0"]
+            "order": ["Input 1 Level", "Input 2 Level", "Input 3 Level", "Noise Level", "RingMod 1X2 Level", "RingMod 2x3 Level", "Noise Color", "Gain", "Input 1 Mute", "Input 1 Solo", "Input 2 Mute", "Input 2 Solo", "Input 3 Mute", "Input 3 Solo", "Noise Mute", "Noise Solo", "RingMod 1X2 Mute", "RingMod 1X2 Solo", "RingMod 2x3 Mute", "RingMod 2x3 Solo", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Input 1 Left", "Input 1 Right", "Input 2 Left", "Input 2 Right", "Input 3 Left", "Input 3 Right", "Left Out", "Right Out", "Display 8"]
         },
         {
             "slug": "SurgeXTDigitalRingMod",
