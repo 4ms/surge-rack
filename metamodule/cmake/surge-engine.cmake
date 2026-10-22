@@ -107,6 +107,10 @@ list(REMOVE_ITEM srcs
 set_target_properties(surge-common PROPERTIES SOURCES "${srcs}")
 target_include_directories(surge-common PUBLIC ${SURGE_RACK_DIR}/surge/libs/sst/sst-plugininfra/include)
 
+# The VCO and VCF modules use FPUStateGuard from sst-plugininfra's cpufeatures, which
+# needs no platform code without MAC, LINUX or WINDOWS (it's a no-op on 32-bit ARM)
+target_sources(surge-common PRIVATE ${SURGE_RACK_DIR}/surge/libs/sst/sst-plugininfra/src/cpufeatures.cpp)
+
 # SurgeStorage still makes a PatchDB, so stub it
 target_sources(surge-common PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../stubs/PatchDB.cpp)
 

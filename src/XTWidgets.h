@@ -1498,6 +1498,11 @@ struct LabeledPlotAreaControl : public rack::app::Knob, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
+#ifdef METAMODULE
+        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
+        // listed and mappable but not drawn as a knob
+        res->hide();
+#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1638,6 +1643,11 @@ struct PlotAreaSwitch : public rack::app::Switch, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
+#ifdef METAMODULE
+        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
+        // listed and mappable but not drawn as a knob
+        res->hide();
+#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1716,6 +1726,11 @@ struct PlotAreaMenuItem : public rack::app::Knob, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
+#ifdef METAMODULE
+        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
+        // listed and mappable but not drawn as a knob
+        res->hide();
+#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });
@@ -1899,6 +1914,11 @@ struct PlotAreaToggleClick : public rack::app::Switch, style::StyleParticipant
         res->module = module;
         res->paramId = paramId;
         res->initParamQuantity();
+#ifdef METAMODULE
+        // Draws in the LCD, which the MetaModule doesn't draw yet: hidden, it's
+        // listed and mappable but not drawn as a knob
+        res->hide();
+#endif
 
         res->bdw = new BufferedDrawFunctionWidget(rack::Vec(0, 0), res->box.size,
                                                   [res](NVGcontext *vg) { res->drawWidget(vg); });

@@ -27,6 +27,7 @@ add_library(SurgeXT STATIC)
 target_sources(SurgeXT PRIVATE
     bringup_init.cpp
     ${SURGE_RACK_DIR}/src/FX.cpp
+    ${SURGE_RACK_DIR}/src/VCO.cpp
     ${SURGE_RACK_DIR}/src/XTModule.cpp
     ${SURGE_RACK_DIR}/src/XTModuleWidget.cpp
     ${SURGE_RACK_DIR}/src/XTStyle.cpp
@@ -63,6 +64,7 @@ file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${SURGE_MM_ASSETS})
 file(COPY
     ${SURGE_RACK_DIR}/surge/resources/surge-shared/configuration.xml
     ${SURGE_RACK_DIR}/surge/resources/surge-shared/windows.wt
+    ${SURGE_RACK_DIR}/surge/resources/data/wavetables
     ${SURGE_RACK_DIR}/surge/resources/data/fx_presets
     ${SURGE_RACK_DIR}/res/surge_extra_data/fx_presets
     DESTINATION ${SURGE_MM_ASSETS}/build/surge-data)

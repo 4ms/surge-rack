@@ -30,6 +30,10 @@
 
 #include "LayoutEngine.h"
 
+#ifdef METAMODULE
+#include "CoreModules/async_thread.hh"
+#endif
+
 namespace sst::surgext_rack::vco
 {
 template <int oscType> struct VCO;
@@ -161,6 +165,12 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
         setupSurgeCommon(NUM_PARAMS, VCOConfig<oscType>::requiresWavetables(), false);
 
         wavetableCount = storage->wt_list.size();
+
+#ifdef METAMODULE
+        if constexpr (VCOConfig<oscType>::requiresWavetables())
+            loadWavetableAsync = std::make_unique<MetaModule::AsyncThread>(
+                this, [this]() { this->loadWavetable(pendingWavetableMessage); });
+#endif
 
         oscstorage = &(storage->getPatch().scene[0].osc[0]);
         oscstorage_display = &(storage->getPatch().scene[0].osc[1]);
@@ -321,12 +331,14 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
             surge_osc[i] = nullptr;
         }
 
+#ifndef METAMODULE
         if (VCOConfig<oscType>::requiresWavetables())
         {
             std::lock_guard<std::mutex> mg(loadWavetableSpawnMutex);
             if (loadWavetableThread)
                 loadWavetableThread->join();
         }
+#endif
     }
 
     inline int polyChannelCount()
@@ -432,8 +444,15 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
     static constexpr int calcModMatrixEvery{256};
     int calcedModMatrix{calcModMatrixEvery};
     std::atomic<bool> suspendForWT{false};
+#ifdef METAMODULE
+    // MetaModule has no std::thread: load in an async task, which runs while the audio
+    // thread is suspended (suspendForWT), so it can read pendingWavetableMessage.
+    WavetableMessage pendingWavetableMessage;
+    std::unique_ptr<MetaModule::AsyncThread> loadWavetableAsync;
+#else
     std::unique_ptr<std::thread> loadWavetableThread;
     std::mutex loadWavetableSpawnMutex;
+#endif
 
     void loadWavetable(WavetableMessage msg)
     {
@@ -493,6 +512,11 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
 
                 if (read)
                 {
+#ifdef METAMODULE
+                    pendingWavetableMessage = msg;
+                    suspendForWT = true;
+                    loadWavetableAsync->run_once();
+#else
                     std::lock_guard<std::mutex> mg(loadWavetableSpawnMutex);
                     if (loadWavetableThread)
                         loadWavetableThread->join();
@@ -500,6 +524,7 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
                         std::make_unique<std::thread>([msg, this]() { this->loadWavetable(msg); });
                     suspendForWT = true;
                     // loadWavetable(msg);
+#endif
                     return;
                 }
             }

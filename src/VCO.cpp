@@ -23,6 +23,9 @@
 #include "SurgeXT.h"
 #include "XTModuleWidget.h"
 #include "osdialog.h"
+#ifdef METAMODULE
+#include "filesystem/async_filebrowser.hh"
+#endif
 
 namespace sst::surgext_rack::vco::ui
 {
@@ -99,6 +102,7 @@ template <int oscType> struct WavetableMenuBuilder
         return menu;
     }
 
+#ifndef METAMODULE
     static void downloadExtraContent(VCO<oscType> *module)
     {
         if (downloadingContent)
@@ -119,6 +123,7 @@ template <int oscType> struct WavetableMenuBuilder
         });
         t.detach();
     }
+#endif
 
     static void buildMenuOnto(rack::ui::Menu *menu, VCO<oscType> *module)
     {
@@ -159,9 +164,9 @@ template <int oscType> struct WavetableMenuBuilder
         }
         menu->addChild(new rack::ui::MenuSeparator);
         menu->addChild(rack::createMenuItem("Load Wavetable File", "", [module]() {
-#ifdef USING_CARDINAL_NOT_RACK
-            async_dialog_filebrowser(false, "wavetable.wav", nullptr, "Load Wavetable File",
-                                     [=](char *openF) {
+#if defined(USING_CARDINAL_NOT_RACK) || defined(METAMODULE)
+            async_dialog_filebrowser(false, ".wav,.WAV,.Wav,.wt,.WT,.Wt", nullptr,
+                                     "Load Wavetable File", [=](char *openF) {
                                          if (openF)
                                          {
                                              DEFER({ std::free(openF); });
@@ -184,8 +189,8 @@ template <int oscType> struct WavetableMenuBuilder
 #endif
         }));
         menu->addChild(rack::createMenuItem("Load WaveEdit Wavetable", "", [module]() {
-#ifdef USING_CARDINAL_NOT_RACK
-            async_dialog_filebrowser(false, "wavetable.wav", nullptr, "Load WaveEdit Wavetable",
+#if defined(USING_CARDINAL_NOT_RACK) || defined(METAMODULE)
+            async_dialog_filebrowser(false, ".wav,.WAV,.Wav", nullptr, "Load WaveEdit Wavetable",
                                      [=](char *openF) {
                                          if (openF)
                                          {
@@ -209,8 +214,8 @@ template <int oscType> struct WavetableMenuBuilder
             {
                 auto label = std::to_string(1 << i) + " Sample Frame WaveTable";
                 pm->addChild(rack::createMenuItem(label, "", [module, i]() {
-#ifdef USING_CARDINAL_NOT_RACK
-                    async_dialog_filebrowser(false, "wavetable.wav", nullptr, "Load Untagged Wav",
+#if defined(USING_CARDINAL_NOT_RACK) || defined(METAMODULE)
+                    async_dialog_filebrowser(false, ".wav,.WAV,.Wav", nullptr, "Load Untagged Wav",
                                              [=](char *openF) {
                                                  if (openF)
                                                  {
@@ -232,6 +237,8 @@ template <int oscType> struct WavetableMenuBuilder
             }
         }));
         menu->addChild(new rack::MenuSeparator);
+#ifndef METAMODULE
+        // No network, and no OS file manager to reveal directories in
         menu->addChild(rack::createMenuItem(
             "Download Extra Wavetable Content", "", [module]() { downloadExtraContent(module); },
             downloadingContent));
@@ -250,6 +257,7 @@ template <int oscType> struct WavetableMenuBuilder
                 module->guaranteeRackUserWavetablesDir();
                 rack::system::openDirectory((module->getRackUserWavetablesDir()).u8string());
             }));
+#endif
         menu->addChild(rack::createMenuItem("Rescan Wavetables", "",
                                             [module]() { module->forceRefreshWT = true; }));
     }

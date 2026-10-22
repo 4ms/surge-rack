@@ -35,8 +35,6 @@ template <> VCOConfig<ot_sine>::layout_t VCOConfig<ot_sine>::getLayout()
         LayoutItem::createVCOKnob(cp + 1, "FEEDBACK", 0, 1),
         LayoutItem::createVCOLight(LayoutItem::VINTAGE_LIGHT, M::ARBITRARY_SWITCH_0 + 2, 0, 1),
 
-        LayoutItem::createVCOKnob(cp + 4, "", 1, 3),
-
         LayoutItem::createVCOKnob(cp + 5, "DETUNE", 1, 0),
         LayoutItem::createVCOKnob(cp + 3, "", 1, 2),
         LayoutItem::createVCOLight(LayoutItem::POWER_LIGHT, M::ARBITRARY_SWITCH_0, 1, 2),

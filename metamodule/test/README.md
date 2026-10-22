@@ -45,8 +45,27 @@ python3 <surge-rack>/metamodule/test/wavtool.py stats out.wav 0.5
 
 `wavtool.py` writes and reads the simulator's 32-bit float WAV files (`gen`, `stats`, `diff`).
 
+To check every module in `plugin-mm.json` (or just the slugs given), from the same directory:
+
+```
+python3 <surge-rack>/metamodule/test/smoke.py <sim-build>/simulator [SLUG ...]
+```
+
+It runs each FX on a stereo sine and each VCO unpatched, and fails a module whose output is
+silent or has NaN/inf.
+
 To print a module's elements (what the MetaModule shows and can map), and its heap use:
 
 ```
 <sim-build>/simulator --dump-elements SurgeXTRack:SurgeXTFXChorus
+```
+
+The element groups and names in `plugin-mm.json` (a "Mod N" group of the "ModN to X" params for
+each modulation input) are written from these dumps. After adding modules, regenerate them and
+check them, from the same directory:
+
+```
+python3 <surge-rack>/metamodule/scripts/element_layout.py <sim-build>/simulator [SLUG ...]
+<sim-build>/simulator --check-element-layout --plugin-mm-json <surge-rack>/metamodule/plugin-mm.json \
+    --plugin-json <surge-rack>/plugin.json
 ```
