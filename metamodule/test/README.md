@@ -59,7 +59,7 @@ NaN/inf.
 To print a module's elements (what the MetaModule shows and can map), and its heap use:
 
 ```
-<sim-build>/simulator --dump-elements SurgeXTRack:SurgeXTFXChorus
+<sim-headless-build>/simulator --dump-elements SurgeXTRack:SurgeXTFXChorus
 ```
 
 The element groups and names in `plugin-mm.json` (a "Mod N" group of the "ModN to X" params for
@@ -67,7 +67,7 @@ each modulation input) are written from these dumps. After adding modules, regen
 check them, from the same directory:
 
 ```
-python3 <surge-rack>/metamodule/scripts/element_layout.py <sim-build>/simulator [SLUG ...]
-<sim-build>/simulator --check-element-layout --plugin-mm-json <surge-rack>/metamodule/plugin-mm.json \
+python3 <surge-rack>/metamodule/scripts/element_layout.py <sim-headless-build>/simulator [SLUG ...]
+<sim-headless-build>/simulator --check-element-layout --plugin-mm-json <surge-rack>/metamodule/plugin-mm.json \
     --plugin-json <surge-rack>/plugin.json
 ```
