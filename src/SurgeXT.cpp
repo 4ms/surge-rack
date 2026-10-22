@@ -18,6 +18,9 @@
 
 #include "SurgeXT.h"
 #include "XTStyle.h"
+#ifndef METAMODULE
+#include "XTModuleWidget.h"
+#endif
 
 namespace logger = rack::logger;
 rack::Plugin *pluginInstance;
@@ -78,6 +81,32 @@ __attribute__((__visibility__("default"))) void init(rack::Plugin *p)
 
     p->addModel(modelUnisonHelper);
     p->addModel(modelUnisonHelperCVExpander);
+
+#ifndef METAMODULE
+    // Rack's screenshots make the module widgets without a module, so the dynamic labels have
+    // no text. For the MetaModule faceplates, give them a new module so they show their default.
+    if (sst::surgext_rack::widgets::XTModuleWidget::panelOnly())
+    {
+        struct PanelOnlyModel : rack::plugin::Model
+        {
+            rack::plugin::Model *model;
+            PanelOnlyModel(rack::plugin::Model *m) : rack::plugin::Model(*m), model(m) {}
+            rack::engine::Module *createModule() override { return model->createModule(); }
+            rack::app::ModuleWidget *createModuleWidget(rack::engine::Module *m) override
+            {
+                if (!m)
+                {
+                    // The widget removes its module from the engine when it's deleted
+                    m = model->createModule();
+                    APP->engine->addModule(m);
+                }
+                return model->createModuleWidget(m);
+            }
+        };
+        for (auto &m : p->models)
+            m = new PanelOnlyModel(m);
+    }
+#endif
 
     sst::surgext_rack::style::XTStyle::initialize();
 }

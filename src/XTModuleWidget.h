@@ -78,6 +78,43 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
         ModuleWidget::step();
     }
 
+#ifndef METAMODULE
+    // For making the MetaModule faceplates (see metamodule/scripts/faceplates.py): with
+    // SURGEXT_PANEL_ONLY set in the environment, draw only the panel art and the labels (the
+    // ones that change show their default text). The params, ports, lights, and LCDs are
+    // MetaModule elements.
+    static bool panelOnly()
+    {
+        static bool res = std::getenv("SURGEXT_PANEL_ONLY") != nullptr;
+        return res;
+    }
+
+    static bool isPanelArt(rack::widget::Widget *w)
+    {
+        return dynamic_cast<widgets::Background *>(w) || dynamic_cast<widgets::Label *>(w) ||
+               dynamic_cast<widgets::GroupLabel *>(w) ||
+               dynamic_cast<widgets::OutputDecoration *>(w);
+    }
+
+    void draw(const DrawArgs &args) override
+    {
+        if (!panelOnly())
+        {
+            ModuleWidget::draw(args);
+            return;
+        }
+        for (auto *c : children)
+            if (c->isVisible() && isPanelArt(c))
+                drawChild(c, args);
+    }
+
+    void drawLayer(const DrawArgs &args, int layer) override
+    {
+        if (!panelOnly())
+            ModuleWidget::drawLayer(args, layer);
+    }
+#endif
+
 #ifdef METAMODULE
     // MetaModule makes a graphic display of each child widget that isn't a param, port, or
     // light. The panel art (background, labels) is in the faceplate image there, and the LCDs
