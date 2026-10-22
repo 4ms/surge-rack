@@ -43,6 +43,9 @@ void XTStyle::initialize()
     {
 #ifdef USING_CARDINAL_NOT_RACK
         setGlobalStyle(rack::settings::preferDarkPanels ? DARK : LIGHT);
+#elif defined(METAMODULE)
+        // The MetaModule's component images are in res/xt/dark
+        setGlobalStyle(DARK);
 #else
         setGlobalStyle(MID);
 #endif
