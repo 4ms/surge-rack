@@ -655,7 +655,7 @@
                 "Modulation Signal 3 In": "Mod 3 In",
                 "Modulation Signal 4 In": "Mod 4 In"
             },
-            "order": ["Size", "Room Shape", "Decay Time", "Low Cut", "Peak Freq", "Peak Gain", "High Cut", "Pre-Delay", "HF Damping", "Width", "Mix", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
+            "order": ["Size", "Decay Time", "Low Cut", "Peak Freq", "Peak Gain", "High Cut", "Pre-Delay", "HF Damping", "Width", "Mix", "Room Shape", "Enable Low Cut", "Enable High Cut", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 10"]
         },
         {
             "slug": "SurgeXTFXPhaser",

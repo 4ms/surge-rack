@@ -2438,7 +2438,12 @@ struct LCDDisplay : public rack::widget::Widget
 #endif
 
 template <int nLights = 4>
+#ifdef METAMODULE
+// The MetaModule draws a slide switch with these images (see createCentered())
+struct ThereAreFourLights : rack::app::SvgSlider, style::StyleParticipant
+#else
 struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
+#endif
 {
     BufferedDrawFunctionWidget *bdwRings{nullptr}, *bdwLight{nullptr};
 
@@ -2465,6 +2470,25 @@ struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
         res->bdwRings = new BufferedDrawFunctionWidget(
             rack::Vec(0, 0), res->box.size, [res](NVGcontext *vg) { res->drawRings(vg); });
         res->addChild(res->bdwRings);
+
+#ifdef METAMODULE
+        // A slide switch with a position for each light (the MetaModule gives a param that isn't
+        // snapped a position for each label), lowest at the bottom. The images are made by
+        // metamodule/scripts/switch_images.py.
+        auto center = res->box.getCenter();
+        res->setBackgroundSvg(
+            rack::Svg::load(rack::asset::plugin(pluginInstance, "res/metamodule/four-lights-bg.svg")));
+        res->setHandleSvg(rack::Svg::load(
+            rack::asset::plugin(pluginInstance, "res/metamodule/four-lights-handle.svg")));
+        res->box.pos = center.minus(res->box.size.div(2));
+        if (auto *spq = dynamic_cast<modules::SurgeParameterParamQuantity *>(res->getParamQuantity()))
+        {
+            spq->labels.clear();
+            for (int i = 0; i < nLights; ++i)
+                spq->labels.push_back(spq->getDisplayValueStringForValue(
+                    Parameter::intScaledToFloat(i, nLights - 1)));
+        }
+#endif
         return res;
     }
 
