@@ -7,9 +7,7 @@ Check our submodules: any overlap with upstream?
 
 Mod Buttons:
   - could be AltParamAction? So just click, no mapping. Would need to redraw them (blue light when on), which AltParams don't support
-
-Reverb: 
-  - Room Size "slider" should be a multi-pos switch
+  - Action could toggle a variable in the module->button, and button step() reads that?
 
 LFO: 
   - can't change waveshape (clickable buttons at top of LCD)
