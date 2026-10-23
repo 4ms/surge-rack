@@ -1191,6 +1191,15 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
         }
         else if (!oscPath.empty())
         {
+            nvgSave(vg);
+            nvgScissor(vg, 0, 0.5, box.size.x, box.size.y - 1);
+
+            auto col = style()->getColor(style::XTStyle::PLOT_CURVE);
+
+            bool first{true};
+
+            // MetaModule draws gradients as solid fills, so only the curve is drawn there
+#ifndef METAMODULE
             bool is3D{false};
             if (module && VCOConfig<oscType>::requiresWavetables() && module->draw3DWavetable &&
                 module->wavetableCount > 0)
@@ -1198,19 +1207,11 @@ struct OSCPlotWidget : public rack::widget::TransparentWidget, style::StyleParti
                 is3D = true;
             }
 
-            nvgSave(vg);
-            nvgScissor(vg, 0, 0.5, box.size.x, box.size.y - 1);
-
-            auto col = style()->getColor(style::XTStyle::PLOT_CURVE);
             auto gcp = col;
             gcp.a = 0.5;
             auto gcn = col;
             gcn.a = 0.0;
 
-            bool first{true};
-
-            // MetaModule draws gradients as solid fills, so only the curve is drawn there
-#ifndef METAMODULE
             if (!is3D)
             {
                 nvgBeginPath(vg);

@@ -124,12 +124,13 @@ target_include_directories(surge-common PUBLIC ${SURGE_MM_COMPAT_DIR})
 # compat juce::dsp::FFT
 target_include_directories(surge-common PRIVATE ${SURGE_RACK_DIR}/surge/libs/sst/sst-filters/include-extras)
 
-# Same warning suppressions as the Rack build
+# Same warning suppressions as the Rack build. Some are for C++ only (surge-common has stubs/posix.c).
 target_compile_options(surge-common PRIVATE -Wno-sign-compare -Wno-ignored-qualifiers -Wno-unused-value -Wno-uninitialized
-                       -Wno-implicit-fallthrough -Wno-char-subscripts -Wno-unused-local-typedefs -Wno-range-loop-construct
-                       -Wno-nonnull -Wno-reorder
-                       $<$<CXX_COMPILER_ID:GNU>:-Wno-unused-but-set-variable -Wno-stringop-truncation -Wno-class-memaccess
-                         -Wno-maybe-uninitialized -Wno-dangling-reference -Wno-restrict>)
+                       -Wno-implicit-fallthrough -Wno-char-subscripts -Wno-unused-local-typedefs -Wno-nonnull
+                       $<$<CXX_COMPILER_ID:GNU>:-Wno-unused-but-set-variable -Wno-stringop-truncation
+                         -Wno-maybe-uninitialized -Wno-restrict>
+                       "$<$<COMPILE_LANGUAGE:CXX>:-Wno-range-loop-construct;-Wno-reorder>"
+                       "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CXX_COMPILER_ID:GNU>>:-Wno-class-memaccess;-Wno-dangling-reference>")
 target_compile_options(eurorack PRIVATE -Wno-unused-local-typedefs)
 target_compile_options(sst-waveshapers INTERFACE -Wno-unused-variable)
 target_compile_options(sst-filters INTERFACE -Wno-unused-variable)

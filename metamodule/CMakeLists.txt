@@ -58,6 +58,12 @@ target_include_directories(SurgeXT PRIVATE
 set_property(TARGET SurgeXT PROPERTY CXX_STANDARD 20)
 target_compile_options(SurgeXT PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-char8_t>)
 
+# Same as the Rack build (sst-rackhelpers and the Surge headers compare int with size_t). And the
+# modules add enums of different types for param ids, which is deprecated in C++20 only (the Rack
+# build is C++17).
+target_compile_options(SurgeXT PRIVATE -Wno-sign-compare
+                       "$<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-enum-enum-conversion;-Wno-deprecated-enum-float-conversion>")
+
 # create_plugin() packages the objects of the libraries linked directly to SurgeXT
 # (not their dependencies), so every static library in the engine is listed here.
 target_link_libraries(SurgeXT PRIVATE ${SURGE_MM_ENGINE_LIBS})

@@ -1130,7 +1130,7 @@ struct ActivateKnobSwitch : rack::app::Switch, style::StyleParticipant
     }
 
 #ifdef METAMODULE
-    // Adds the off and on frames for the type (made by metamodule/scripts/activate_buttons.py),
+    // Adds the off and on frames for the type (made by metamodule/scripts/switch_images.py),
     // keeping the center. Call it after setting the type.
     void addFrames()
     {
