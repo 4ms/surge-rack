@@ -985,6 +985,10 @@ template <typename ModKnob> struct ModArcDisplay : rack::widget::Widget
     modules::XTModule *module{nullptr};
     std::array<ModKnob *, modules::XTModule::numModButtons> rings{};
 
+    // The mod depths at the last step, to see which one changed
+    std::array<float, modules::XTModule::numModButtons> lastDepths{};
+    bool haveLastDepths{false};
+
     ModArcDisplay(modules::XTModule *module, const rack::Vec &center, const rack::Vec &size)
         : module(module)
     {
@@ -995,8 +999,29 @@ template <typename ModKnob> struct ModArcDisplay : rack::widget::Widget
     void step() override
     {
         if (module)
+        {
+            showChangedModDepth();
             module->stepModButtons();
+        }
         rack::widget::Widget::step();
+    }
+
+    // Changing a mod depth (by its knob, or a mapping) turns its Mod button on, so it's shown
+    // without having to turn on the Mod button first
+    void showChangedModDepth()
+    {
+        for (int m = 0; m < modules::XTModule::numModButtons; ++m)
+        {
+            auto *pq = rings[m] ? rings[m]->getParamQuantity() : nullptr;
+            if (!pq)
+                continue;
+
+            auto v = pq->getValue();
+            if (haveLastDepths && v != lastDepths[m])
+                module->params[module->modButtonParam0 + m].setValue(1.f);
+            lastDepths[m] = v;
+        }
+        haveLastDepths = true;
     }
 
     void draw(const DrawArgs &args) override
