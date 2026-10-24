@@ -88,8 +88,9 @@ file(COPY
     ${SURGE_RACK_DIR}/surge/resources/data/fx_presets
     ${SURGE_RACK_DIR}/res/surge_extra_data/fx_presets
     DESTINATION ${SURGE_MM_ASSETS}/build/surge-data)
-# The font the LCDs draw text with (the firmware loads TrueType fonts only)
+# The font the LCDs draw text with (the firmware loads TrueType fonts only), and its license
 file(COPY ${SURGE_RACK_DIR}/res/xt/fonts/quicksand/Quicksand-Bold.ttf
+    "${SURGE_RACK_DIR}/res/xt/fonts/quicksand/SIL Open Font License.txt"
     DESTINATION ${SURGE_MM_ASSETS}/xt/fonts/quicksand)
 
 # create_plugin() makes a presets/ dir next to the plugin.json it is given,
