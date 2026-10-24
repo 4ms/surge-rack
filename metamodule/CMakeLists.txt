@@ -51,6 +51,7 @@ target_sources(SurgeXT PRIVATE
 # would try to package the objects of an INTERFACE library.
 target_include_directories(SurgeXT PRIVATE
     ${SURGE_RACK_DIR}/src
+    ${CMAKE_CURRENT_LIST_DIR}
     ${SURGE_RACK_DIR}/libs/sst-rackhelpers/include
 )
 
