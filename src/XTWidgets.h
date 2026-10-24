@@ -772,7 +772,9 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
             angle = std::fmod(angle, 2 * M_PI);
             return angle;
         };
-        float angle = toAngle(uv, uq, 1.0);
+        // An angle past min/maxAngle would make the arcs below wrap around into a full circle
+        float angle = std::clamp(toAngle(uv, uq, 1.0), underlyerParamWidget->minAngle,
+                                 underlyerParamWidget->maxAngle);
         float modAngle = toAngle(pv, pq, 0.5);
 
         auto w = ringSize.y;

@@ -142,8 +142,9 @@ struct FX : modules::XTModule, sst::rackhelpers::module_connector::NeighborConne
         {
             if (fxstorage->p[i].ctrltype != ct_none)
                 lastParam = i;
-            configParam<modules::SurgeParameterParamQuantity>(FX_PARAM_0 + i, 0, 1,
-                                                              fxstorage->p[i].get_value_f01());
+            // Some surge defaults are outside the param's range (Reverb1 High Cut is 72, max 70)
+            configParam<modules::SurgeParameterParamQuantity>(
+                FX_PARAM_0 + i, 0, 1, std::clamp(fxstorage->p[i].get_value_f01(), 0.f, 1.f));
         }
 
         if (lastParam != FXConfig<fxType>::numParams() - 1)
