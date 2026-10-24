@@ -63,7 +63,8 @@ jobs:
   build-mac:
     name: mac
     needs: modify-plugin-version
-    runs-on: macos-latest
+    # macos-26's AppleClang 21 fails surge's -Werror build (fmt's deprecated literal operator)
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
