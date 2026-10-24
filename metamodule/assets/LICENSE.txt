@@ -1,0 +1,44 @@
+Surge XT for MetaModule
+=======================
+
+This is a port of Surge XT for VCV Rack (https://github.com/surge-synthesizer/surge-rack/)
+to the 4ms MetaModule. The port's source is at https://github.com/4ms/surge-rack/.
+
+
+Software
+--------
+
+The plugin software is licensed under the GNU General Public License v3 or later
+(GPL-3.0-or-later): https://www.gnu.org/licenses/gpl-3.0.en.html
+
+It is a derived work of Surge XT, Surge XT for VCV Rack, and VCV Rack (all GPL-3.0-or-later)
+and their dependencies. Copyright is held by the authors, as described in the git
+transaction logs of those projects.
+
+The wavetables and presets in build/surge-data/ are from Surge XT.
+
+
+Artwork
+-------
+
+The Surge XT for VCV Rack artwork (the panel and component SVGs in res/xt/ of Surge XT for
+VCV Rack) is copyright Steve and Pierre, and licensed under CC BY-NC-SA 4.0:
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+The images in this plugin are adaptations of that artwork, and are licensed under the same
+CC BY-NC-SA 4.0 license:
+
+  - faceplates/: renderings of the SurgeXTRack panels, using the VCV Rack
+	headless screenshot mode with the a mod to hide the controls, jacks, and
+	displays
+  - xt/*/components/: converted to PNG from the SurgeXTRack component SVGs, and
+	in some cases slightly modified
+  - metamodule/: PNGs created match the SurgeXTRack controls that are drawn with code
+
+
+Font
+----
+
+xt/fonts/quicksand/Quicksand-Bold.ttf is the Quicksand font, copyright (c) 2011 Andrew
+Paglinawan, with Reserved Font Name "Quicksand". It is licensed under the SIL Open Font
+License, Version 1.1; see xt/fonts/quicksand/SIL Open Font License.txt.
