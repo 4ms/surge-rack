@@ -1970,7 +1970,7 @@
                 "Mod 3 In": "Mod 3 In",
                 "Mod 4 In": "Mod 4 In"
             },
-            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 10"]
+            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Type", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 10"]
         },
         {
             "slug": "SurgeXTDelay",
