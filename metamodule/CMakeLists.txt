@@ -81,6 +81,9 @@ set(SURGE_MM_ASSETS ${CMAKE_CURRENT_BINARY_DIR}/assets)
 file(GLOB_RECURSE SURGE_MM_ASSET_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/assets/*)
 file(REMOVE_RECURSE ${SURGE_MM_ASSETS})
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${SURGE_MM_ASSETS})
+# The plugin's license notice, at the top level of the .mmplugin
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/LICENSE.txt DESTINATION ${SURGE_MM_ASSETS})
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/LICENSE.txt)
 file(COPY
     ${SURGE_RACK_DIR}/surge/resources/surge-shared/configuration.xml
     ${SURGE_RACK_DIR}/surge/resources/surge-shared/windows.wt
