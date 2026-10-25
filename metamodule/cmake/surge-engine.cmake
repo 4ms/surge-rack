@@ -29,13 +29,14 @@ set(SURGE_BUILD_TESTRUNNER FALSE CACHE BOOL "skip surge tests")
 set(SURGE_COMPILE_BLOCK_SIZE 8 CACHE STRING "surge compile block size")
 
 # Use the SDK's simde, which rack-interface also uses (as the Rack build uses the Rack SDK's simde).
-# The simulator's stand-in SDK dir doesn't have it, so use the firmware's copy of the SDK.
-if(DEFINED METAMODULE_FW_DIR)
-    set(SURGE_MM_SDK_DIR ${METAMODULE_FW_DIR}/metamodule-plugin-sdk)
+# The simulator's stand-in SDK dir doesn't have it, so use the firmware's copy of the SDK
+# (the simulator sets FWDIR to the firmware dir). FORCE, so a stale path in the cache is replaced.
+if(NOT SURGE_MM_HARDWARE AND DEFINED FWDIR)
+    set(SURGE_MM_SDK_DIR ${FWDIR}/metamodule-plugin-sdk)
 else()
     set(SURGE_MM_SDK_DIR ${METAMODULE_SDK_DIR})
 endif()
-set(SURGE_SIMDE_PATH "${SURGE_MM_SDK_DIR}/rack-interface/dep/include" CACHE STRING "surge simde is the MetaModule SDK simde")
+set(SURGE_SIMDE_PATH "${SURGE_MM_SDK_DIR}/rack-interface/dep/include" CACHE STRING "surge simde is the MetaModule SDK simde" FORCE)
 
 # The firmware does not export std::filesystem, so build ghc::filesystem into the plugin
 set(SST_PLUGININFRA_FILESYSTEM_FORCE_GHC ON CACHE BOOL "Force GHC filesystem implementation")
