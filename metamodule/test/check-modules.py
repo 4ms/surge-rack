@@ -1,6 +1,7 @@
-"""Smoke test: run each module in plugin-mm.json through the headless simulator.
+"""Check modules: run each module in plugin-mm.json through the headless simulator
+   and make sure they don't crash
 
-  python3 smoke.py SIMULATOR [SLUG ...]
+  python3 check-modules.py SIMULATOR [SLUG ...]
 
 Run it from a directory with a SurgeXTRack link to the plugin's staged assets (see README.md).
 In 1/In 2 are a stereo sine, or with gate=True, a 5V sine and a 4Hz 0-10V gate. By default

@@ -13,53 +13,75 @@ Patches for checking the Surge modules in the MetaModule headless simulator
 
 ## Building the simulator with this plugin
 
-This needs the `surge-rack-port` branch of the MetaModule firmware repo and of its
-`metamodule-plugin-sdk` submodule, which have the Rack interface changes the plugin needs
-(params added with `addChild()`, faceplates for panels drawn in code, `rack::event`)
-and the simulator's `--dump-elements` option.
+The surge-rack MetaModule plugins need v2.4.1-surge001 or later of the MetaModule firmware repo, which
+contains some widget fixes and the simulator's `--dump-elements` option.
 
+Clone the MetaModule firmware repo and check out a tag at least v2.4.1-surge001:
 ```
-cmake -S <metamodule>/simulator -B sim-build -G Ninja -DHEADLESS=ON \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+git clone https://github.com/4ms/metamodule
+cd metamodule
+git checkout v2.4.1-surge001
+git submodule update --init --recursive
+```
+
+From the metamodule repo, build the headless simulator:
+```
+cd simulator
+cmake --fresh --preset headless -DLOG_LEVEL=DEBUG \
     -DEXT_BUILTIN_BRAND_PATHS=<surge-rack>/metamodule \
     -DEXT_BUILTIN_BRAND_LIBNAMES=SurgeXT \
     -DEXT_BUILTIN_BRAND_SLUGS=SurgeXTRack
-cmake --build sim-build
+cmake --build build-headless
 ```
-
-Add `-DOMIT_BRAND_<Brand>=ON` for brands you don't need (see the simulator's `headless-min` preset).
 
 ## Running
 
-The headless simulator opens files relative to the current directory, and the
-modules read their data from `SurgeXTRack/build/surge-data/`, so run it from a
-directory with a `SurgeXTRack` link to the plugin's staged assets:
+Once the simulator is built, for modules that don't load wavetables from the
+filesystem, you can run a patch and get the output like this:
 
 ```
-mkdir run && cd run
-ln -s <sim-build>/builtins/SurgeXT/assets SurgeXTRack
-cp <surge-rack>/metamodule/test/patches/*.yml .
-python3 <surge-rack>/metamodule/test/wavtool.py gen sine.wav 2 220 330 0.5
-<sim-build>/simulator -p chorus.yml --in sine.wav --out out.wav -n 96000
-python3 <surge-rack>/metamodule/test/wavtool.py stats out.wav 0.5
+cd <surge-rack>/metamodule
+mkdir tmp && cd tmp
+
+# Generate an input wav file:
+python3 ../test/wavtool.py gen sine.wav 2 220 330 0.5
+
+# Run the headless simulator and get an output wav:
+<metamodule-repo>/simulator/build-headless/simulator -p ../test/patches/chorus.yml --in sine.wav --out out.wav -n 96000
+
+# Analyze the output wav:
+python3 ../test/wavtool.py stats out.wav 0.5
 ```
 
-`wavtool.py` writes and reads the simulator's 32-bit float WAV files (`gen`, `stats`, `diff`).
+If you need to test modules like Wavetable VCO which read files from the filesystem,
+then you have to link or copy them to `SurgeXTRack/build/surge-data/` relative to the current
+directory, as is shown in the next example.
 
-To check every module in `plugin-mm.json` (or just the slugs given), from the same directory:
+Often you will want to do a "smoke" test on all the modules (i.e. do the
+modules even run without crashing or generating NaN/inf). Do it like this:
 
 ```
-python3 <surge-rack>/metamodule/test/smoke.py <sim-build>/simulator [SLUG ...]
+cd <surge-rack>/metamodule
+mkdir tmp && cd tmp
+
+# Link the assets (wavetables) into the current dir
+ln -s <metamodule-repo>/simulator/build-headless/builtins/SurgeXT/assets SurgeXTRack
+
+# Run a patch for each module in the headless simulator:
+python3 ../test/check-modules.py <metamodule-repo>/simulator/build-headless/simulator [SLUG ...]
+
+# And/or run the headless simulator and get an output wav (see previous example):
+<metamodule-repo>/simulator/build-headless/simulator -p ../test/patches/unison.yml --in sine.wav --out out.wav -n 96000
 ```
 
-It runs each FX on a stereo sine, each VCO unpatched, and the other modules as set up in its
-`SETUPS` (e.g. the envelopes get a gate), and fails a module whose output is silent or has
-NaN/inf.
+check-modules.py runs a stereo sine into each FX, runs each VCO unpatched, and
+runs the other modules in specific ways (e.g. the envelopes get a gate). It
+fails a module whose output is silent or has NaN/inf.
 
 To print a module's elements (what the MetaModule shows and can map), and its heap use:
 
 ```
-<sim-headless-build>/simulator --dump-elements SurgeXTRack:SurgeXTFXChorus
+<metamodule-repo>/simulator/build-headless/simulator --dump-elements SurgeXTRack:SurgeXTFXChorus
 ```
 
 The element groups and names in `plugin-mm.json` (a "Mod N" group of the "ModN to X" params for
@@ -67,7 +89,13 @@ each modulation input) are written from these dumps. After adding modules, regen
 check them, from the same directory:
 
 ```
-python3 <surge-rack>/metamodule/scripts/element_layout.py <sim-headless-build>/simulator [SLUG ...]
-<sim-headless-build>/simulator --check-element-layout --plugin-mm-json <surge-rack>/metamodule/plugin-mm.json \
-    --plugin-json <surge-rack>/plugin.json
+cd <surge-rack>/metamodule
+
+# Generate plugin-mm.json (calls --dump-elements and parses it):
+python3 scripts/element_layout.py <metamodule-repo>/simulator/build-headless/simulator [SLUG ...]
+
+# run the simulator's checks on the plugin-mm.json
+<metamodule-repo>/simulator/build-headless/simulator --check-element-layout \
+    --plugin-mm-json plugin-mm.json \
+    --plugin-json ../plugin.json
 ```
