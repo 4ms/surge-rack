@@ -644,6 +644,9 @@ struct QuadLFO : modules::XTModule
                           "Random Trigger"});
             configSwitch(BIPOLAR_0 + i, 0, 1, 1, "Bipolar", {"Uni", "Bi"});
         }
+        // resetInteractionType() renames these, so they need a PortInfo
+        for (int i = 0; i < n_lfos; ++i)
+            configInput(TRIGGER_0 + i, "Trigger " + std::to_string(i + 1));
         for (int i = 0; i < n_mod_inputs; ++i)
             configInput(MOD_INPUT_0 + i, "Mod " + std::to_string(i));
 
