@@ -1,13 +1,7 @@
 TODO
 
 Check our submodules: any overlap with upstream?
-  - upstream uses c++20?
   - Look for anything that would be useful as an issue or PR
-
-
-Mod Buttons:
-  - could be AltParamAction? So just click, no mapping. Would need to redraw them (blue light when on), which AltParams don't support
-  - Action could toggle a variable in the module->button, and button step() reads that?
 
 LFO: 
   - can't change waveshape (clickable buttons at top of LCD)
@@ -27,5 +21,3 @@ stat(FX Presets) returned -1
 stat() on file fx_presets on vol 2 failed
 stat(fx_presets) returned -1
 
-
-Fix compile warnings
