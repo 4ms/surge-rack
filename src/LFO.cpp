@@ -443,7 +443,13 @@ struct LFOStepWidget : rack::Widget, style::StyleParticipant
     }
 };
 
+#ifdef METAMODULE
+// The MetaModule has no way to click on a glyph, and doesn't make a control for a plain
+// ParamWidget, so make it an LCD param knob that steps through the shapes
+struct LFOTypeWidget : widgets::PlotAreaKnob, style::StyleParticipant
+#else
 struct LFOTypeWidget : rack::app::ParamWidget, style::StyleParticipant
+#endif
 {
     widgets::BufferedDrawFunctionWidget *bdw{nullptr};
 
