@@ -29,8 +29,34 @@
 
 namespace sst::surgext_rack::widgets
 {
+#ifndef METAMODULE
 using BufferedDrawFunctionWidget = sst::rackhelpers::ui::BufferedDrawFunctionWidget;
 using BufferedDrawFunctionWidgetOnLayer = sst::rackhelpers::ui::BufferedDrawFunctionWidgetOnLayer;
+#else
+// Firmware v2.4.0's FramebufferWidget::draw() doesn't draw its children (later firmware does, as
+// in Rack), so these draw them
+struct BufferedDrawFunctionWidget : sst::rackhelpers::ui::BufferedDrawFunctionWidget
+{
+    using sst::rackhelpers::ui::BufferedDrawFunctionWidget::BufferedDrawFunctionWidget;
+    void draw(const DrawArgs &args) override { rack::widget::Widget::draw(args); }
+};
+
+struct BufferedDrawFunctionWidgetOnLayer : BufferedDrawFunctionWidget
+{
+    int layer{1};
+    BufferedDrawFunctionWidgetOnLayer(rack::Vec pos, rack::Vec sz, drawfn_t draw_, int ly = 1)
+        : BufferedDrawFunctionWidget(pos, sz, draw_), layer(ly)
+    {
+    }
+
+    void draw(const DrawArgs &args) override {}
+    void drawLayer(const DrawArgs &args, int dl) override
+    {
+        if (dl == layer)
+            BufferedDrawFunctionWidget::draw(args);
+    }
+};
+#endif
 
 struct DebugRect : rack::TransparentWidget
 {
@@ -731,7 +757,7 @@ struct SQPParamLabel : rack::ui::MenuLabel
 };
 
 #ifdef METAMODULE
-// On MetaModule each mod depth is a knob of its own
+// On MetaModule each mod depth is an invisible knob
 struct ModRingKnob : rack::app::SvgKnob, style::StyleParticipant, HasBDW
 #else
 struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
@@ -825,8 +851,7 @@ struct ModRingKnob : rack::app::Knob, style::StyleParticipant, HasBDW
         res->initParamQuantity();
 
 #ifdef METAMODULE
-        // The knob is invisible: a ModArcDisplay draws the ring, when its Mod button is on. The
-        // image is the size of the knob it's on (diameter is the ring around it, see LayoutEngine)
+		// draw the invisible knob
         auto knobSize = (int)std::round(diameter / rack::mm2px(1) - 2 * KnobN::ringWidth_MM);
         res->minAngle = -M_PI * (180 - 40) / 180;
         res->maxAngle = M_PI * (180 - 40) / 180;
@@ -1529,9 +1554,7 @@ struct ToggleParamButton : GlowOverlayHoverButton<rack::app::ParamWidget>
 };
 
 #ifdef METAMODULE
-// The LCD controls draw themselves in the LCD, which the MetaModule doesn't draw yet, and it
-// would draw a plain rack::app::Knob as a default knob. As an SvgKnob with a transparent image,
-// they're listed and can be mapped, but aren't drawn. (The switches aren't drawn either way.)
+// Treat the LCD controls as invible knobs
 struct PlotAreaKnob : public rack::app::SvgKnob
 {
     PlotAreaKnob()
@@ -2853,7 +2876,7 @@ struct VerticalSlider : rack::app::SliderKnob, style::StyleParticipant, Modulata
 #endif
 
 #ifdef METAMODULE
-// On MetaModule each mod depth is a slider of its own
+// On MetaModule each mod depth is an invisible slider
 struct VerticalSliderModulator : rack::app::SvgSlider, style::StyleParticipant, HasBDW
 #else
 struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasBDW
@@ -2972,8 +2995,7 @@ struct VerticalSliderModulator : rack::SliderKnob, style::StyleParticipant, HasB
         res->box.size = rack::Vec(width, height);
         res->barsSize = res->box.size;
 #ifdef METAMODULE
-        // The slider is invisible, and the size of the slider it's on: a ModArcDisplay draws
-        // the bars, when its Mod button is on
+        // The slider is invisible and the size of the main slider it modifies
         auto compDir = res->style()->skinAssetDir() + "/components";
         auto bg = heightMM > 19 ? "/fader-mod-invisible-25.svg" : "/fader-mod-invisible.svg";
         res->setBackgroundSvg(rack::Svg::load(rack::asset::plugin(pluginInstance, compDir + bg)));
