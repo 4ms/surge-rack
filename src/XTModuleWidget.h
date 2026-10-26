@@ -249,6 +249,16 @@ template <typename M, bool useAnimValues = true> struct DirtyHelper
         return v;
     }
 };
+
+// The Model for the module widget W and its module W::M
+template <typename W> rack::Model *createXTModel(const std::string &slug)
+{
+#ifdef METAMODULE
+    return rack::createModel<typename W::M, WithFaceplate<W>>(slug);
+#else
+    return rack::createModel<typename W::M, W>(slug);
+#endif
+}
 } // namespace sst::surgext_rack::widgets
 
 #endif

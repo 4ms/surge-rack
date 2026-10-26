@@ -688,5 +688,5 @@ WaveshaperWidget::WaveshaperWidget(WaveshaperWidget::M *module) : XTModuleWidget
 // namespace sst::surgext_rack::vcf::ui
 
 rack::Model *modelSurgeWaveshaper =
-    rack::createModel<sst::surgext_rack::waveshaper::ui::WaveshaperWidget::M,
-                      sst::surgext_rack::waveshaper::ui::WaveshaperWidget>("SurgeXTWaveshaper");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::waveshaper::ui::WaveshaperWidget>(
+        "SurgeXTWaveshaper");

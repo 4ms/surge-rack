@@ -197,5 +197,5 @@ DelayWidget::DelayWidget(DelayWidget::M *module) : XTModuleWidget()
 // namespace sst::surgext_rack::vcf::ui
 
 rack::Model *modelSurgeDelay =
-    rack::createModel<sst::surgext_rack::delay::ui::DelayWidget::M,
-                      sst::surgext_rack::delay::ui::DelayWidget>("SurgeXTDelay");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::delay::ui::DelayWidget>(
+        "SurgeXTDelay");

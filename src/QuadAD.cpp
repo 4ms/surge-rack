@@ -559,5 +559,5 @@ QuadADWidget::QuadADWidget(sst::surgext_rack::quadad::ui::QuadADWidget::M *modul
 // namespace sst::surgext_rack::quadad::ui
 
 rack::Model *modelQuadAD =
-    rack::createModel<sst::surgext_rack::quadad::ui::QuadADWidget::M,
-                      sst::surgext_rack::quadad::ui::QuadADWidget>("SurgeXTQuadAD");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::quadad::ui::QuadADWidget>(
+        "SurgeXTQuadAD");

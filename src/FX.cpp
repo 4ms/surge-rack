@@ -275,7 +275,7 @@ template <int fxType> FXWidget<fxType>::FXWidget(FXWidget<fxType>::M *module)
 namespace fxui = sst::surgext_rack::fx::ui;
 
 #define FXMODEL(type, nm)                                                                          \
-    rack::Model *modelFX##nm = rack::createModel<fxui::FXWidget<type>::M, fxui::FXWidget<type>>(   \
+    rack::Model *modelFX##nm = sst::surgext_rack::widgets::createXTModel<fxui::FXWidget<type>>(    \
         std::string("SurgeXTFX") + #nm);
 
 FXMODEL(fxt_reverb, Reverb);

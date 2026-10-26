@@ -299,5 +299,5 @@ ModMatrixWidget::ModMatrixWidget(ModMatrixWidget::M *module) : XTModuleWidget()
 // namespace sst::surgext_rack::vcf::ui
 
 rack::Model *modelSurgeModMatrix =
-    rack::createModel<sst::surgext_rack::modmatrix::ui::ModMatrixWidget::M,
-                      sst::surgext_rack::modmatrix::ui::ModMatrixWidget>("SurgeXTModMatrix");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::modmatrix::ui::ModMatrixWidget>(
+        "SurgeXTModMatrix");

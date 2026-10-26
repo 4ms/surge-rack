@@ -331,9 +331,9 @@ MixerWidget<useKnobs>::MixerWidget(MixerWidget::M *module) : XTModuleWidget()
 // namespace sst::surgext_rack::vcf::ui
 
 rack::Model *modelSurgeMixer =
-    rack::createModel<sst::surgext_rack::mixer::ui::MixerWidget<true>::M,
-                      sst::surgext_rack::mixer::ui::MixerWidget<true>>("SurgeXTMixer");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::mixer::ui::MixerWidget<true>>(
+        "SurgeXTMixer");
 
 rack::Model *modelSurgeMixerSlider =
-    rack::createModel<sst::surgext_rack::mixer::ui::MixerWidget<false>::M,
-                      sst::surgext_rack::mixer::ui::MixerWidget<false>>("SurgeXTMixerSlider");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::mixer::ui::MixerWidget<false>>(
+        "SurgeXTMixerSlider");

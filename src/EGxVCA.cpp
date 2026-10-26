@@ -623,5 +623,5 @@ EGxVCAWidget::EGxVCAWidget(sst::surgext_rack::egxvca::ui::EGxVCAWidget::M *m)
 } // namespace sst::surgext_rack::egxvca::ui
 
 rack::Model *modelEGxVCA =
-    rack::createModel<sst::surgext_rack::egxvca::ui::EGxVCAWidget::M,
-                      sst::surgext_rack::egxvca::ui::EGxVCAWidget>("SurgeXTEGxVCA");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::egxvca::ui::EGxVCAWidget>(
+        "SurgeXTEGxVCA");

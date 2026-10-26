@@ -276,12 +276,9 @@ UnisonHelperCVExpanderWidget::UnisonHelperCVExpanderWidget(UnisonHelperCVExpande
 
 } // namespace sst::surgext_rack::unisonhelper::ui
 
-rack::Model *modelUnisonHelper =
-    rack::createModel<sst::surgext_rack::unisonhelper::ui::UnisonHelperWidget::M,
-                      sst::surgext_rack::unisonhelper::ui::UnisonHelperWidget>(
-        "SurgeXTUnisonHelper");
+rack::Model *modelUnisonHelper = sst::surgext_rack::widgets::createXTModel<
+    sst::surgext_rack::unisonhelper::ui::UnisonHelperWidget>("SurgeXTUnisonHelper");
 
-rack::Model *modelUnisonHelperCVExpander =
-    rack::createModel<sst::surgext_rack::unisonhelper::ui::UnisonHelperCVExpanderWidget::M,
-                      sst::surgext_rack::unisonhelper::ui::UnisonHelperCVExpanderWidget>(
-        "SurgeXTUnisonHelperCVExpander");
+rack::Model *modelUnisonHelperCVExpander = sst::surgext_rack::widgets::createXTModel<
+    sst::surgext_rack::unisonhelper::ui::UnisonHelperCVExpanderWidget>(
+    "SurgeXTUnisonHelperCVExpander");

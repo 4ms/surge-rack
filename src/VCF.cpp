@@ -827,5 +827,5 @@ VCFWidget::VCFWidget(VCFWidget::M *module) : XTModuleWidget()
 
 // namespace sst::surgext_rack::vcf::ui
 
-rack::Model *modelSurgeVCF = rack::createModel<sst::surgext_rack::vcf::ui::VCFWidget::M,
-                                               sst::surgext_rack::vcf::ui::VCFWidget>("SurgeXTVCF");
+rack::Model *modelSurgeVCF =
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::vcf::ui::VCFWidget>("SurgeXTVCF");

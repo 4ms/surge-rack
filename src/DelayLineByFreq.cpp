@@ -164,6 +164,5 @@ DelayLineByFreqWidget::DelayLineByFreqWidget(DelayLineByFreqWidget::M *module) :
 // namespace sst::surgext_rack::vcf::ui
 
 rack::Model *modelSurgeDelayLineByFreq =
-    rack::createModel<sst::surgext_rack::delay::ui::DelayLineByFreqWidget::M,
-                      sst::surgext_rack::delay::ui::DelayLineByFreqWidget>(
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::delay::ui::DelayLineByFreqWidget>(
         "SurgeXTDelayLineByFreq");

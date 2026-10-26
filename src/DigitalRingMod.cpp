@@ -195,7 +195,5 @@ DigitalRingModWidget::DigitalRingModWidget(DigitalRingModWidget::M *module) : XT
 
 // namespace sst::surgext_rack::vcf::ui
 
-rack::Model *modelSurgeDigitalRingMods =
-    rack::createModel<sst::surgext_rack::digitalrm::ui::DigitalRingModWidget::M,
-                      sst::surgext_rack::digitalrm::ui::DigitalRingModWidget>(
-        "SurgeXTDigitalRingMod");
+rack::Model *modelSurgeDigitalRingMods = sst::surgext_rack::widgets::createXTModel<
+    sst::surgext_rack::digitalrm::ui::DigitalRingModWidget>("SurgeXTDigitalRingMod");

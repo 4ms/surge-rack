@@ -197,7 +197,5 @@ DelayLineByFreqExpandedWidget::DelayLineByFreqExpandedWidget(
 
 // namespace sst::surgext_rack::vcf::ui
 
-rack::Model *modelSurgeDelayLineByFreqExpanded =
-    rack::createModel<sst::surgext_rack::delay::ui::DelayLineByFreqExpandedWidget::M,
-                      sst::surgext_rack::delay::ui::DelayLineByFreqExpandedWidget>(
-        "SurgeXTDelayLineByFreqExpanded");
+rack::Model *modelSurgeDelayLineByFreqExpanded = sst::surgext_rack::widgets::createXTModel<
+    sst::surgext_rack::delay::ui::DelayLineByFreqExpandedWidget>("SurgeXTDelayLineByFreqExpanded");

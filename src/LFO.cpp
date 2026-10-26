@@ -1663,5 +1663,5 @@ void LFOWidget::step()
 
 // namespace sst::surgext_rack::vcf::ui
 
-rack::Model *modelSurgeLFO = rack::createModel<sst::surgext_rack::lfo::ui::LFOWidget::M,
-                                               sst::surgext_rack::lfo::ui::LFOWidget>("SurgeXTLFO");
+rack::Model *modelSurgeLFO =
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::lfo::ui::LFOWidget>("SurgeXTLFO");

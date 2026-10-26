@@ -146,4 +146,25 @@ struct LCDDisplay : public rack::widget::Widget
     }
 };
 
+// A module widget that sets its panel SVG to the module's faceplate, res/faceplates/<slug>.svg
+// (the faceplate PNG is at faceplates/<slug>.png in the plugin). The modules draw their panels,
+// so they don't set one, and older firmware (v2.4 and earlier) finds the faceplate from the panel
+// SVG only.
+// The panel is set last, so the displays the widget adds keep their indices.
+template <typename W> struct WithFaceplate : W
+{
+    explicit WithFaceplate(typename W::M *module) : W(module)
+    {
+        auto *model = rack::RegisteredModel<typename W::M, WithFaceplate<W>>::model;
+        if (!model)
+            return;
+
+        // Keep the widget's size: setPanel() sets it to the faceplate's
+        auto size = this->box.size;
+        this->setPanel(rack::Svg::load(
+            rack::asset::plugin(pluginInstance, "res/faceplates/" + model->slug + ".svg")));
+        this->box.size = size;
+    }
+};
+
 } // namespace sst::surgext_rack::widgets

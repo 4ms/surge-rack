@@ -1455,35 +1455,30 @@ VCOWidget<oscType>::VCOWidget(VCOWidget<oscType>::M *module) : XTModuleWidget()
 namespace vcoui = sst::surgext_rack::vco::ui;
 
 rack::Model *modelVCOClassic =
-    rack::createModel<vcoui::VCOWidget<ot_classic>::M, vcoui::VCOWidget<ot_classic>>(
-        "SurgeXTOSCClassic");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_classic>>("SurgeXTOSCClassic");
 
 rack::Model *modelVCOModern =
-    rack::createModel<vcoui::VCOWidget<ot_modern>::M, vcoui::VCOWidget<ot_modern>>(
-        "SurgeXTOSCModern");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_modern>>("SurgeXTOSCModern");
 
 rack::Model *modelVCOWavetable =
-    rack::createModel<vcoui::VCOWidget<ot_wavetable>::M, vcoui::VCOWidget<ot_wavetable>>(
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_wavetable>>(
         "SurgeXTOSCWavetable");
 rack::Model *modelVCOWindow =
-    rack::createModel<vcoui::VCOWidget<ot_window>::M, vcoui::VCOWidget<ot_window>>(
-        "SurgeXTOSCWindow");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_window>>("SurgeXTOSCWindow");
 
 rack::Model *modelVCOSine =
-    rack::createModel<vcoui::VCOWidget<ot_sine>::M, vcoui::VCOWidget<ot_sine>>("SurgeXTOSCSine");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_sine>>("SurgeXTOSCSine");
 rack::Model *modelVCOFM2 =
-    rack::createModel<vcoui::VCOWidget<ot_FM2>::M, vcoui::VCOWidget<ot_FM2>>("SurgeXTOSCFM2");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_FM2>>("SurgeXTOSCFM2");
 rack::Model *modelVCOFM3 =
-    rack::createModel<vcoui::VCOWidget<ot_FM3>::M, vcoui::VCOWidget<ot_FM3>>("SurgeXTOSCFM3");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_FM3>>("SurgeXTOSCFM3");
 
 rack::Model *modelVCOSHNoise =
-    rack::createModel<vcoui::VCOWidget<ot_shnoise>::M, vcoui::VCOWidget<ot_shnoise>>(
-        "SurgeXTOSCSHNoise");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_shnoise>>("SurgeXTOSCSHNoise");
 
 rack::Model *modelVCOString =
-    rack::createModel<vcoui::VCOWidget<ot_string>::M, vcoui::VCOWidget<ot_string>>(
-        "SurgeXTOSCString");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_string>>("SurgeXTOSCString");
 rack::Model *modelVCOAlias =
-    rack::createModel<vcoui::VCOWidget<ot_alias>::M, vcoui::VCOWidget<ot_alias>>("SurgeXTOSCAlias");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_alias>>("SurgeXTOSCAlias");
 rack::Model *modelVCOTwist =
-    rack::createModel<vcoui::VCOWidget<ot_twist>::M, vcoui::VCOWidget<ot_twist>>("SurgeXTOSCTwist");
+    sst::surgext_rack::widgets::createXTModel<vcoui::VCOWidget<ot_twist>>("SurgeXTOSCTwist");

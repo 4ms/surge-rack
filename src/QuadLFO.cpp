@@ -502,5 +502,5 @@ QuadLFOWidget::QuadLFOWidget(sst::surgext_rack::quadlfo::ui::QuadLFOWidget::M *m
 } // namespace sst::surgext_rack::quadlfo::ui
 
 rack::Model *modelQuadLFO =
-    rack::createModel<sst::surgext_rack::quadlfo::ui::QuadLFOWidget::M,
-                      sst::surgext_rack::quadlfo::ui::QuadLFOWidget>("SurgeXTQuadLFO");
+    sst::surgext_rack::widgets::createXTModel<sst::surgext_rack::quadlfo::ui::QuadLFOWidget>(
+        "SurgeXTQuadLFO");
