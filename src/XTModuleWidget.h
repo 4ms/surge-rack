@@ -116,17 +116,27 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
 #endif
 
 #ifdef METAMODULE
-    // MetaModule makes a graphic display of each child widget that isn't a param, port, or
-    // light. The panel art (background, labels) is in the faceplate image there, and the LCDs
-    // are drawn by addLCDDisplays(), so add those widgets as plain children.
+	// MetaModule needs addParam() and addOutput/Input() to be called instead of addChild(),
+	// for actual params and ports.
+	// Route addChild() calls to appropriate place
     using rack::ModuleWidget::addChild;
     void addChild(rack::widget::Widget *w)
     {
         if (auto *sw = dynamic_cast<widgets::ActivateKnobSwitch *>(w))
             sw->addFrames();
 
-        if (dynamic_cast<rack::app::ParamWidget *>(w) || dynamic_cast<rack::app::PortWidget *>(w) ||
-            dynamic_cast<rack::app::LightWidget *>(w))
+        if (auto *pw = dynamic_cast<rack::app::ParamWidget *>(w))
+            rack::ModuleWidget::addParam(pw);
+        else if (auto *port = dynamic_cast<rack::app::PortWidget *>(w))
+        {
+            if (port->type == rack::engine::Port::INPUT)
+                rack::ModuleWidget::addInput(port);
+            else
+                rack::ModuleWidget::addOutput(port);
+        }
+        else if (auto *lw = dynamic_cast<rack::app::ModuleLightWidget *>(w))
+            rack::ModuleWidget::addChild(lw);
+        else if (dynamic_cast<rack::app::LightWidget *>(w))
             rack::ModuleWidget::addChild(w);
         else
             rack::widget::Widget::addChild(w);
