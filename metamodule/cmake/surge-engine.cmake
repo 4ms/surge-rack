@@ -70,8 +70,11 @@ if(SURGE_MM_HARDWARE)
     target_include_directories(filesystem BEFORE PRIVATE
         ${SURGE_MM_SDK_DIR}/core-interface/filesystem
         ${SURGE_MM_COMPAT_DIR}/posix)
-    target_compile_options(filesystem PRIVATE "SHELL:-include ${SURGE_MM_COMPAT_DIR}/posix/ghc_prefix.h")
+    target_compile_definitions(filesystem PRIVATE SURGE_MM_HARDWARE)
 endif()
+# ghc::filesystem lists the Surge data in the plugin's assets from an index (see
+# compat/posix/asset_dirs.h). Also in the simulator, so it runs the same code as hardware.
+target_compile_options(filesystem PRIVATE "SHELL:-include ${SURGE_MM_COMPAT_DIR}/posix/ghc_prefix.h")
 
 # surge-common only links simde for APPLE/UNIX/WIN32 targets
 target_link_libraries(surge-common PUBLIC surge::simde)

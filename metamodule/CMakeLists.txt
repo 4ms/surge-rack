@@ -91,6 +91,31 @@ file(COPY
     ${SURGE_RACK_DIR}/surge/resources/data/fx_presets
     ${SURGE_RACK_DIR}/res/surge_extra_data/fx_presets
     DESTINATION ${SURGE_MM_ASSETS}/build/surge-data)
+# An index of the Surge data, which ghc::filesystem lists directories from (see
+# compat/posix/asset_dirs.h): each path relative to build/surge-data, whether it's a directory, and
+# its size. Written only when it changes, so the plugin isn't rebuilt on every configure.
+set(SURGE_MM_DATA ${SURGE_MM_ASSETS}/build/surge-data)
+file(GLOB_RECURSE SURGE_MM_DATA_PATHS LIST_DIRECTORIES true RELATIVE ${SURGE_MM_DATA} ${SURGE_MM_DATA}/*)
+list(SORT SURGE_MM_DATA_PATHS)
+set(SURGE_MM_DATA_INDEX "")
+foreach(path IN LISTS SURGE_MM_DATA_PATHS)
+    if(IS_DIRECTORY ${SURGE_MM_DATA}/${path})
+        set(is_dir true)
+        set(size 0)
+    else()
+        set(is_dir false)
+        file(SIZE ${SURGE_MM_DATA}/${path} size)
+    endif()
+    string(REPLACE "\\" "\\\\" path "${path}")
+    string(REPLACE "\"" "\\\"" path "${path}")
+    string(APPEND SURGE_MM_DATA_INDEX "{\"${path}\", ${is_dir}, ${size}},\n")
+endforeach()
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/surge_data_index.inc.tmp "${SURGE_MM_DATA_INDEX}")
+configure_file(${CMAKE_CURRENT_BINARY_DIR}/surge_data_index.inc.tmp
+    ${CMAKE_CURRENT_BINARY_DIR}/gen/surge_data_index.inc COPYONLY)
+target_sources(SurgeXT PRIVATE ${CMAKE_CURRENT_LIST_DIR}/compat/posix/asset_dirs.cc)
+target_include_directories(SurgeXT PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/gen)
+
 # The font the LCDs draw text with (the firmware loads TrueType fonts only), and its license
 file(COPY ${SURGE_RACK_DIR}/res/xt/fonts/quicksand/Quicksand-Bold.ttf
     "${SURGE_RACK_DIR}/res/xt/fonts/quicksand/SIL Open Font License.txt"
