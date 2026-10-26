@@ -1026,7 +1026,6 @@ struct GroupLabel : rack::widget::TransparentWidget, style::StyleParticipant
         nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_TOP);
         nvgText(vg, box.size.x * 0.5, 0, label.c_str(), nullptr);
         nvgTextBounds(vg, box.size.x * 0.5, 0, label.c_str(), nullptr, textBox);
-        nvgFill(vg);
 
         float yline = (textBox[1] + textBox[3]) * 0.5 - rack::mm2px(0.1);
         float x0 = rack::mm2px(1.3);

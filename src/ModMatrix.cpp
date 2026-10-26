@@ -128,7 +128,6 @@ struct MatrixDisplay : rack::Widget, style::StyleParticipant
                 nvgFillColor(vg, style()->getColor(style::XTStyle::PLOT_MARKS));
 
             nvgText(vg, p.x, p.y, std::to_string(i + 1).c_str(), nullptr);
-            nvgFill(vg);
         }
 
         // row headers
@@ -144,7 +143,6 @@ struct MatrixDisplay : rack::Widget, style::StyleParticipant
             else
                 nvgFillColor(vg, style()->getColor(style::XTStyle::PLOT_MARKS));
             nvgText(vg, p.x, p.y, std::to_string(i + 1).c_str(), nullptr);
-            nvgFill(vg);
         }
 
         for (int i = 0; i < M::n_mod_inputs; ++i)
