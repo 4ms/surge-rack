@@ -244,7 +244,11 @@ template <int fxType> FXWidget<fxType>::FXWidget(FXWidget<fxType>::M *module)
                               fx::FXLayoutHelper::knobGap16_MM);
         auto fl =
             widgets::ThereAreFourLights<>::createCentered({xc, yc}, module, M::FX_PARAM_0 + 1);
+#ifdef METAMODULE
+        fl->addAsSlideSwitch(this);
+#else
         addParam(fl);
+#endif
 
         auto halfSize = (14 - 9) * 0.5f;
         auto boxx0 = xc - rack::mm2px(layout::LayoutConstants::columnWidth_MM * 0.5 + halfSize);

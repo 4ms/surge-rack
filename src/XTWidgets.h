@@ -2363,7 +2363,7 @@ struct LCDBackground : public rack::widget::TransparentWidget, style::StyleParti
 
 template <int nLights = 4>
 #ifdef METAMODULE
-// The MetaModule draws a slide switch with these images (see createCentered())
+// The MetaModule draws a slide switch
 struct ThereAreFourLights : rack::app::SvgSlider, style::StyleParticipant
 #else
 struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
@@ -2396,9 +2396,6 @@ struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
         res->addChild(res->bdwRings);
 
 #ifdef METAMODULE
-        // A slide switch with a position for each light (the MetaModule gives a param that isn't
-        // snapped a position for each label), lowest at the bottom. The images are made by
-        // metamodule/scripts/switch_images.py.
         auto center = res->box.getCenter();
         res->setBackgroundSvg(
             rack::Svg::load(rack::asset::plugin(pluginInstance, "res/metamodule/four-lights-bg.svg")));
@@ -2415,6 +2412,33 @@ struct ThereAreFourLights : rack::app::SliderKnob, style::StyleParticipant
 #endif
         return res;
     }
+
+#ifdef METAMODULE
+    // Adds this to the module widget as a slide switch (snapEnabled, min->max integer values)
+	// then reverts the values back to what the module will look for. 
+    void addAsSlideSwitch(rack::app::ModuleWidget *mw)
+    {
+        auto *pq = getParamQuantity();
+        if (!pq)
+        {
+            mw->addParam(this);
+            return;
+        }
+
+        auto minValue = pq->minValue, maxValue = pq->maxValue, defaultValue = pq->defaultValue;
+        pq->defaultValue = pq->toScaled(defaultValue) * (nLights - 1);
+        pq->minValue = 0;
+        pq->maxValue = nLights - 1;
+        pq->snapEnabled = true;
+
+        mw->addParam(this);
+
+        pq->minValue = minValue;
+        pq->maxValue = maxValue;
+        pq->defaultValue = defaultValue;
+        pq->snapEnabled = false;
+    }
+#endif
 
     void drawRings(NVGcontext *vg)
     {
