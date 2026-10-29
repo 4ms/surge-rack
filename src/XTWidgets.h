@@ -1562,15 +1562,24 @@ struct PlotAreaKnob : public rack::app::SvgKnob
         setSvg(rack::Svg::load(rack::asset::plugin(pluginInstance, "res/metamodule/lcd-param.svg")));
     }
 
-    // The MetaModule turns a knob with an integer display multiplier N (and no units) N steps over
-    // its range, one per click. For an int Surge param, make each step one of its values. (The
-    // range can be part of the param's, like the VCOs' unison voices.)
+	// Fix 2-position Surge params on MetaModule: need to enable snap so MM toggles between two states.
     void initParamQuantity() override
     {
         SvgKnob::initParamQuantity();
         auto *pq = dynamic_cast<modules::SurgeParameterParamQuantity *>(getParamQuantity());
         auto *par = pq ? pq->surgepar() : nullptr;
-        if (par && par->valtype == vt_int)
+        if (!par || par->valtype != vt_int)
+            return;
+
+        if (par->val_max.i - par->val_min.i == 1 && pq->minValue == 0 && pq->maxValue == 1)
+        {
+            pq->snapEnabled = true;
+            pq->labels.clear();
+            for (int i = 0; i < 2; ++i)
+                pq->labels.push_back(
+                    pq->getDisplayValueStringForValue(Parameter::intScaledToFloat(i, 1)));
+        }
+        else
             pq->displayMultiplier =
                 std::round((pq->maxValue - pq->minValue) * (par->val_max.i - par->val_min.i));
     }
