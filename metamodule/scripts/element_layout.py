@@ -8,7 +8,8 @@ elements with the simulator's --dump-elements, then sets the module's entry in p
     first, then the "ModN to X" params in the order of their knobs, then the "Mod N In" jack
   - "names": "X" for each "ModN to X" param, "Mod N In" for each modulation input jack,
     "X Mod Display" for the display behind the X knob (which draws its mod depth arcs),
-    "LCD Display" for the one other display, and shorter names for some long jack names
+    "LCD Display" for the one other display, shorter names for some long jack names, and the
+    names in NAMES (which a knob's mod display also takes)
   - "order": the panel's knobs and sliders, then its switches, then the params on the LCD,
     each in reading order, then the Mod groups, then the jacks in reading order, then the
     LCD Display. Everything else follows, in the module's own order.
@@ -29,6 +30,24 @@ MOD_JACK = re.compile(r'^(Modulation Signal|Modulator|Mod Input|Mod) \d+( In)?$'
 SHORT_NAMES = [
     (re.compile(r'^Left \(or Mono merged\) Out$'), 'Left/Mono Out'),
 ]
+
+# Names for elements whose own names are unclear, by module slug, then by element index
+# ("param:N", "in:N", "out:N")
+NAMES = {
+    'SurgeXTFXBonsai': {
+        'param:5': 'Saturation',
+        'param:8': 'Dull',
+        'param:1': 'Bass Boost Amount',
+        'param:2': 'Bass Boost Dist.',
+        'param:6': 'Noise Sens.',
+        'param:7': 'Noise Gain',
+        'param:0': 'Input Gain',
+        'param:9': 'Output Gain',
+        'param:10': 'Mix',
+        'param:3': 'Bias Filter',
+        'param:4': 'Type',
+    },
+}
 
 ELEMENT = re.compile(r'^\[\s*\d+\] (\S+)\s+x=\s*(\S+) y=\s*(\S+) w=\s*(\S+) h=\s*(\S+) "([^"]*)"'
                      r'(?: (param|input|output|light)=(\d+))?')
@@ -76,16 +95,27 @@ def reading_order(elements):
     return [el for row in rows for el in sorted(row, key=lambda el: el.center[0])]
 
 
-def layout(elements):
+def layout(slug, elements):
+    # Leave out the panel (the faceplate, see WithFaceplate): an unnamed display covering the module
+    elements = [el for el in elements if not (el.kind == DISPLAY and not el.name and el.x == 0 and el.y == 0)]
+
     # The firmware matches names ignoring case
     count = {}
     for el in elements:
         count[el.name.lower()] = count.get(el.name.lower(), 0) + 1
 
+    def index(el):
+        return None if el.id is None else f'{REF_PREFIX[el.id_kind]}:{el.id}'
+
     def ref(el):
         if count[el.name.lower()] == 1 or el.id is None:
             return el.name
-        return f'{REF_PREFIX[el.id_kind]}:{el.id}'
+        return index(el)
+
+    by_index = {index(el): el for el in elements if el.id is not None}
+    overrides = NAMES.get(slug, {})
+    if unknown := overrides.keys() - by_index.keys():
+        sys.exit(f'{slug}: NAMES has elements it doesn\'t have: {", ".join(sorted(unknown))}')
 
     # The mod params of a knob are at its center, and so is the display behind it
     mod_targets = {}
@@ -94,9 +124,19 @@ def layout(elements):
         if m and el.id_kind == 'param':
             mod_targets.setdefault(el.center, m.group(2))
 
-    def mod_target(el):
+    def mod_target_center(el):
         cx, cy = el.center
-        return next((t for (x, y), t in mod_targets.items() if abs(x - cx) < 0.05 and abs(y - cy) < 0.05), None)
+        return next((c for c in mod_targets if abs(c[0] - cx) < 0.05 and abs(c[1] - cy) < 0.05), None)
+
+    def mod_target(el):
+        center = mod_target_center(el)
+        return None if center is None else mod_targets[center]
+
+    # A knob's mod display takes the knob's name from NAMES
+    for i, name in overrides.items():
+        el = by_index[i]
+        if not MOD_PARAM.match(el.name) and (center := mod_target_center(el)):
+            mod_targets[center] = name
 
     shows = {}
     mod_params = {}
@@ -147,6 +187,10 @@ def layout(elements):
     order += [ref(el) for el in reading_order(jacks)]
     order += [ref(el) for el in lcds if len(lcds) == 1]
 
+    # NAMES first (and instead of any made above)
+    named = {ref(by_index[i]): name for i, name in overrides.items() if name != by_index[i].name}
+    names = named | {r: name for r, name in names.items() if r not in named}
+
     return groups, names, order
 
 
@@ -168,7 +212,7 @@ def main():
         slug = module['slug']
         if only and slug not in only:
             continue
-        groups, display, order = layout(elements_of(sim, slug))
+        groups, display, order = layout(slug, elements_of(sim, slug))
         for key, val in (('groups', groups), ('names', display), ('order', order)):
             if val:
                 module[key] = val
