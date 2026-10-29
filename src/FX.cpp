@@ -24,6 +24,8 @@
 
 namespace sst::surgext_rack::fx::ui
 {
+template <int fxType> struct FXPresetSelector;
+
 template <int fxType> struct FXWidget : public widgets::XTModuleWidget
 {
     typedef FX<fxType> M;
@@ -32,6 +34,7 @@ template <int fxType> struct FXWidget : public widgets::XTModuleWidget
     std::array<std::array<rack::Widget *, M::n_mod_inputs>, n_fx_params> overlays;
     std::array<widgets::ModulatableKnob *, n_fx_params> underKnobs;
     std::array<widgets::ModToggleButton *, M::n_mod_inputs> toggles;
+    FXPresetSelector<fxType> *presetSelector{nullptr};
 
     void selectModulator(int mod) override
     {
@@ -44,6 +47,23 @@ template <int fxType> struct FXWidget : public widgets::XTModuleWidget
         if (!module)
             return;
         auto xtm = static_cast<FX<fxType> *>(module);
+
+#ifdef METAMODULE
+        // The LCD's preset arrows and menu can't be clicked on the MetaModule
+        if (!xtm->presets.empty())
+        {
+            menu->addChild(rack::createSubmenuItem("Presets", "", [this, xtm](auto *sm) {
+                int idx{0};
+                for (const auto &p : xtm->presets)
+                {
+                    sm->addChild(
+                        rack::createMenuItem(p.name, CHECKMARK(xtm->loadedPreset == idx),
+                                             [this, idx] { presetSelector->setValue(idx); }));
+                    idx++;
+                }
+            }));
+        }
+#endif
 
         menu->addChild(new rack::ui::MenuSeparator);
         menu->addChild(
@@ -262,6 +282,7 @@ template <int fxType> FXWidget<fxType>::FXWidget(FXWidget<fxType>::M *module)
 
     auto wts = FXPresetSelector<fxType>::create(module);
     addChild(wts);
+    presetSelector = wts;
 
     engine_t::addModulationSection(this, M::n_mod_inputs, M::MOD_INPUT_0);
 
