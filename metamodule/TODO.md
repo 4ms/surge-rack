@@ -3,9 +3,6 @@ TODO
 Check our submodules: any overlap with upstream?
   - Look for anything that would be useful as an issue or PR
 
-LFO: 
-  - can't change waveshape (clickable buttons at top of LCD)
-
 Fix lots of console errors with paths:
  - can't we just add those files to the plugin?
 stat() on file SurgeXTUserDefaults.xml on vol 2 failed
