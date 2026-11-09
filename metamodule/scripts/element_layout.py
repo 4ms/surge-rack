@@ -47,6 +47,16 @@ NAMES = {
         'param:3': 'Bias Filter',
         'param:4': 'Type',
     },
+    'SurgeXTFXDistortion': {
+        'param:0': 'Pre Gain',
+        'param:1': 'Pre Frequency',
+        'param:2': 'Pre Bandwidth',
+        'param:3': 'Pre High Cut',
+        'param:6': 'Post Gain',
+        'param:7': 'Post Frequency',
+        'param:8': 'Post Bandwidth',
+        'param:9': 'Post High Cut',
+    },
 }
 
 ELEMENT = re.compile(r'^\[\s*\d+\] (\S+)\s+x=\s*(\S+) y=\s*(\S+) w=\s*(\S+) h=\s*(\S+) "([^"]*)"'
@@ -132,7 +142,7 @@ def layout(slug, elements):
         center = mod_target_center(el)
         return None if center is None else mod_targets[center]
 
-    # A knob's mod display takes the knob's name from NAMES
+    # A knob's mod params and mod display take the knob's name from NAMES
     for i, name in overrides.items():
         el = by_index[i]
         if not MOD_PARAM.match(el.name) and (center := mod_target_center(el)):
@@ -147,7 +157,7 @@ def layout(slug, elements):
         show = SHOW_MOD.match(el.name)
         if m and el.id_kind == 'param':
             mod_params.setdefault(f'Mod {m.group(1)}', []).append(el)
-            names[ref(el)] = m.group(2)
+            names[ref(el)] = mod_target(el)
         elif show and el.id_kind == 'param':
             shows[f'Mod {show.group(1)}'] = el
         elif el.kind == DISPLAY and (target := mod_target(el)):
