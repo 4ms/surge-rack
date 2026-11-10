@@ -138,12 +138,14 @@ struct QuadAD : modules::XTModule
         for (int i = 0; i < n_ads; ++i)
         {
             auto maxv = log2(10.0);
-            configParam<ADParamQuantity>(ATTACK_0 + i, -8, maxv, -5, "Attack " + std::to_string(i));
-            configParam<ADParamQuantity>(DECAY_0 + i, -8, maxv, -5, "Decay " + std::to_string(i));
-            configSwitch(MODE_0 + i, 0, 1, 0, "Mode", {"Digital", "Analog"});
-            configSwitch(A_SHAPE_0 + i, 0, 2, 1, "Attack Curve", {"Faster", "Standard", "Slower"});
-            configSwitch(D_SHAPE_0 + i, 0, 2, 1, "Decay Curve", {"Faster", "Standard", "Slower"});
-            configSwitch(ADAR_0 + i, 0, 1, 0, "AD vs AR", {"AD", "AR"});
+            configParam<ADParamQuantity>(ATTACK_0 + i, -8, maxv, -5, "Attack " + std::to_string(i + 1));
+            configParam<ADParamQuantity>(DECAY_0 + i, -8, maxv, -5, "Decay " + std::to_string(i + 1));
+            configSwitch(MODE_0 + i, 0, 1, 0, "Mode " + std::to_string(i + 1), {"Digital", "Analog"});
+            configSwitch(A_SHAPE_0 + i, 0, 2, 1, "Attack Curve " + std::to_string(i + 1),
+                         {"Faster", "Standard", "Slower"});
+            configSwitch(D_SHAPE_0 + i, 0, 2, 1, "Decay Curve " + std::to_string(i + 1),
+                         {"Faster", "Standard", "Slower"});
+            configSwitch(ADAR_0 + i, 0, 1, 0, "AD vs AR " + std::to_string(i + 1), {"AD", "AR"});
             configSwitch(LINK_TRIGGER_0 + i, -1, 1, 0,
                          "Link " + std::to_string(i + 1) + " EOC to " +
                              std::to_string((i + 1) % n_ads + 1) + " Attack",
@@ -170,13 +172,13 @@ struct QuadAD : modules::XTModule
 
         for (int i = 0; i < n_ads; ++i)
         {
-            configInput(TRIGGER_0 + i, "Trigger/Gate " + std::to_string(i));
-            configOutput(OUTPUT_0 + i, "ENV " + std::to_string(i));
+            configInput(TRIGGER_0 + i, "Trigger/Gate " + std::to_string(i + 1));
+            configOutput(OUTPUT_0 + i, "ENV " + std::to_string(i + 1));
             configBypass(TRIGGER_0 + i, OUTPUT_0 + i);
         }
 
         for (int i = 0; i < n_mod_inputs; ++i)
-            configInput(MOD_INPUT_0 + i, "Mod " + std::to_string(i));
+            configInput(MOD_INPUT_0 + i, "Mod " + std::to_string(i + 1));
 
         modAssist.initialize(this);
         modAssist.setupMatrix(this);

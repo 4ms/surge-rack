@@ -2157,10 +2157,10 @@
             "slug": "SurgeXTQuadAD",
             "name": "Quad AD",
             "groups": {
-                "Mod 1": ["Show Mod 1", "Mod 1 to Attack 1", "Mod 1 to Attack 2", "Mod 1 to Attack 3", "Mod 1 to Attack 4", "Mod 1 to Decay 1", "Mod 1 to Decay 2", "Mod 1 to Decay 3", "Mod 1 to Decay 4", "Mod 0 In"],
-                "Mod 2": ["Show Mod 2", "Mod 2 to Attack 1", "Mod 2 to Attack 2", "Mod 2 to Attack 3", "Mod 2 to Attack 4", "Mod 2 to Decay 1", "Mod 2 to Decay 2", "Mod 2 to Decay 3", "Mod 2 to Decay 4", "Mod 1 In"],
-                "Mod 3": ["Show Mod 3", "Mod 3 to Attack 1", "Mod 3 to Attack 2", "Mod 3 to Attack 3", "Mod 3 to Attack 4", "Mod 3 to Decay 1", "Mod 3 to Decay 2", "Mod 3 to Decay 3", "Mod 3 to Decay 4", "Mod 2 In"],
-                "Mod 4": ["Show Mod 4", "Mod 4 to Attack 1", "Mod 4 to Attack 2", "Mod 4 to Attack 3", "Mod 4 to Attack 4", "Mod 4 to Decay 1", "Mod 4 to Decay 2", "Mod 4 to Decay 3", "Mod 4 to Decay 4", "Mod 3 In"]
+                "Mod 1": ["Show Mod 1", "Mod 1 to Attack 1", "Mod 1 to Attack 2", "Mod 1 to Attack 3", "Mod 1 to Attack 4", "Mod 1 to Decay 1", "Mod 1 to Decay 2", "Mod 1 to Decay 3", "Mod 1 to Decay 4", "Mod 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod 2 to Attack 1", "Mod 2 to Attack 2", "Mod 2 to Attack 3", "Mod 2 to Attack 4", "Mod 2 to Decay 1", "Mod 2 to Decay 2", "Mod 2 to Decay 3", "Mod 2 to Decay 4", "Mod 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod 3 to Attack 1", "Mod 3 to Attack 2", "Mod 3 to Attack 3", "Mod 3 to Attack 4", "Mod 3 to Decay 1", "Mod 3 to Decay 2", "Mod 3 to Decay 3", "Mod 3 to Decay 4", "Mod 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod 4 to Attack 1", "Mod 4 to Attack 2", "Mod 4 to Attack 3", "Mod 4 to Attack 4", "Mod 4 to Decay 1", "Mod 4 to Decay 2", "Mod 4 to Decay 3", "Mod 4 to Decay 4", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to Attack 1": "Attack 1",
@@ -2204,12 +2204,12 @@
                 "Display 6": "Attack 4 Mod Display",
                 "Display 7": "Decay 4 Mod Display",
                 "Display 8": "LCD Display",
-                "Mod 0 In": "Mod 1 In",
-                "Mod 1 In": "Mod 2 In",
-                "Mod 2 In": "Mod 3 In",
-                "Mod 3 In": "Mod 4 In"
+                "Mod 1 In": "Mod 1 In",
+                "Mod 2 In": "Mod 2 In",
+                "Mod 3 In": "Mod 3 In",
+                "Mod 4 In": "Mod 4 In"
             },
-            "order": ["Attack 0", "Attack 1", "Attack 2", "Attack 3", "Decay 0", "Decay 1", "Decay 2", "Decay 3", "Link 1 EOC to 2 Attack", "Link 2 EOC to 3 Attack", "Link 3 EOC to 4 Attack", "Link 4 EOC to 1 Attack", "Sum 1 ENV to 2 Output", "Sum 2 ENV to 3 Output", "Sum 3 ENV to 4 Output", "param:20", "param:21", "param:22", "param:23", "param:12", "param:8", "param:16", "param:13", "param:9", "param:17", "param:14", "param:10", "param:18", "param:15", "param:11", "param:19", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger/Gate 0 In", "Trigger/Gate 1 In", "Trigger/Gate 2 In", "Trigger/Gate 3 In", "ENV 0 Out", "ENV 1 Out", "ENV 2 Out", "ENV 3 Out", "Display 8"]
+            "order": ["Attack 1", "Attack 2", "Attack 3", "Attack 4", "Decay 1", "Decay 2", "Decay 3", "Decay 4", "Link 1 EOC to 2 Attack", "Link 2 EOC to 3 Attack", "Link 3 EOC to 4 Attack", "Link 4 EOC to 1 Attack", "Sum 1 ENV to 2 Output", "Sum 2 ENV to 3 Output", "Sum 3 ENV to 4 Output", "AD vs AR 1", "AD vs AR 2", "AD vs AR 3", "AD vs AR 4", "Attack Curve 1", "Mode 1", "Decay Curve 1", "Attack Curve 2", "Mode 2", "Decay Curve 2", "Attack Curve 3", "Mode 3", "Decay Curve 3", "Attack Curve 4", "Mode 4", "Decay Curve 4", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger/Gate 1 In", "Trigger/Gate 2 In", "Trigger/Gate 3 In", "Trigger/Gate 4 In", "ENV 1 Out", "ENV 2 Out", "ENV 3 Out", "ENV 4 Out", "Display 8"]
         },
         {
             "slug": "SurgeXTQuadLFO",
