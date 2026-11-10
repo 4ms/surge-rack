@@ -147,8 +147,68 @@ struct LCDDisplay : public rack::widget::Widget
                 isParam ? w->rack::widget::Widget::drawLayer(childArgs, layer)
                         : w->drawLayer(childArgs, layer);
 
+            if (!firmwareDrawsFramebufferChildren(childArgs))
+                drawBuffered(w, childArgs, layer);
+
             nvgRestore(args.vg);
         }
+    }
+
+    // Everything on the LCDs draws in a BufferedDrawFunctionWidget, which is a FramebufferWidget.
+    // Some firmware (e.g. v2.4.1) doesn't draw a FramebufferWidget's children, so draw the
+    // BufferedDrawFunctionWidgets under w here.
+    static void drawBuffered(rack::widget::Widget *w, const DrawArgs &args, int layer)
+    {
+        for (auto *c : w->children)
+        {
+            if (!c->isVisible())
+                continue;
+
+            auto childArgs = args;
+            childArgs.clipBox = c->box.zeroPos();
+            nvgSave(args.vg);
+            nvgTranslate(args.vg, c->box.pos.x, c->box.pos.y);
+
+            if (auto *b = dynamic_cast<BufferedDrawFunctionWidgetOnLayer *>(c))
+            {
+                if (layer == b->layer)
+                    b->drawf(args.vg);
+            }
+            else if (auto *b = dynamic_cast<BufferedDrawFunctionWidget *>(c))
+            {
+                if (layer == 0)
+                    b->drawf(args.vg);
+            }
+            else if (!dynamic_cast<rack::widget::FramebufferWidget *>(c))
+            {
+                drawBuffered(c, childArgs, layer);
+            }
+
+            nvgRestore(args.vg);
+        }
+    }
+
+    // Firmware that does draw them (e.g. with the change in v2.4.1-surge001) would draw them
+    // twice, so check once (drawing into args, which the probe doesn't draw anything into)
+    static bool firmwareDrawsFramebufferChildren(const DrawArgs &args)
+    {
+        static const bool res = [&args] {
+            struct Probe : rack::widget::Widget
+            {
+                bool *drawn;
+                explicit Probe(bool *d) : drawn(d) {}
+                void draw(const DrawArgs &) override { *drawn = true; }
+            };
+            bool drawn = false;
+            rack::widget::FramebufferWidget fb;
+            auto *probe = new Probe(&drawn);
+            probe->box.size = rack::Vec(1, 1);
+            fb.box.size = rack::Vec(1, 1);
+            fb.addChild(probe);
+            fb.draw(args);
+            return drawn;
+        }();
+        return res;
     }
 };
 

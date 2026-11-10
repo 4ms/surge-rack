@@ -119,6 +119,15 @@ struct VCF : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
             mfst = std::max(mfst, fc);
 
         configParam<VCFSubTypeParamQuanity>(VCF_SUBTYPE, 0, mfst, 3, "Filter Model SubType");
+#ifdef METAMODULE
+        // On MetaModule these are knobs that can be mapped (see VCFJogSelectorBase), which
+        // step through the models and subtypes. The MetaModule names params by their name, and
+        // Rack by their label.
+        paramQuantities[VCF_TYPE]->snapEnabled = true;
+        paramQuantities[VCF_TYPE]->name = "Filter Model";
+        paramQuantities[VCF_SUBTYPE]->snapEnabled = true;
+        paramQuantities[VCF_SUBTYPE]->name = "Filter Subtype";
+#endif
 
         for (int i = 0; i < n_vcf_params * n_mod_inputs; ++i)
         {

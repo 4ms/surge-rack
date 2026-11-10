@@ -32,10 +32,20 @@
 
 namespace sst::surgext_rack::vcf::ui
 {
+struct VCFSelector;
+struct VCFSubtypeSelector;
+
 struct VCFWidget : widgets::XTModuleWidget
 {
     typedef vcf::VCF M;
     VCFWidget(M *module);
+
+    VCFSelector *typeSelector{nullptr};
+    VCFSubtypeSelector *subtypeSelector{nullptr};
+#ifdef METAMODULE
+    // The Filter Model and Filter Subtype menus, which the LCD selectors show in Rack
+    void appendFilterMenus(rack::ui::Menu *menu);
+#endif
 
     void moduleBackground(NVGcontext *vg) {}
 
@@ -68,6 +78,9 @@ struct VCFWidget : widgets::XTModuleWidget
     {
         if (module)
         {
+#ifdef METAMODULE
+            appendFilterMenus(menu);
+#endif
             menu->addChild(new rack::MenuSeparator);
             menu->addChild(rack::createSubmenuItem(
                 "Curve Poly Channel", "",
@@ -108,7 +121,15 @@ struct FilterChangeAction : rack::history::ModuleAction
     }
 };
 
-struct VCFSelector : widgets::ParamJogSelector
+#ifdef METAMODULE
+// The MetaModule makes an element (which can be mapped to a knob) of an SvgKnob, but not of a
+// plain ParamWidget, so here the selectors are invisible knobs, like the other LCD controls
+using VCFJogSelectorBase = widgets::GenericPresetJogSelector<widgets::PlotAreaKnob>;
+#else
+using VCFJogSelectorBase = widgets::ParamJogSelector;
+#endif
+
+struct VCFSelector : VCFJogSelectorBase
 {
     FilterSelectorMapper fsm;
     std::vector<int> fsmOrdering;
@@ -172,7 +193,11 @@ struct VCFSelector : widgets::ParamJogSelector
             return;
         auto menu = rack::createMenu();
         menu->addChild(rack::createMenuLabel("Filter Types"));
+        appendTypeItems(menu);
+    }
 
+    void appendTypeItems(rack::ui::Menu *menu)
+    {
         std::string currentGroup{"-not-a-filter-group-"};
 
         auto t = filterType();
@@ -250,7 +275,7 @@ struct VCFSelector : widgets::ParamJogSelector
     }
 };
 
-struct VCFSubtypeSelector : widgets::ParamJogSelector
+struct VCFSubtypeSelector : VCFJogSelectorBase
 {
     FilterSelectorMapper fsm;
 
@@ -315,13 +340,22 @@ struct VCFSubtypeSelector : widgets::ParamJogSelector
             return;
 
         int type = filterType();
-        int subt = filterSubType();
         int ct = sst::filters::fut_subcount[type];
         if (ct == 0)
             return;
 
         auto menu = rack::createMenu();
         menu->addChild(rack::createMenuLabel("Filter SubTypes"));
+        appendSubtypeItems(menu);
+    }
+
+    void appendSubtypeItems(rack::ui::Menu *menu)
+    {
+        int type = filterType();
+        int subt = filterSubType();
+        int ct = sst::filters::fut_subcount[type];
+        if (ct == 0)
+            menu->addChild(rack::createMenuLabel("No subtypes for this model"));
         for (int i = 0; i < ct; ++i)
         {
             menu->addChild(
@@ -762,6 +796,20 @@ struct FilterPlotWidget : rack::widget::TransparentWidget, style::StyleParticipa
     void onStyleChanged() override { bdw->dirty = true; }
 };
 
+#ifdef METAMODULE
+void VCFWidget::appendFilterMenus(rack::ui::Menu *menu)
+{
+    if (!typeSelector || !subtypeSelector)
+        return;
+    menu->addChild(new rack::MenuSeparator);
+    menu->addChild(rack::createSubmenuItem("Filter Model", typeSelector->getPresetName(),
+                                           [s = typeSelector](auto *x) { s->appendTypeItems(x); }));
+    menu->addChild(rack::createSubmenuItem(
+        "Filter Subtype", subtypeSelector->hasPresets() ? subtypeSelector->getPresetName() : "",
+        [s = subtypeSelector](auto *x) { s->appendSubtypeItems(x); }));
+}
+#endif
+
 VCFWidget::VCFWidget(VCFWidget::M *module) : XTModuleWidget()
 {
     setModule(module);
@@ -790,6 +838,7 @@ VCFWidget::VCFWidget(VCFWidget::M *module) : XTModuleWidget()
     auto wts = VCFSelector::create(rack::Vec(plotStartX, plotStartY),
                                    rack::Vec(plotW, fivemm - halfmm), module, VCF::VCF_TYPE);
     addChild(wts);
+    typeSelector = wts;
     plotStartY += fivemm;
     plotH -= fivemm;
 
@@ -801,6 +850,7 @@ VCFWidget::VCFWidget(VCFWidget::M *module) : XTModuleWidget()
         VCFSubtypeSelector::create(rack::Vec(plotStartX, underPlotStartY),
                                    rack::Vec(plotW, fivemm - halfmm), module, M::VCF_SUBTYPE);
     addChild(subType);
+    subtypeSelector = subType;
 
     typedef layout::LayoutItem lay_t;
     for (const auto &lay : {lay_t::createVCFWSBigKnob(M::FREQUENCY, "FREQUENCY"),
