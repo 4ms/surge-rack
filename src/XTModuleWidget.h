@@ -116,6 +116,19 @@ struct XTModuleWidget : public virtual rack::ModuleWidget, style::StyleParticipa
 #endif
 
 #ifdef METAMODULE
+    // The slug of the module that init() is registering (see SurgeXT.cpp), or empty. The
+    // firmware makes each module's widget once as it's registered, and takes the faceplate from
+    // its panel then. The panels are drawn in code, so give it the module's faceplate image
+    // (made by metamodule/scripts/faceplates.py).
+    static inline std::string registeringSlug{};
+
+    XTModuleWidget()
+    {
+        if (!registeringSlug.empty())
+            setPanel(rack::createPanel(rack::asset::plugin(
+                pluginInstance, "res/faceplates/" + registeringSlug + ".svg")));
+    }
+
     // MetaModule makes a graphic display of each child widget that isn't a param, port, or
     // light. The panel art (background, labels) is in the faceplate image there, and the LCDs
     // are drawn by addLCDDisplays(), so add those widgets as plain children.

@@ -18,17 +18,37 @@
 
 #include "SurgeXT.h"
 #include "XTStyle.h"
-#ifndef METAMODULE
 #include "XTModuleWidget.h"
-#endif
 
 namespace logger = rack::logger;
 rack::Plugin *pluginInstance;
 
-__attribute__((__visibility__("default"))) void init(rack::Plugin *p)
+#ifdef METAMODULE
+// Registers the models, telling their widgets which module they're for (see
+// XTModuleWidget::registeringSlug)
+struct FaceplateRegistrar
 {
-    pluginInstance = p;
+    rack::Plugin *plugin;
+    void addModel(rack::plugin::Model *m)
+    {
+        sst::surgext_rack::widgets::XTModuleWidget::registeringSlug = m->slug;
+        plugin->addModel(m);
+        sst::surgext_rack::widgets::XTModuleWidget::registeringSlug.clear();
+    }
+};
+#endif
+
+__attribute__((__visibility__("default"))) void init(rack::Plugin *plugin)
+{
+    pluginInstance = plugin;
     INFO("[SurgeXTRack] initializing");
+
+#ifdef METAMODULE
+    FaceplateRegistrar registrar{plugin};
+    auto *p = &registrar;
+#else
+    auto *p = plugin;
+#endif
 
     p->addModel(modelVCOClassic);
     p->addModel(modelVCOModern);
