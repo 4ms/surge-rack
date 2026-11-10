@@ -82,8 +82,13 @@ struct DigitalRingMod : modules::XTModule,
         setupSurgeCommon(NUM_PARAMS, false, false);
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
+#ifdef METAMODULE
+        // The full name is too long for the MetaModule's element list
+        auto linkS = configSwitch(LINK_01, 0, 1, 0, "Link 2A to Out 1", {"Don't Link", "Link"});
+#else
         auto linkS =
             configSwitch(LINK_01, 0, 1, 0, "Link Second A to First Output", {"Don't Link", "Link"});
+#endif
         linkS->randomizeEnabled = false;
         std::vector<std::string> nm;
         for (int i = 0; i < n_cxm_modes; ++i)
