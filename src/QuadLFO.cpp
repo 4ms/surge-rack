@@ -59,6 +59,36 @@ struct QuadLFOWidget : public widgets::XTModuleWidget
         if (!module)
             return;
         auto m = static_cast<M *>(module);
+#ifdef METAMODULE
+        // What's picked with the mouse on the LCD: the mode, and each LFO's shape and Uni/Bipolar
+        auto addChoices = [](rack::ui::Menu *sm, rack::engine::ParamQuantity *pq) {
+            auto cur = (int)std::round(pq->getValue());
+            for (int i = 0; i < (int)pq->labels.size(); ++i)
+                sm->addChild(rack::createMenuItem(pq->labels[i], CHECKMARK(i == cur),
+                                                  [pq, i]() { pq->setValue(i); }));
+        };
+        menu->addChild(new rack::ui::MenuSeparator);
+        {
+            auto *pq = m->paramQuantities[M::INTERPLAY_MODE];
+            menu->addChild(rack::createSubmenuItem("Mode", pq->getDisplayValueString(),
+                                                   [=](auto *sm) { addChoices(sm, pq); }));
+        }
+        for (int i = 0; i < M::n_lfos; ++i)
+        {
+            auto *spq = m->paramQuantities[M::SHAPE_0 + i];
+            auto *bpq = m->paramQuantities[M::BIPOLAR_0 + i];
+            menu->addChild(rack::createSubmenuItem(
+                "LFO " + std::to_string(i + 1), spq->getDisplayValueString(), [=](auto *sm) {
+                    addChoices(sm, spq);
+                    sm->addChild(new rack::ui::MenuSeparator);
+                    auto bv = bpq->getValue() > 0.5;
+                    sm->addChild(rack::createMenuItem("Unipolar (0/10v)", CHECKMARK(!bv),
+                                                      [bpq]() { bpq->setValue(0); }));
+                    sm->addChild(rack::createMenuItem("Bipolar (-5/+5v)", CHECKMARK(bv),
+                                                      [bpq]() { bpq->setValue(1); }));
+                }));
+        }
+#endif
         menu->addChild(new rack::ui::MenuSeparator);
         menu->addChild(
             rack::createSubmenuItem("Polyphony", "", [this, m](auto *x) { polyMenu(x, m); }));
@@ -471,6 +501,24 @@ QuadLFOWidget::QuadLFOWidget(sst::surgext_rack::quadlfo::ui::QuadLFOWidget::M *m
             auto ql = QuadWavePicker::create(rack::Vec(topx + qw * i, topy), rack::Vec(qw, height),
                                              module, i);
             addChild(ql);
+
+#ifdef METAMODULE
+            // In Rack, clicking the wave picks the shape and Uni/Bipolar. On the MetaModule,
+            // they're knobs (which draw nothing: the picker does): the shape on the wave, and
+            // Uni/Bipolar on the label under it.
+            auto lh = ql->labelHeight;
+            for (auto [par, y, h] : {std::tuple{M::SHAPE_0, 0.f, ql->box.size.y - lh},
+                                     std::tuple{M::BIPOLAR_0, ql->box.size.y - lh, lh}})
+            {
+                auto *k = new widgets::PlotAreaKnob();
+                k->box.pos = ql->box.pos.plus(rack::Vec(0, y));
+                k->box.size = rack::Vec(ql->box.size.x, h);
+                k->module = module;
+                k->paramId = par + i;
+                k->initParamQuantity();
+                addChild(k);
+            }
+#endif
         }
     }
 

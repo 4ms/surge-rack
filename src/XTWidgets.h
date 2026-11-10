@@ -2147,12 +2147,17 @@ template <typename T> struct GenericPresetJogSelector : public T, style::StylePa
 typedef GenericPresetJogSelector<rack::Widget> PresetJogSelector;
 typedef GenericPresetJogSelector<rack::ParamWidget> ParamJogSelector;
 
+// (A knob on the MetaModule, which makes a control for it that steps through the values)
+#ifdef METAMODULE
+struct SteppedParamAsPresetJog : GenericPresetJogSelector<PlotAreaKnob>
+#else
 struct SteppedParamAsPresetJog : GenericPresetJogSelector<rack::ParamWidget>
+#endif
 {
     int lastValue{-1};
     void setup() override
     {
-        GenericPresetJogSelector<rack::ParamWidget>::setup();
+        GenericPresetJogSelector::setup();
         if (module)
             initParamQuantity();
     }
