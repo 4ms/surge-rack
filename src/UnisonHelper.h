@@ -154,6 +154,16 @@ struct UnisonHelper : modules::XTModule, sst::rackhelpers::module_connector::Nei
         configParam<modules::MidiNoteParamQuantity<69>>(HICUT, -60, 70, 70, "High Cut");
         configOnOff(HICUT_ENABLED, 0, "Enable High Cut");
 
+#ifdef METAMODULE
+        // Named like the panel labels, which fit on the screen
+        configInput(INPUT_VOCT, "V/Oct");
+
+        for (int i = 0; i < n_sub_vcos; ++i)
+        {
+            configInput(INPUT_SUB1 + i, "VCO " + std::to_string(i + 1));
+            configOutput(OUTPUT_VOCT_SUB1 + i, "V/Oct " + std::to_string(i + 1));
+        }
+#else
         configInput(INPUT_VOCT, "V/Oct for pre-unison source");
 
         for (int i = 0; i < n_sub_vcos; ++i)
@@ -161,6 +171,7 @@ struct UnisonHelper : modules::XTModule, sst::rackhelpers::module_connector::Nei
             configInput(INPUT_SUB1 + i, "Audio from Sub VCO " + std::to_string(i + 1));
             configOutput(OUTPUT_VOCT_SUB1 + i, "V/Oct to Sub VCO " + std::to_string(i + 1));
         }
+#endif
 
         for (int i = 0; i < n_mod_inputs; ++i)
         {

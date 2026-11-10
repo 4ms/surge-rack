@@ -2450,7 +2450,7 @@
         },
         {
             "slug": "SurgeXTUnisonHelper",
-            "name": "UnisonHelper",
+            "name": "Unison",
             "groups": {
                 "Mod 1": ["Show Mod 1", "Mod 1 to Detune", "Mod 1 to Drift", "Mod 1 to Low Cut", "Mod 1 to High Cut", "Mod 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Detune", "Mod 2 to Drift", "Mod 2 to Low Cut", "Mod 2 to High Cut", "Mod 2 In"],
@@ -2484,7 +2484,7 @@
                 "Mod 3 In": "Mod 3 In",
                 "Mod 4 In": "Mod 4 In"
             },
-            "order": ["Detune", "Drift", "Voice Count", "Low Cut", "High Cut", "Detune Range", "Enable Low Cut", "Enable High Cut", "Character Filter", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Audio from Sub VCO 1 In", "Audio from Sub VCO 2 In", "Audio from Sub VCO 3 In", "Audio from Sub VCO 4 In", "V/Oct to Sub VCO 1 Out", "V/Oct to Sub VCO 2 Out", "V/Oct to Sub VCO 3 Out", "V/Oct to Sub VCO 4 Out", "V/Oct for pre-unison source In", "Left Out", "Right Out", "Display 4"]
+            "order": ["Detune", "Drift", "Voice Count", "Low Cut", "High Cut", "Detune Range", "Enable Low Cut", "Enable High Cut", "Character Filter", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "VCO 1 In", "VCO 2 In", "VCO 3 In", "VCO 4 In", "V/Oct 1 Out", "V/Oct 2 Out", "V/Oct 3 Out", "V/Oct 4 Out", "V/Oct In", "Left Out", "Right Out", "Display 4"]
         },
         {
             "slug": "SurgeXTUnisonHelperCVExpander",
