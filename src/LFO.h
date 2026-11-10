@@ -83,6 +83,13 @@ struct LFO : modules::XTModule
         BROADCAST_TRIG_TO_POLY,
         UNTRIGGERED_ENV_NONZERO,
         RANDOMIZATION_CHANGES_SHAPES,
+#ifdef METAMODULE
+        // A stepped copy of SHAPE (which is a fraction), to show and pick the type by name
+        SHAPE_MM,
+        // Buttons for the step editor's jog arrows, which rotate the steps
+        STEP_ROTATE_LEFT_MM,
+        STEP_ROTATE_RIGHT_MM,
+#endif
         NUM_PARAMS
     };
     enum InputIds
@@ -139,6 +146,66 @@ struct LFO : modules::XTModule
     rack::simd::float_4 output0[3][4], output1[3][4];
 
     std::map<int, size_t> paramOffsetByID;
+
+#ifdef METAMODULE
+    static constexpr int nShapesMM{lt_stepseq + 1};
+    int lastShapeMM{-1};
+
+    float shapeValueFor(int type)
+    {
+        auto &sh = lfostorage->shape;
+        return Parameter::intScaledToFloat(type, sh.val_max.i, sh.val_min.i);
+    }
+
+    // Keep SHAPE and SHAPE_MM the same, whichever one changed (at the start, SHAPE, which an
+    // older patch has without SHAPE_MM)
+    void syncShapeMM()
+    {
+        auto t = (int)std::round(params[SHAPE_MM].getValue());
+        if (lastShapeMM >= 0 && t != lastShapeMM)
+        {
+            params[SHAPE].setValue(shapeValueFor(t));
+        }
+        else
+        {
+            auto &sh = lfostorage->shape;
+            t = std::clamp(Parameter::intUnscaledFromFloat(params[SHAPE].getValue(), sh.val_max.i,
+                                                           sh.val_min.i),
+                           0, nShapesMM - 1);
+            params[SHAPE_MM].setValue(t);
+        }
+        lastShapeMM = t;
+    }
+
+    bool rotatePressedMM[2]{false, false};
+    void processRotateButtonsMM()
+    {
+        for (int i = 0; i < 2; ++i)
+        {
+            auto pressed = params[STEP_ROTATE_LEFT_MM + i].getValue() > 0.5;
+            if (pressed && !rotatePressedMM[i])
+                rotateSteps(i == 0 ? -1 : 1);
+            rotatePressedMM[i] = pressed;
+        }
+    }
+#endif
+
+    // Moves each step (and its trigger) dir steps right (with dir 1) or left (-1), wrapping around
+    void rotateSteps(int dir)
+    {
+        float tvals[n_steps], gvals[n_steps];
+        for (int i = 0; i < n_steps; ++i)
+        {
+            tvals[i] = params[STEP_SEQUENCER_STEP_0 + i].getValue();
+            gvals[i] = params[STEP_SEQUENCER_TRIGGER_0 + i].getValue();
+        }
+        for (int i = 0; i < n_steps; ++i)
+        {
+            auto next = (i + dir) & (n_steps - 1);
+            params[STEP_SEQUENCER_STEP_0 + next].setValue(tvals[i]);
+            params[STEP_SEQUENCER_TRIGGER_0 + next].setValue(gvals[i]);
+        }
+    }
 
     void setupSurge()
     {
@@ -238,12 +305,32 @@ struct LFO : modules::XTModule
             ->snapEnabled = true;
         configParamNoRand(STEP_SEQUENCER_END, 1, n_steps, n_steps, "Last Loop Point")->snapEnabled =
             true;
+#ifdef METAMODULE
+        // The MetaModule shows a snapped knob's value by its labels, which are empty otherwise
+        for (auto p : {STEP_SEQUENCER_START, STEP_SEQUENCER_END})
+        {
+            auto *pq = paramQuantities[p];
+            pq->labels.clear();
+            for (int v = (int)pq->minValue; v <= (int)pq->maxValue; ++v)
+                pq->labels.push_back(std::to_string(v));
+        }
+#endif
 
         configParamNoRand(SCALE_RAW_OUTPUTS, 0, 1, 1, "Scale raw outputs by amp?");
         configParamNoRand(NO_TRIG_POLY, 1, 16, 1, "Scale raw outputs by amp?")->snapEnabled = true;
         configParamNoRand(BROADCAST_TRIG_TO_POLY, FOLLOW_TRIG_POLY, TAKE_CHANNEL_0,
                           FOLLOW_TRIG_POLY, "Trigger Broadcast Mode");
         configOnOff(UNTRIGGERED_ENV_NONZERO, 0, "Without connected trigger, output Envelope?");
+#ifdef METAMODULE
+        {
+            std::vector<std::string> labels;
+            for (int i = 0; i < nShapesMM; ++i)
+                labels.push_back(i == lt_snh ? "S&H" : i == lt_stepseq ? "Step Seq" : lt_names[i]);
+            configSwitch(SHAPE_MM, 0, nShapesMM - 1, 0, "Type", labels)->randomizeEnabled = false;
+        }
+        configButton(STEP_ROTATE_LEFT_MM, "Rotate Steps Left");
+        configButton(STEP_ROTATE_RIGHT_MM, "Rotate Steps Right");
+#endif
         configOnOff(RANDOMIZATION_CHANGES_SHAPES, 1, "Randomize changes curve shape outside Step?")
             ->randomizeEnabled = false;
 
@@ -405,6 +492,10 @@ struct LFO : modules::XTModule
 
     void process(const typename rack::Module::ProcessArgs &args) override
     {
+#ifdef METAMODULE
+        syncShapeMM();
+        processRotateButtonsMM();
+#endif
         int userPoly = (int)std::round(params[NO_TRIG_POLY].getValue());
         auto tt = (LFO::TrigBroadcastMode)std::round(params[BROADCAST_TRIG_TO_POLY].getValue());
         auto untrigEnvMult = params[UNTRIGGERED_ENV_NONZERO].getValue() > 0.5 ? 1.f : 0.f;
