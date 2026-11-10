@@ -37,7 +37,10 @@ struct LFOWidget : widgets::XTModuleWidget
     int priorShape{-1};
     rack::Widget *wavePlot{nullptr}, *stepEditor{nullptr};
     rack::Widget *stepStart{nullptr}, *stepEnd{nullptr};
+    std::vector<rack::Widget *> stepParamsMM; // The step editor's params, on the MetaModule
+    std::function<void(rack::Menu *)> stepPresetMenuMM; // The step editor's presets
     void step() override;
+    void showStepEditorIfStepSeq();
 
     void polyMenu(rack::Menu *p, M *m)
     {
@@ -87,6 +90,29 @@ struct LFOWidget : widgets::XTModuleWidget
         if (!module)
             return;
         auto m = static_cast<M *>(module);
+#ifdef METAMODULE
+        {
+            auto *pq = m->paramQuantities[M::SHAPE_MM];
+            menu->addChild(new rack::MenuSeparator);
+            menu->addChild(
+                rack::createSubmenuItem("Type", pq->getDisplayValueString(), [pq](auto *sm) {
+                    auto cur = (int)std::round(pq->getValue());
+                    for (int i = 0; i < M::nShapesMM; ++i)
+                        sm->addChild(rack::createMenuItem(pq->labels[i], CHECKMARK(i == cur),
+                                                          [pq, i]() { pq->setValue(i); }));
+                }));
+
+            // What the step editor does with the mouse: the jog arrows and the bars' menu
+            menu->addChild(rack::createSubmenuItem("Step Sequencer", "", [this, m](auto *sm) {
+                sm->addChild(
+                    rack::createMenuItem("Rotate Steps Left", "", [m]() { m->rotateSteps(-1); }));
+                sm->addChild(
+                    rack::createMenuItem("Rotate Steps Right", "", [m]() { m->rotateSteps(1); }));
+                if (stepPresetMenuMM)
+                    stepPresetMenuMM(sm);
+            }));
+        }
+#endif
         {
             auto shp = m->lfostorage->shape.val.i;
             auto mx = lt_num_deforms[shp];
@@ -164,7 +190,12 @@ struct LFOWidget : widgets::XTModuleWidget
 struct LFOStepWidget : rack::Widget, style::StyleParticipant
 {
 
+#ifdef METAMODULE
+    // A knob on the MetaModule, which makes a control for it that steps through Off/A/B/A and B
+    struct TriggerSwitch : widgets::PlotAreaKnob, style::StyleParticipant
+#else
     struct TriggerSwitch : rack::app::Switch, style::StyleParticipant
+#endif
     {
         widgets::BufferedDrawFunctionWidget *bdw{nullptr};
         widgets::BufferedDrawFunctionWidget *bdwLight{nullptr};
@@ -363,6 +394,21 @@ struct LFOStepWidget : rack::Widget, style::StyleParticipant
             rack::Vec(2, y0 + ytrig0), rack::Vec(x0 - 4, box.size.y - y0 - ypad - ytrig0), module);
         addChild(jog);
 
+#ifdef METAMODULE
+        // The jog button's halves (> on top, < on the bottom)
+        for (int i = 0; i < 2; ++i)
+        {
+            auto *b = new rack::app::Switch();
+            b->momentary = true;
+            b->box.size = rack::Vec(jog->box.size.x, jog->box.size.y * 0.5);
+            b->box.pos = jog->box.pos.plus(rack::Vec(0, i == 0 ? 0 : b->box.size.y));
+            b->module = module;
+            b->paramId = i == 0 ? LFO::STEP_ROTATE_RIGHT_MM : LFO::STEP_ROTATE_LEFT_MM;
+            b->initParamQuantity();
+            paramsMM.push_back(b);
+        }
+#endif
+
         auto slPos = rack::Vec(x0, y0 + ytrig0);
         auto slSize = rack::Vec(dx * LFO::n_steps, box.size.y - y0 - ypad - ytrig0);
         auto sliders = widgets::NBarWidget<LFO::n_steps>::create(slPos, slSize, module,
@@ -374,14 +420,38 @@ struct LFOStepWidget : rack::Widget, style::StyleParticipant
         sliders->makeAdditionalMenu = [this](auto w, auto m) { makeAdditionalLFOPresetMenu(m); };
         addChild(sliders);
 
+#ifdef METAMODULE
+        // A knob for each bar (which draws nothing: the bars do)
+        for (int i = 0; i < LFO::n_steps; ++i)
+        {
+            auto *k = new widgets::PlotAreaKnob();
+            k->box.pos = slPos.plus(rack::Vec(i * dx, 0));
+            k->box.size = rack::Vec(dx, slSize.y);
+            k->module = module;
+            k->paramId = LFO::STEP_SEQUENCER_STEP_0 + i;
+            k->initParamQuantity();
+            paramsMM.push_back(k);
+        }
+#endif
+
         for (int i = 0; i < LFO::n_steps; ++i)
         {
             auto spos = rack::Vec(i * dx + x0, ytrig0);
             auto ssz = rack::Vec(dx, y0);
             auto sks = TriggerSwitch::create(spos, ssz, module, LFO::STEP_SEQUENCER_TRIGGER_0 + i);
+#ifdef METAMODULE
+            paramsMM.push_back(sks);
+#else
             addChild(sks);
+#endif
         }
     }
+
+#ifdef METAMODULE
+    // The params of the editor, which the module widget adds (at its position plus theirs), since
+    // the MetaModule only makes controls for the module widget's params
+    std::vector<rack::app::ParamWidget *> paramsMM;
+#endif
     void onStyleChanged() override
     {
         bdw->dirty = true;
@@ -1467,7 +1537,11 @@ LFOWidget::LFOWidget(LFOWidget::M *module) : XTModuleWidget()
     }
     addChild(lcd);
 
+#ifdef METAMODULE
+    auto tw = LFOTypeWidget::create(screwWidth, module, M::SHAPE_MM);
+#else
     auto tw = LFOTypeWidget::create(screwWidth, module, M::SHAPE);
+#endif
     addChild(tw);
 
     auto ww = new LFOWaveform();
@@ -1490,6 +1564,29 @@ LFOWidget::LFOWidget(LFOWidget::M *module) : XTModuleWidget()
     addChild(ws);
     ws->setVisible(false);
     stepEditor = ws;
+#ifdef METAMODULE
+    stepPresetMenuMM = [ws](auto *m) { ws->makeAdditionalLFOPresetMenu(m); };
+    for (auto *p : ws->paramsMM)
+    {
+        p->box.pos = p->box.pos.plus(ws->box.pos);
+        addChild(p);
+        p->setVisible(false);
+        stepParamsMM.push_back(p);
+    }
+
+    // The MetaModule doesn't step the module widget, but does step the widgets on an LCD, so
+    // this one switches between the plot and the step editor
+    struct StepEditorSwitcher : rack::Widget
+    {
+        LFOWidget *w{nullptr};
+        void step() override { w->showStepEditorIfStepSeq(); }
+    };
+    auto sw = new StepEditorSwitcher();
+    sw->w = this;
+    sw->box.pos = ws->box.getCenter();
+    sw->box.size = rack::Vec(0, 0);
+    addChild(sw);
+#endif
 
     auto gutterX = ww->box.pos.x;
     auto gutterY = ww->box.pos.y + ww->box.size.y - rack::mm2px(0.5);
@@ -1637,6 +1734,12 @@ LFOWidget::LFOWidget(LFOWidget::M *module) : XTModuleWidget()
 
 void LFOWidget::step()
 {
+    showStepEditorIfStepSeq();
+    widgets::XTModuleWidget::step();
+}
+
+void LFOWidget::showStepEditorIfStepSeq()
+{
     if (module)
     {
         auto lm = static_cast<LFO *>(module);
@@ -1655,9 +1758,10 @@ void LFOWidget::step()
                 stepStart->setVisible(stepSide);
             if (stepEnd)
                 stepEnd->setVisible(stepSide);
+            for (auto *p : stepParamsMM)
+                p->setVisible(stepSide);
         }
     }
-    widgets::XTModuleWidget::step();
 }
 } // namespace sst::surgext_rack::lfo::ui
 

@@ -1906,12 +1906,14 @@
         },
         {
             "slug": "SurgeXTLFO",
-            "name": "LFO",
+            "name": "LFO x EG",
             "groups": {
                 "Mod 1": ["Show Mod 1", "Mod 1 to Rate", "Mod 1 to Phase", "Mod 1 to Deform", "Mod 1 to Amplitude", "Mod 1 to Delay", "Mod 1 to Attack", "Mod 1 to Hold", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release", "Mod 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Rate", "Mod 2 to Phase", "Mod 2 to Deform", "Mod 2 to Amplitude", "Mod 2 to Delay", "Mod 2 to Attack", "Mod 2 to Hold", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release", "Mod 2 In"],
                 "Mod 3": ["Show Mod 3", "Mod 3 to Rate", "Mod 3 to Phase", "Mod 3 to Deform", "Mod 3 to Amplitude", "Mod 3 to Delay", "Mod 3 to Attack", "Mod 3 to Hold", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release", "Mod 3 In"],
-                "Mod 4": ["Show Mod 4", "Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 In"]
+                "Mod 4": ["Show Mod 4", "Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 In"],
+                "Steps": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5", "Step 6", "Step 7", "Step 8", "Step 9", "Step 10", "Step 11", "Step 12", "Step 13", "Step 14", "Step 15", "Step 16"],
+                "Step Triggers": ["Step Trigger 1", "Step Trigger 2", "Step Trigger 3", "Step Trigger 4", "Step Trigger 5", "Step Trigger 6", "Step Trigger 7", "Step Trigger 8", "Step Trigger 9", "Step Trigger 10", "Step Trigger 11", "Step Trigger 12", "Step Trigger 13", "Step Trigger 14", "Step Trigger 15", "Step Trigger 16"]
             },
             "names": {
                 "Mod 1 to Rate": "Rate",
@@ -1970,7 +1972,7 @@
                 "Mod 3 In": "Mod 3 In",
                 "Mod 4 In": "Mod 4 In"
             },
-            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "First Loop Point", "Last Loop Point", "Type", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 10"]
+            "order": ["Rate", "Phase", "Deform", "Amplitude", "Delay", "Attack", "Hold", "Decay", "Sustain", "Release", "Unipolar", "Type", "First Loop Point", "Last Loop Point", "Rotate Steps Left", "Rotate Steps Right", "Steps", "Step Triggers", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger on end of Envelope Stage or Step Trigger A Out", "Trigger on end of Envelope or Step Trigger B Out", "Trigger on End of Wave Cycle Out", "Gate for Full LFO (env + wave) In", "Gate for Envelope Only In", "Clock In", "Direct Phase (0-10v for 0-1 Phase) In", "LFO Wave Out", "Envelope Generator Out", "LFO Wave x Envelope Generator Out", "Display 10"]
         },
         {
             "slug": "SurgeXTDelay",
