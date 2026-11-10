@@ -78,10 +78,38 @@ template <> FXConfig<fxt_resonator>::layout_t FXConfig<fxt_resonator>::getLayout
 template <> void FXConfig<fxt_resonator>::configSpecificParams(FX<fxt_resonator> *m)
 {
     typedef FX<fxt_resonator> fx_t;
+#ifdef METAMODULE
+    // Shorter, to fit on the screen
+    for (int i = 0; i < 3; ++i)
+        m->configOnOff(fx_t::FX_SPECIFIC_PARAM_0 + i, 0,
+                       "Extend Band " + std::to_string(i + 1) + " Freq.");
+#else
     m->configOnOff(fx_t::FX_SPECIFIC_PARAM_0 + 0, 0, "Extend Band 1 Frequency");
     m->configOnOff(fx_t::FX_SPECIFIC_PARAM_0 + 1, 0, "Extend Band 2 Frequency");
     m->configOnOff(fx_t::FX_SPECIFIC_PARAM_0 + 2, 0, "Extend Band 3 Frequency");
+#endif
 }
+
+#ifdef METAMODULE
+// The panel labels the output gain OUTPUT, but Surge names it Gain. And Frequency is shortened to
+// fit on the screen.
+template <> void FXConfig<fxt_resonator>::adjustCalculatedNames(FX<fxt_resonator> *m)
+{
+    typedef FX<fxt_resonator> fx_t;
+    typedef ResonatorEffect sfx_t;
+    auto rename = [m](int fxParam, const std::string &name) {
+        auto par = fx_t::FX_PARAM_0 + fxParam;
+        m->paramQuantities[par]->name = name;
+        for (int i = 0; i < fx_t::n_mod_inputs; ++i)
+            m->paramQuantities[fx_t::modulatorIndexFor(par, i)]->name =
+                "Mod" + std::to_string(i + 1) + " to " + name;
+    };
+    rename(sfx_t::resonator_freq1, "Freq. 1");
+    rename(sfx_t::resonator_freq2, "Freq. 2");
+    rename(sfx_t::resonator_freq3, "Freq. 3");
+    rename(sfx_t::resonator_gain, "Output");
+}
+#endif
 template <> void FXConfig<fxt_resonator>::processSpecificParams(FX<fxt_resonator> *m)
 {
     typedef FX<fxt_resonator> fx_t;
