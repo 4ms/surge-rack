@@ -72,5 +72,20 @@ template <> FXConfig<fxt_flanger>::layout_t FXConfig<fxt_flanger>::getLayout()
     // clang-format on
 }
 
+#ifdef METAMODULE
+// The panel labels the feedback knob DEPTH, in the FEEDBACK group, but Surge names it Feedback.
+// (Depth is the other DEPTH knob.)
+template <> void FXConfig<fxt_flanger>::adjustCalculatedNames(FX<fxt_flanger> *m)
+{
+    typedef FX<fxt_flanger> fx_t;
+    static const std::string name{"Fdbk. Depth"};
+    auto par = fx_t::FX_PARAM_0 + FlangerEffect::fl_feedback;
+    m->paramQuantities[par]->name = name;
+    for (int i = 0; i < fx_t::n_mod_inputs; ++i)
+        m->paramQuantities[fx_t::modulatorIndexFor(par, i)]->name =
+            "Mod" + std::to_string(i + 1) + " to " + name;
+}
+#endif
+
 } // namespace sst::surgext_rack::fx
 #endif // SURGEXT_RACK_FX_ROTARYSPEAKER_H

@@ -349,6 +349,8 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
     }
 
     void snapCalculatedNames();
+    // Called after snapCalculatedNames() sets the names, to change some of them
+    virtual void adjustCalculatedNames() {}
 
     void onSurgeError(const std::string &msg, const std::string &title,
                       const SurgeStorage::ErrorType &t) override
@@ -1166,6 +1168,7 @@ inline void XTModule::snapCalculatedNames()
             pq->name = s->getCalculatedName();
         }
     }
+    adjustCalculatedNames();
 }
 
 struct TypeSwappingParameterQuantity : rack::ParamQuantity, modules::CalculatedName

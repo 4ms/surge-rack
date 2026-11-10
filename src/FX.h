@@ -56,6 +56,8 @@ template <int fxType> struct FXConfig
     static void configSpecificParams(FX<fxType> *M) {}
     static void processSpecificParams(FX<fxType> *M) {}
     static void adjustParamsBasedOnState(FX<fxType> *M) {}
+    // Change the names that the params take from the Surge params (see snapCalculatedNames())
+    static void adjustCalculatedNames(FX<fxType> *M) {}
     static void loadPresetOntoSpecificParams(FX<fxType> *M,
                                              const Surge::Storage::FxUserPreset::Preset &)
     {
@@ -191,6 +193,8 @@ struct FX : modules::XTModule, sst::rackhelpers::module_connector::NeighborConne
         configBypass(INPUT_R, OUTPUT_R);
         snapCalculatedNames();
     }
+
+    void adjustCalculatedNames() override { FXConfig<fxType>::adjustCalculatedNames(this); }
 
     std::optional<std::vector<labeledStereoPort_t>> getPrimaryInputs() override
     {

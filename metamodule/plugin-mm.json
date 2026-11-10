@@ -1089,10 +1089,10 @@
             "slug": "SurgeXTFXFlanger",
             "name": "Flanger",
             "groups": {
-                "Mod 1": ["Show Mod 1", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Count", "Mod1 to Base Pitch", "Mod1 to Spacing", "Mod1 to Feedback", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
-                "Mod 2": ["Show Mod 2", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Count", "Mod2 to Base Pitch", "Mod2 to Spacing", "Mod2 to Feedback", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
-                "Mod 3": ["Show Mod 3", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Count", "Mod3 to Base Pitch", "Mod3 to Spacing", "Mod3 to Feedback", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
-                "Mod 4": ["Show Mod 4", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Count", "Mod4 to Base Pitch", "Mod4 to Spacing", "Mod4 to Feedback", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
+                "Mod 1": ["Show Mod 1", "Mod1 to Rate", "Mod1 to Depth", "Mod1 to Count", "Mod1 to Base Pitch", "Mod1 to Spacing", "Mod1 to Fdbk. Depth", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Rate", "Mod2 to Depth", "Mod2 to Count", "Mod2 to Base Pitch", "Mod2 to Spacing", "Mod2 to Fdbk. Depth", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Rate", "Mod3 to Depth", "Mod3 to Count", "Mod3 to Base Pitch", "Mod3 to Spacing", "Mod3 to Fdbk. Depth", "Mod3 to HF Damping", "Mod3 to Width", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Rate", "Mod4 to Depth", "Mod4 to Count", "Mod4 to Base Pitch", "Mod4 to Spacing", "Mod4 to Fdbk. Depth", "Mod4 to HF Damping", "Mod4 to Width", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
                 "Mod1 to Rate": "Rate",
@@ -1115,10 +1115,10 @@
                 "Mod2 to Spacing": "Spacing",
                 "Mod3 to Spacing": "Spacing",
                 "Mod4 to Spacing": "Spacing",
-                "Mod1 to Feedback": "Feedback",
-                "Mod2 to Feedback": "Feedback",
-                "Mod3 to Feedback": "Feedback",
-                "Mod4 to Feedback": "Feedback",
+                "Mod1 to Fdbk. Depth": "Fdbk. Depth",
+                "Mod2 to Fdbk. Depth": "Fdbk. Depth",
+                "Mod3 to Fdbk. Depth": "Fdbk. Depth",
+                "Mod4 to Fdbk. Depth": "Fdbk. Depth",
                 "Mod1 to HF Damping": "HF Damping",
                 "Mod2 to HF Damping": "HF Damping",
                 "Mod3 to HF Damping": "HF Damping",
@@ -1147,7 +1147,7 @@
                 "Modulation Signal 3 In": "Mod 3 In",
                 "Modulation Signal 4 In": "Mod 4 In"
             },
-            "order": ["Rate", "Depth", "Count", "Base Pitch", "Spacing", "Feedback", "HF Damping", "Width", "Mix", "Mode", "Waveform", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
+            "order": ["Rate", "Depth", "Count", "Base Pitch", "Spacing", "Fdbk. Depth", "HF Damping", "Width", "Mix", "Mode", "Waveform", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Clock/Tempo CV In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 9"]
         },
         {
             "slug": "SurgeXTFXRingMod",
