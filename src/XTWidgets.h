@@ -1528,6 +1528,8 @@ struct MomentaryParamButton : GlowOverlayHoverButton<rack::app::ParamWidget>
     }
 };
 
+#ifndef METAMODULE
+// (The MetaModule doesn't draw this, so it has its own ToggleParamButton, in XTWidgets-mm.h)
 struct ToggleParamButton : GlowOverlayHoverButton<rack::app::ParamWidget>
 {
     void onButton(const ButtonEvent &e) override
@@ -1552,6 +1554,7 @@ struct ToggleParamButton : GlowOverlayHoverButton<rack::app::ParamWidget>
         ParamWidget::step();
     }
 };
+#endif
 
 #ifdef METAMODULE
 // Treat the LCD controls as invible knobs

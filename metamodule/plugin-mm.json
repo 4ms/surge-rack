@@ -1392,7 +1392,7 @@
                 "Modulation Signal 3 In": "Mod 3 In",
                 "Modulation Signal 4 In": "Mod 4 In"
             },
-            "order": ["Threshold", "Ratio", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate to Flip It! In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 3"]
+            "order": ["Threshold", "Flip It Good", "Ratio", "Mix", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Gate to Flip It! In", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 3"]
         },
         {
             "slug": "SurgeXTFXExciter",

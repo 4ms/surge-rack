@@ -96,6 +96,12 @@ struct ModToggleParamButton : rack::app::SvgSwitch, style::StyleParticipant
     void onStyleChanged() override {}
 };
 
+// Chow's Flip button, drawn like the Mod buttons. In Rack it's a GlowOverlayHoverButton, which
+// draws itself, so the MetaModule wouldn't draw it at all.
+struct ToggleParamButton : ModToggleParamButton
+{
+};
+
 // The MetaModule draws an LCD as one graphic display: the LCDBackground and the widgets on it.
 // Those stay children of the module widget (params must, for their positions), so this draws
 // them without owning them.
