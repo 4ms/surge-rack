@@ -37,6 +37,10 @@
 #include "TemposyncSupport.h"
 #include "version.h"
 
+#ifdef METAMODULE
+#include "patch/patch_file.hh"
+#endif
+
 namespace logger = rack::logger;
 using rack::appGet;
 
@@ -134,14 +138,36 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
 
     static std::atomic<bool> showedPathsOnce;
 
+	static std::string host_userdir(std::string_view path) {
+#ifdef METAMODULE
+		// Try sd card and usb in order: First whichever vol the patch file is on,
+		// then sdc if it's mounted, then usb if it's mounted
+		auto vol = std::string(MetaModule::Patch::get_volume());
+		if (vol != "sdc:/" && vol != "usb:/") {
+			vol = "sdc:/";
+			if (!fs::exists(fs::path{vol}))
+				vol = "usb:/";
+		}
+        return vol.append(path);
+#else
+        return rack::asset::user(path);
+#endif
+	}
+
     fs::path getRackUserWavetablesDir()
     {
-        return fs::path{rack::asset::user("SurgeXTRack/UserWavetables")};
+        return fs::path{host_userdir("SurgeXTRack/UserWavetables")};
     }
 
     void guaranteeRackUserWavetablesDir()
     {
         auto p = getRackUserWavetablesDir();
+#ifdef METAMODULE
+		// For MM firmware pre-v2.5.x, there is no mkdir() so we have to use the rack api:
+		std::error_code ec;
+        if (!fs::exists(p, ec) && !rack::system::createDirectories(p.string()))
+            INFO("Failed to create FS Dir: %s: %s", p.string().c_str(), ec.message().c_str());
+#else
         try
         {
             if (!fs::exists(p))
@@ -153,6 +179,7 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
         {
             INFO("Failed to create FS Dir: %s", e.what());
         }
+#endif
     }
 
     void setupSurgeCommon(int NUM_PARAMS, bool loadWavetables, bool loadFX)
@@ -165,7 +192,7 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
         {
             config.suppliedDataPath = rack::asset::plugin(pluginInstance, "build/surge-data/");
             config.extraThirdPartyWavetablesPath =
-                fs::path{rack::asset::user("SurgeXTRack/SurgeXTRack_ExtraContent")};
+                fs::path{host_userdir("SurgeXTRack/SurgeXTRack_ExtraContent")};
             guaranteeRackUserWavetablesDir();
             config.extraUsersWavetablesPath = getRackUserWavetablesDir();
             config.scanWavetableAndPatches = loadWavetables;
