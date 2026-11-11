@@ -2504,7 +2504,7 @@
         },
         {
             "slug": "SurgeXTUnisonHelper",
-            "name": "UnisonHelper",
+            "name": "Unison",
             "groups": {
                 "Mod 1": ["Show Mod 1", "Mod 1 to Detune", "Mod 1 to Drift", "Mod 1 to Low Cut", "Mod 1 to High Cut", "Mod 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Detune", "Mod 2 to Drift", "Mod 2 to Low Cut", "Mod 2 to High Cut", "Mod 2 In"],
@@ -2542,7 +2542,7 @@
         },
         {
             "slug": "SurgeXTUnisonHelperCVExpander",
-            "name": "UnisonHelper CV Expander",
+            "name": "Unison CV Expander",
             "names": {
                 "Display 0": "LCD Display"
             },
