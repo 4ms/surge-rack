@@ -395,7 +395,7 @@ template <int oscType> struct VCOWidget : public widgets::XTModuleWidget
             if (vm && vm->forceRefreshWT)
             {
                 vm->forceRefreshWT = false;
-                vm->storage->refresh_wtlist();
+                vm->refreshWavetableList();
             }
         }
         widgets::XTModuleWidget::step();

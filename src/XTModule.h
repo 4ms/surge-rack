@@ -143,11 +143,8 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
 		// Try sd card and usb in order: First whichever vol the patch file is on,
 		// then sdc if it's mounted, then usb if it's mounted
 		auto vol = std::string(MetaModule::Patch::get_volume());
-		if (vol != "sdc:/" && vol != "usb:/") {
-			vol = "sdc:/";
-			if (!fs::exists(fs::path{vol}))
-				vol = "usb:/";
-		}
+		if ((vol != "sdc:/" && vol != "usb:/") || !fs::exists(fs::path{vol}))
+			vol = fs::exists(fs::path{"sdc:/"}) ? "sdc:/" : "usb:/";
         return vol.append(path);
 #else
         return rack::asset::user(path);
@@ -157,6 +154,21 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
     fs::path getRackUserWavetablesDir()
     {
         return fs::path{host_userdir("SurgeXTRack/UserWavetables")};
+    }
+
+    fs::path getRackExtraContentDir()
+    {
+        return fs::path{host_userdir("SurgeXTRack/SurgeXTRack_ExtraContent")};
+    }
+
+    // Find the dirs again before scanning: on MetaModule, the drive they were on may be gone
+    // (see host_userdir())
+    void refreshWavetableList()
+    {
+        guaranteeRackUserWavetablesDir();
+        storage->extraThirdPartyWavetablesPath = getRackExtraContentDir();
+        storage->extraUserWavetablesPath = getRackUserWavetablesDir();
+        storage->refresh_wtlist();
     }
 
     void guaranteeRackUserWavetablesDir()
@@ -191,8 +203,7 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
         if (loadWavetables || loadFX)
         {
             config.suppliedDataPath = rack::asset::plugin(pluginInstance, "build/surge-data/");
-            config.extraThirdPartyWavetablesPath =
-                fs::path{host_userdir("SurgeXTRack/SurgeXTRack_ExtraContent")};
+            config.extraThirdPartyWavetablesPath = getRackExtraContentDir();
             guaranteeRackUserWavetablesDir();
             config.extraUsersWavetablesPath = getRackUserWavetablesDir();
             config.scanWavetableAndPatches = loadWavetables;
