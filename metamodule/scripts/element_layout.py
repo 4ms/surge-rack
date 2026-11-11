@@ -5,8 +5,8 @@
 Run it from the simulator run directory (see ../test/README.md). It reads each module's
 elements with the simulator's --dump-elements, then sets the module's entry in plugin-mm.json:
   - "groups": the groups in GROUPS, then a "Mod N" group for each modulation input, with its
-    "Show Mod N" button first, then the "ModN to X" params in the order of their knobs, then
-    the "Mod N In" jack
+    "Show Mod N" button first, then the "ModN to X" params in the order of their knobs (with the
+    moves in MOD_MOVES), then the "Mod N In" jack
   - "names": the names in GROUPS, "X" for each "ModN to X" param, "Mod N In" for each modulation input jack,
     "X Mod Display" for the display behind the X knob (which draws its mod depth arcs),
     "LCD Display" for the one other display, shorter names for some long jack names, and the
@@ -68,6 +68,9 @@ NAMES = {
     'SurgeXTQuadLFO': {
         'param:48': 'Mode',  # LFO Inter-operation Mode
     },
+    'SurgeXTFXResonator': {
+        'param:10': 'Output Gain',
+    },
 }
 
 # Elements to move in the order, by module slug: (element, the element or group it goes after),
@@ -77,6 +80,12 @@ MOVES = {
     # Type after Unipolar, then Rotate Steps Left and Right after Last Loop Point
     'SurgeXTLFO': [('param:97', 'param:11'), ('param:98', 'param:91'), ('param:99', 'param:98')],
     'SurgeXTQuadLFO': [('param:48', 'Mod 4')],  # Mode after the Mod groups
+}
+
+# Mod params to move in the Mod groups, by module slug: (the name of the knob it modulates, the
+# name of the knob whose mod param it goes after), with the names from NAMES
+MOD_MOVES = {
+    'SurgeXTFXResonator': [('Output Gain', 'Gain 3')],  # Output Gain just before Mix
 }
 
 # More groups, by module slug: the group name => its elements, by index, or (index, name) to give
@@ -103,6 +112,11 @@ GROUPS = {
         f'LFO {n + 1}': [f'param:{i}' for i in (n, 4 + n, 8 + n, 12 + n)]
                         + [f'in:{n}', (f'out:{n}', f'LFO{NBSP}Out')]
         for n in range(4)
+    },
+    # Each band's Frequency, Resonance, Gain, and Extend Frequency
+    'SurgeXTFXResonator': {
+        f'Band {n + 1}': [f'param:{i}' for i in (3 * n, 3 * n + 1, 3 * n + 2, 60 + n)]
+        for n in range(3)
     },
     'SurgeXTLFO': {
         'Steps': [f'param:{i}' for i in range(58, 74)],
@@ -237,7 +251,12 @@ def layout(slug, elements):
     groups = {group: [ref(by_index[i]) for i in members] for group, members in more_groups.items()}
     for group in sorted(shows.keys() | mod_params.keys()):
         members = [shows[group]] if group in shows else []
-        members += reading_order(mod_params.get(group, []))
+        knobs = reading_order(mod_params.get(group, []))
+        for target, after in MOD_MOVES.get(slug, []):
+            el = next(el for el in knobs if mod_target(el) == target)
+            knobs.remove(el)
+            knobs.insert(next(n for n, k in enumerate(knobs) if mod_target(k) == after) + 1, el)
+        members += knobs
         if jack := mod_jacks.get(group):
             members.append(jack)
             names[ref(jack)] = f'{group} In'

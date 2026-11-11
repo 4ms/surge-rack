@@ -1292,12 +1292,16 @@
             "slug": "SurgeXTFXResonator",
             "name": "Resonator",
             "groups": {
-                "Mod 1": ["Show Mod 1", "Mod1 to Frequency 1", "Mod1 to Resonance 1", "Mod1 to Gain 1", "Mod1 to Frequency 2", "Mod1 to Resonance 2", "Mod1 to Gain 2", "Mod1 to Gain", "Mod1 to Frequency 3", "Mod1 to Resonance 3", "Mod1 to Gain 3", "Mod1 to Mix", "Modulation Signal 1 In"],
-                "Mod 2": ["Show Mod 2", "Mod2 to Frequency 1", "Mod2 to Resonance 1", "Mod2 to Gain 1", "Mod2 to Frequency 2", "Mod2 to Resonance 2", "Mod2 to Gain 2", "Mod2 to Gain", "Mod2 to Frequency 3", "Mod2 to Resonance 3", "Mod2 to Gain 3", "Mod2 to Mix", "Modulation Signal 2 In"],
-                "Mod 3": ["Show Mod 3", "Mod3 to Frequency 1", "Mod3 to Resonance 1", "Mod3 to Gain 1", "Mod3 to Frequency 2", "Mod3 to Resonance 2", "Mod3 to Gain 2", "Mod3 to Gain", "Mod3 to Frequency 3", "Mod3 to Resonance 3", "Mod3 to Gain 3", "Mod3 to Mix", "Modulation Signal 3 In"],
-                "Mod 4": ["Show Mod 4", "Mod4 to Frequency 1", "Mod4 to Resonance 1", "Mod4 to Gain 1", "Mod4 to Frequency 2", "Mod4 to Resonance 2", "Mod4 to Gain 2", "Mod4 to Gain", "Mod4 to Frequency 3", "Mod4 to Resonance 3", "Mod4 to Gain 3", "Mod4 to Mix", "Modulation Signal 4 In"]
+                "Band 1": ["Frequency 1", "Resonance 1", "Gain 1", "Extend Band 1 Frequency"],
+                "Band 2": ["Frequency 2", "Resonance 2", "Gain 2", "Extend Band 2 Frequency"],
+                "Band 3": ["Frequency 3", "Resonance 3", "Gain 3", "Extend Band 3 Frequency"],
+                "Mod 1": ["Show Mod 1", "Mod1 to Frequency 1", "Mod1 to Resonance 1", "Mod1 to Gain 1", "Mod1 to Frequency 2", "Mod1 to Resonance 2", "Mod1 to Gain 2", "Mod1 to Frequency 3", "Mod1 to Resonance 3", "Mod1 to Gain 3", "Mod1 to Gain", "Mod1 to Mix", "Modulation Signal 1 In"],
+                "Mod 2": ["Show Mod 2", "Mod2 to Frequency 1", "Mod2 to Resonance 1", "Mod2 to Gain 1", "Mod2 to Frequency 2", "Mod2 to Resonance 2", "Mod2 to Gain 2", "Mod2 to Frequency 3", "Mod2 to Resonance 3", "Mod2 to Gain 3", "Mod2 to Gain", "Mod2 to Mix", "Modulation Signal 2 In"],
+                "Mod 3": ["Show Mod 3", "Mod3 to Frequency 1", "Mod3 to Resonance 1", "Mod3 to Gain 1", "Mod3 to Frequency 2", "Mod3 to Resonance 2", "Mod3 to Gain 2", "Mod3 to Frequency 3", "Mod3 to Resonance 3", "Mod3 to Gain 3", "Mod3 to Gain", "Mod3 to Mix", "Modulation Signal 3 In"],
+                "Mod 4": ["Show Mod 4", "Mod4 to Frequency 1", "Mod4 to Resonance 1", "Mod4 to Gain 1", "Mod4 to Frequency 2", "Mod4 to Resonance 2", "Mod4 to Gain 2", "Mod4 to Frequency 3", "Mod4 to Resonance 3", "Mod4 to Gain 3", "Mod4 to Gain", "Mod4 to Mix", "Modulation Signal 4 In"]
             },
             "names": {
+                "Gain": "Output Gain",
                 "Mod1 to Frequency 1": "Frequency 1",
                 "Mod2 to Frequency 1": "Frequency 1",
                 "Mod3 to Frequency 1": "Frequency 1",
@@ -1334,10 +1338,10 @@
                 "Mod2 to Gain 3": "Gain 3",
                 "Mod3 to Gain 3": "Gain 3",
                 "Mod4 to Gain 3": "Gain 3",
-                "Mod1 to Gain": "Gain",
-                "Mod2 to Gain": "Gain",
-                "Mod3 to Gain": "Gain",
-                "Mod4 to Gain": "Gain",
+                "Mod1 to Gain": "Output Gain",
+                "Mod2 to Gain": "Output Gain",
+                "Mod3 to Gain": "Output Gain",
+                "Mod4 to Gain": "Output Gain",
                 "Mod1 to Mix": "Mix",
                 "Mod2 to Mix": "Mix",
                 "Mod3 to Mix": "Mix",
@@ -1352,7 +1356,7 @@
                 "Display 6": "Frequency 3 Mod Display",
                 "Display 7": "Resonance 3 Mod Display",
                 "Display 8": "Gain 3 Mod Display",
-                "Display 9": "Gain Mod Display",
+                "Display 9": "Output Gain Mod Display",
                 "Display 10": "Mix Mod Display",
                 "Display 11": "LCD Display",
                 "Modulation Signal 1 In": "Mod 1 In",
@@ -1360,7 +1364,7 @@
                 "Modulation Signal 3 In": "Mod 3 In",
                 "Modulation Signal 4 In": "Mod 4 In"
             },
-            "order": ["Frequency 1", "Resonance 1", "Gain 1", "Frequency 2", "Resonance 2", "Gain 2", "Gain", "Frequency 3", "Resonance 3", "Gain 3", "Mix", "Extend Band 1 Frequency", "Extend Band 2 Frequency", "Extend Band 3 Frequency", "Mode", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 11"]
+            "order": ["Gain", "Mix", "Mode", "Band 1", "Band 2", "Band 3", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Left In", "Right In", "Left (or Mono merged) Out", "Right Out", "Display 11"]
         },
         {
             "slug": "SurgeXTFXChow",
