@@ -4,14 +4,15 @@
 
 Run it from the simulator run directory (see ../test/README.md). It reads each module's
 elements with the simulator's --dump-elements, then sets the module's entry in plugin-mm.json:
-  - "groups": a "Mod N" group for each modulation input, with its "Show Mod N" button
-    first, then the "ModN to X" params in the order of their knobs, then the "Mod N In" jack
-  - "names": "X" for each "ModN to X" param, "Mod N In" for each modulation input jack,
+  - "groups": the groups in GROUPS, then a "Mod N" group for each modulation input, with its
+    "Show Mod N" button first, then the "ModN to X" params in the order of their knobs, then
+    the "Mod N In" jack
+  - "names": the names in GROUPS, "X" for each "ModN to X" param, "Mod N In" for each modulation input jack,
     "X Mod Display" for the display behind the X knob (which draws its mod depth arcs),
     "LCD Display" for the one other display, shorter names for some long jack names, and the
     names in NAMES (which a knob's mod params and mod display also take)
   - "order": the panel's knobs and sliders, then its switches, then the params on the LCD,
-    each in reading order, then the Mod groups, then the jacks in reading order, then the
+    each in reading order, then the groups, then the jacks in reading order, then the
     LCD Display, with the moves in MOVES. Everything else follows, in the module's own order.
 Elements are given by name, or by index ("param:N", "in:N", "out:N") if another element
 has the same name. Other entries in plugin-mm.json are kept.
@@ -69,7 +70,32 @@ NAMES = {
 # Elements to move in the order, by module slug: (element, the element it goes after), by index
 MOVES = {
     'SurgeXTFXChow': [('param:60', 'param:0')],  # Flip It Good after Threshold
-    'SurgeXTLFO': [('param:10', 'param:91')],  # Type after Last Loop Point
+    # Type after Unipolar, then Rotate Steps Left and Right after Last Loop Point
+    'SurgeXTLFO': [('param:97', 'param:11'), ('param:98', 'param:91'), ('param:99', 'param:98')],
+}
+
+# More groups, by module slug: the group name => its elements, by index, or (index, name) to give
+# the element a name (which, unlike in NAMES, its mod params and mod display don't take). They
+# come before the Mod groups.
+# The firmware leaves out of a member's name any word that's also in its group's name, so a
+# member keeps such a word only with a no-break space (NBSP) joining it to the next word.
+NBSP = '\u00a0'
+GROUPS = {
+    # Each AD's Attack, Decay, Link EOC, Sum ENV (there's no 4th, param 31), AD vs AR, Attack
+    # Curve, Mode, Decay Curve, and its jacks. The ADs' knobs and jacks are named from 0, but their
+    # mod params from 1.
+    'SurgeXTQuadAD': {
+        f'AD {n + 1}': [(f'param:{n}', 'Attack'), (f'param:{4 + n}', 'Decay')]
+                       + [f'param:{i}' for i in (24 + n, 28 + n) if i != 31]
+                       + [(f'param:{20 + n}', f'AD{NBSP}vs AR')]
+                       + [f'param:{i}' for i in (12 + n, 8 + n, 16 + n)]
+                       + [(f'in:{n}', 'Trigger/Gate In'), (f'out:{n}', 'ENV Out')]
+        for n in range(4)
+    },
+    'SurgeXTLFO': {
+        'Steps': [f'param:{i}' for i in range(58, 74)],
+        'Step Triggers': [f'param:{i}' for i in range(74, 90)],
+    },
 }
 
 ELEMENT = re.compile(r'^\[\s*\d+\] (\S+)\s+x=\s*(\S+) y=\s*(\S+) w=\s*(\S+) h=\s*(\S+) "([^"]*)"'
@@ -138,8 +164,16 @@ def layout(slug, elements):
     by_index = {index(el): el for el in elements if el.id is not None}
     overrides = NAMES.get(slug, {})
     moves = MOVES.get(slug, [])
-    if unknown := (overrides.keys() | {i for move in moves for i in move}) - by_index.keys():
-        sys.exit(f'{slug}: NAMES or MOVES has elements it doesn\'t have: {", ".join(sorted(unknown))}')
+    more_groups = {}
+    group_names = {}
+    for group, members in GROUPS.get(slug, {}).items():
+        more_groups[group] = [m if isinstance(m, str) else m[0] for m in members]
+        group_names |= {m[0]: m[1] for m in members if not isinstance(m, str)}
+    used = overrides.keys() | {i for move in moves for i in move} | {
+        i for members in more_groups.values() for i in members}
+    if unknown := used - by_index.keys():
+        sys.exit(f'{slug}: NAMES, MOVES, or GROUPS has elements it doesn\'t have: '
+                 f'{", ".join(sorted(unknown))}')
 
     # The mod params of a knob are at its center, and so is the display behind it
     mod_targets = {}
@@ -188,7 +222,7 @@ def layout(slug, elements):
                        key=lambda el: el.id)
     mod_jacks = {f'Mod {n}': el for n, el in enumerate(mod_jacks, 1)}
 
-    groups = {}
+    groups = {group: [ref(by_index[i]) for i in members] for group, members in more_groups.items()}
     for group in sorted(shows.keys() | mod_params.keys()):
         members = [shows[group]] if group in shows else []
         members += reading_order(mod_params.get(group, []))
@@ -206,7 +240,7 @@ def layout(slug, elements):
     order += [ref(el) for el in reading_order([el for el in on_panel if el.kind in KNOBS])]
     order += [ref(el) for el in reading_order([el for el in on_panel if el.kind not in KNOBS])]
     order += [ref(el) for el in reading_order(on_lcd)]
-    order += sorted(groups)
+    order += list(more_groups) + sorted(groups.keys() - more_groups.keys())
     jacks = [el for el in elements if el.kind in JACKS and ref(el) not in grouped]
     order += [ref(el) for el in reading_order(jacks)]
     order += [ref(el) for el in lcds if len(lcds) == 1]
@@ -215,8 +249,9 @@ def layout(slug, elements):
         order.remove(ref(by_index[i]))
         order.insert(order.index(ref(by_index[after])) + 1, ref(by_index[i]))
 
-    # NAMES first (and instead of any made above)
-    named = {ref(by_index[i]): name for i, name in overrides.items() if name != by_index[i].name}
+    # NAMES and the names in GROUPS first (and instead of any made above)
+    named = {ref(by_index[i]): name for i, name in (overrides | group_names).items()
+             if name != by_index[i].name}
     names = named | {r: name for r, name in names.items() if r not in named}
 
     return groups, names, order
@@ -225,6 +260,8 @@ def layout(slug, elements):
 def dump(data):
     # One line per group, rather than one line per group member
     text = json.dumps(data, indent=4, ensure_ascii=False)
+    # An NBSP looks like a space, so write it escaped
+    text = text.replace(NBSP, '\\u00a0')
     return re.sub(r'\[\n\s+("[^\]]*?)\n\s+\]',
                   lambda m: '[' + ', '.join(s.strip() for s in m.group(1).split(',\n')) + ']', text) + '\n'
 

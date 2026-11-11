@@ -1926,12 +1926,12 @@
             "slug": "SurgeXTLFO",
             "name": "LFO x EG",
             "groups": {
+                "Steps": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5", "Step 6", "Step 7", "Step 8", "Step 9", "Step 10", "Step 11", "Step 12", "Step 13", "Step 14", "Step 15", "Step 16"],
+                "Step Triggers": ["Step Trigger 1", "Step Trigger 2", "Step Trigger 3", "Step Trigger 4", "Step Trigger 5", "Step Trigger 6", "Step Trigger 7", "Step Trigger 8", "Step Trigger 9", "Step Trigger 10", "Step Trigger 11", "Step Trigger 12", "Step Trigger 13", "Step Trigger 14", "Step Trigger 15", "Step Trigger 16"],
                 "Mod 1": ["Show Mod 1", "Mod 1 to Rate", "Mod 1 to Phase", "Mod 1 to Deform", "Mod 1 to Amplitude", "Mod 1 to Delay", "Mod 1 to Attack", "Mod 1 to Hold", "Mod 1 to Decay", "Mod 1 to Sustain", "Mod 1 to Release", "Mod 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Rate", "Mod 2 to Phase", "Mod 2 to Deform", "Mod 2 to Amplitude", "Mod 2 to Delay", "Mod 2 to Attack", "Mod 2 to Hold", "Mod 2 to Decay", "Mod 2 to Sustain", "Mod 2 to Release", "Mod 2 In"],
                 "Mod 3": ["Show Mod 3", "Mod 3 to Rate", "Mod 3 to Phase", "Mod 3 to Deform", "Mod 3 to Amplitude", "Mod 3 to Delay", "Mod 3 to Attack", "Mod 3 to Hold", "Mod 3 to Decay", "Mod 3 to Sustain", "Mod 3 to Release", "Mod 3 In"],
-                "Mod 4": ["Show Mod 4", "Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 In"],
-                "Steps": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5", "Step 6", "Step 7", "Step 8", "Step 9", "Step 10", "Step 11", "Step 12", "Step 13", "Step 14", "Step 15", "Step 16"],
-                "Step Triggers": ["Step Trigger 1", "Step Trigger 2", "Step Trigger 3", "Step Trigger 4", "Step Trigger 5", "Step Trigger 6", "Step Trigger 7", "Step Trigger 8", "Step Trigger 9", "Step Trigger 10", "Step Trigger 11", "Step Trigger 12", "Step Trigger 13", "Step Trigger 14", "Step Trigger 15", "Step Trigger 16"]
+                "Mod 4": ["Show Mod 4", "Mod 4 to Rate", "Mod 4 to Phase", "Mod 4 to Deform", "Mod 4 to Amplitude", "Mod 4 to Delay", "Mod 4 to Attack", "Mod 4 to Hold", "Mod 4 to Decay", "Mod 4 to Sustain", "Mod 4 to Release", "Mod 4 In"]
             },
             "names": {
                 "Mod 1 to Rate": "Rate",
@@ -2175,12 +2175,36 @@
             "slug": "SurgeXTQuadAD",
             "name": "Quad AD",
             "groups": {
+                "AD 1": ["Attack 0", "Decay 0", "Link 1 EOC to 2 Attack", "Sum 1 ENV to 2 Output", "param:20", "param:12", "param:8", "param:16", "Trigger/Gate 0 In", "ENV 0 Out"],
+                "AD 2": ["Attack 1", "Decay 1", "Link 2 EOC to 3 Attack", "Sum 2 ENV to 3 Output", "param:21", "param:13", "param:9", "param:17", "Trigger/Gate 1 In", "ENV 1 Out"],
+                "AD 3": ["Attack 2", "Decay 2", "Link 3 EOC to 4 Attack", "Sum 3 ENV to 4 Output", "param:22", "param:14", "param:10", "param:18", "Trigger/Gate 2 In", "ENV 2 Out"],
+                "AD 4": ["Attack 3", "Decay 3", "Link 4 EOC to 1 Attack", "param:23", "param:15", "param:11", "param:19", "Trigger/Gate 3 In", "ENV 3 Out"],
                 "Mod 1": ["Show Mod 1", "Mod 1 to Attack 1", "Mod 1 to Attack 2", "Mod 1 to Attack 3", "Mod 1 to Attack 4", "Mod 1 to Decay 1", "Mod 1 to Decay 2", "Mod 1 to Decay 3", "Mod 1 to Decay 4", "Mod 0 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Attack 1", "Mod 2 to Attack 2", "Mod 2 to Attack 3", "Mod 2 to Attack 4", "Mod 2 to Decay 1", "Mod 2 to Decay 2", "Mod 2 to Decay 3", "Mod 2 to Decay 4", "Mod 1 In"],
                 "Mod 3": ["Show Mod 3", "Mod 3 to Attack 1", "Mod 3 to Attack 2", "Mod 3 to Attack 3", "Mod 3 to Attack 4", "Mod 3 to Decay 1", "Mod 3 to Decay 2", "Mod 3 to Decay 3", "Mod 3 to Decay 4", "Mod 2 In"],
                 "Mod 4": ["Show Mod 4", "Mod 4 to Attack 1", "Mod 4 to Attack 2", "Mod 4 to Attack 3", "Mod 4 to Attack 4", "Mod 4 to Decay 1", "Mod 4 to Decay 2", "Mod 4 to Decay 3", "Mod 4 to Decay 4", "Mod 3 In"]
             },
             "names": {
+                "Attack 0": "Attack",
+                "Decay 0": "Decay",
+                "param:20": "AD\u00a0vs AR",
+                "Trigger/Gate 0 In": "Trigger/Gate In",
+                "ENV 0 Out": "ENV Out",
+                "Attack 1": "Attack",
+                "Decay 1": "Decay",
+                "param:21": "AD\u00a0vs AR",
+                "Trigger/Gate 1 In": "Trigger/Gate In",
+                "ENV 1 Out": "ENV Out",
+                "Attack 2": "Attack",
+                "Decay 2": "Decay",
+                "param:22": "AD\u00a0vs AR",
+                "Trigger/Gate 2 In": "Trigger/Gate In",
+                "ENV 2 Out": "ENV Out",
+                "Attack 3": "Attack",
+                "Decay 3": "Decay",
+                "param:23": "AD\u00a0vs AR",
+                "Trigger/Gate 3 In": "Trigger/Gate In",
+                "ENV 3 Out": "ENV Out",
                 "Mod 1 to Attack 1": "Attack 1",
                 "Mod 2 to Attack 1": "Attack 1",
                 "Mod 3 to Attack 1": "Attack 1",
@@ -2227,7 +2251,7 @@
                 "Mod 2 In": "Mod 3 In",
                 "Mod 3 In": "Mod 4 In"
             },
-            "order": ["Attack 0", "Attack 1", "Attack 2", "Attack 3", "Decay 0", "Decay 1", "Decay 2", "Decay 3", "Link 1 EOC to 2 Attack", "Link 2 EOC to 3 Attack", "Link 3 EOC to 4 Attack", "Link 4 EOC to 1 Attack", "Sum 1 ENV to 2 Output", "Sum 2 ENV to 3 Output", "Sum 3 ENV to 4 Output", "param:20", "param:21", "param:22", "param:23", "param:12", "param:8", "param:16", "param:13", "param:9", "param:17", "param:14", "param:10", "param:18", "param:15", "param:11", "param:19", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger/Gate 0 In", "Trigger/Gate 1 In", "Trigger/Gate 2 In", "Trigger/Gate 3 In", "ENV 0 Out", "ENV 1 Out", "ENV 2 Out", "ENV 3 Out", "Display 8"]
+            "order": ["AD 1", "AD 2", "AD 3", "AD 4", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Display 8"]
         },
         {
             "slug": "SurgeXTQuadLFO",
