@@ -471,6 +471,22 @@ QuadLFOWidget::QuadLFOWidget(sst::surgext_rack::quadlfo::ui::QuadLFOWidget::M *m
             auto ql = QuadWavePicker::create(rack::Vec(topx + qw * i, topy), rack::Vec(qw, height),
                                              module, i);
             addChild(ql);
+
+#ifdef METAMODULE
+            // Make params for the waveshape picker and uni/bipolar selection on MetaModule
+            auto lh = ql->labelHeight;
+            for (auto [par, y, h] : {std::tuple{M::SHAPE_0, 0.f, ql->box.size.y - lh},
+                                     std::tuple{M::BIPOLAR_0, ql->box.size.y - lh, lh}})
+            {
+                auto *k = new widgets::PlotAreaKnob();
+                k->box.pos = ql->box.pos.plus(rack::Vec(0, y));
+                k->box.size = rack::Vec(ql->box.size.x, h);
+                k->module = module;
+                k->paramId = par + i;
+                k->initParamQuantity();
+                addChild(k);
+            }
+#endif
         }
     }
 
