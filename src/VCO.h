@@ -456,6 +456,25 @@ struct VCO : public modules::XTModule, sst::rackhelpers::module_connector::Neigh
 
     void loadWavetable(WavetableMessage msg)
     {
+#ifdef METAMODULE
+        // A file that can't be read throws (from std::filebuf). The wavetable is left as it
+        // was, but the audio thread must be resumed or the VCO stays silent for good.
+        try
+        {
+            loadQueuedWavetable(msg);
+        }
+        catch (const std::exception &e)
+        {
+            WARN("Failed to load wavetable: %s", e.what());
+        }
+        suspendForWT = false;
+#else
+        loadQueuedWavetable(msg);
+#endif
+    }
+
+    void loadQueuedWavetable(const WavetableMessage &msg)
+    {
         if (msg.index >= 0)
         {
             auto nid = std::clamp((int)msg.index, (int)0, (int)storage->wt_list.size());
