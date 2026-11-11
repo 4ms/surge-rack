@@ -65,13 +65,18 @@ NAMES = {
     'SurgeXTDigitalRingMod': {
         'param:2': 'Link 2A to Out 1',
     },
+    'SurgeXTQuadLFO': {
+        'param:48': 'Mode',  # LFO Inter-operation Mode
+    },
 }
 
-# Elements to move in the order, by module slug: (element, the element it goes after), by index
+# Elements to move in the order, by module slug: (element, the element or group it goes after),
+# by index or group name
 MOVES = {
     'SurgeXTFXChow': [('param:60', 'param:0')],  # Flip It Good after Threshold
     # Type after Unipolar, then Rotate Steps Left and Right after Last Loop Point
     'SurgeXTLFO': [('param:97', 'param:11'), ('param:98', 'param:91'), ('param:99', 'param:98')],
+    'SurgeXTQuadLFO': [('param:48', 'Mod 4')],  # Mode after the Mod groups
 }
 
 # More groups, by module slug: the group name => its elements, by index, or (index, name) to give
@@ -90,6 +95,13 @@ GROUPS = {
                        + [(f'param:{20 + n}', f'AD{NBSP}vs AR')]
                        + [f'param:{i}' for i in (12 + n, 8 + n, 16 + n)]
                        + [(f'in:{n}', 'Trigger/Gate In'), (f'out:{n}', 'ENV Out')]
+        for n in range(4)
+    },
+    # Each LFO's Rate, Deform, Shape, Bipolar, and jacks. The firmware shows "Rate 1" in "LFO 1" as
+    # "Rate", but "LFO 1 Out" would be just "Out".
+    'SurgeXTQuadLFO': {
+        f'LFO {n + 1}': [f'param:{i}' for i in (n, 4 + n, 8 + n, 12 + n)]
+                        + [f'in:{n}', (f'out:{n}', f'LFO{NBSP}Out')]
         for n in range(4)
     },
     'SurgeXTLFO': {
@@ -169,7 +181,7 @@ def layout(slug, elements):
     for group, members in GROUPS.get(slug, {}).items():
         more_groups[group] = [m if isinstance(m, str) else m[0] for m in members]
         group_names |= {m[0]: m[1] for m in members if not isinstance(m, str)}
-    used = overrides.keys() | {i for move in moves for i in move} | {
+    used = overrides.keys() | {i for move in moves for i in move if ':' in i} | {
         i for members in more_groups.values() for i in members}
     if unknown := used - by_index.keys():
         sys.exit(f'{slug}: NAMES, MOVES, or GROUPS has elements it doesn\'t have: '
@@ -245,9 +257,11 @@ def layout(slug, elements):
     order += [ref(el) for el in reading_order(jacks)]
     order += [ref(el) for el in lcds if len(lcds) == 1]
 
+    if unknown := {after for _, after in moves if ':' not in after} - groups.keys():
+        sys.exit(f'{slug}: MOVES has groups it doesn\'t have: {", ".join(sorted(unknown))}')
     for i, after in moves:
         order.remove(ref(by_index[i]))
-        order.insert(order.index(ref(by_index[after])) + 1, ref(by_index[i]))
+        order.insert(order.index(after if after in groups else ref(by_index[after])) + 1, ref(by_index[i]))
 
     # NAMES and the names in GROUPS first (and instead of any made above)
     named = {ref(by_index[i]): name for i, name in (overrides | group_names).items()

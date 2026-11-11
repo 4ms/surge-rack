@@ -2257,12 +2257,21 @@
             "slug": "SurgeXTQuadLFO",
             "name": "Quad LFO",
             "groups": {
+                "LFO 1": ["Rate 1", "Deform 1", "Shape 1", "Bipolar 1", "Trigger 1 In", "LFO 1 Out"],
+                "LFO 2": ["Rate 2", "Deform 2", "Shape 2", "Bipolar 2", "Trigger 2 In", "LFO 2 Out"],
+                "LFO 3": ["Rate 3", "Deform 3", "Shape 3", "Bipolar 3", "Trigger 3 In", "LFO 3 Out"],
+                "LFO 4": ["Rate 4", "Deform 4", "Shape 4", "Bipolar 4", "Trigger 4 In", "LFO 4 Out"],
                 "Mod 1": ["Show Mod 1", "Mod 1 to Rate 1", "Mod 1 to Rate 2", "Mod 1 to Rate 3", "Mod 1 to Rate 4", "Mod 1 to Deform 1", "Mod 1 to Deform 2", "Mod 1 to Deform 3", "Mod 1 to Deform 4", "Mod 0 In"],
                 "Mod 2": ["Show Mod 2", "Mod 2 to Rate 1", "Mod 2 to Rate 2", "Mod 2 to Rate 3", "Mod 2 to Rate 4", "Mod 2 to Deform 1", "Mod 2 to Deform 2", "Mod 2 to Deform 3", "Mod 2 to Deform 4", "Mod 1 In"],
                 "Mod 3": ["Show Mod 3", "Mod 3 to Rate 1", "Mod 3 to Rate 2", "Mod 3 to Rate 3", "Mod 3 to Rate 4", "Mod 3 to Deform 1", "Mod 3 to Deform 2", "Mod 3 to Deform 3", "Mod 3 to Deform 4", "Mod 2 In"],
                 "Mod 4": ["Show Mod 4", "Mod 4 to Rate 1", "Mod 4 to Rate 2", "Mod 4 to Rate 3", "Mod 4 to Rate 4", "Mod 4 to Deform 1", "Mod 4 to Deform 2", "Mod 4 to Deform 3", "Mod 4 to Deform 4", "Mod 3 In"]
             },
             "names": {
+                "LFO Inter-operation Mode": "Mode",
+                "LFO 1 Out": "LFO\u00a0Out",
+                "LFO 2 Out": "LFO\u00a0Out",
+                "LFO 3 Out": "LFO\u00a0Out",
+                "LFO 4 Out": "LFO\u00a0Out",
                 "Mod 1 to Rate 1": "Rate 1",
                 "Mod 2 to Rate 1": "Rate 1",
                 "Mod 3 to Rate 1": "Rate 1",
@@ -2309,7 +2318,7 @@
                 "Mod 2 In": "Mod 3 In",
                 "Mod 3 In": "Mod 4 In"
             },
-            "order": ["Rate 1", "Rate 2", "Rate 3", "Rate 4", "Deform 1", "Deform 2", "Deform 3", "Deform 4", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "Trigger 1 In", "Trigger 2 In", "Trigger 3 In", "Trigger 4 In", "LFO 1 Out", "LFO 2 Out", "LFO 3 Out", "LFO 4 Out", "Display 8"]
+            "order": ["LFO 1", "LFO 2", "LFO 3", "LFO 4", "Mod 1", "Mod 2", "Mod 3", "Mod 4", "LFO Inter-operation Mode", "Display 8"]
         },
         {
             "slug": "SurgeXTMixer",
