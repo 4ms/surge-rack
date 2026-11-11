@@ -2405,7 +2405,10 @@
         },
         {
             "slug": "SurgeXTDigitalRingMod",
-            "name": "Digital RingModulators and Combinators",
+            "name": "CXOR",
+            "names": {
+                "Link Second A to First Output": "Link 2A to Out 1"
+            },
             "order": ["Link Second A to First Output", "CXOR 1 Algorithm", "CXOR 2 Algorithm", "CXOR 1 A Left In", "CXOR 1 A Right In", "CXOR 1 B Left In", "CXOR 1 B Right In", "CXOR 1 Left Out", "CXOR 1 Right Out", "CXOR 2 A Left In", "CXOR 2 A Right In", "CXOR 2 B Left In", "CXOR 2 B Right In", "CXOR 2 Left Out", "CXOR 2 Right Out"]
         },
         {
