@@ -591,7 +591,7 @@
         },
         {
             "slug": "SurgeXTFXReverb",
-            "name": "Reverb",
+            "name": "Reverb 1",
             "groups": {
                 "Mod 1": ["Show Mod 1", "Mod1 to Size", "Mod1 to Decay Time", "Mod1 to Low Cut", "Mod1 to Peak Freq", "Mod1 to Peak Gain", "Mod1 to High Cut", "Mod1 to Pre-Delay", "Mod1 to HF Damping", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod2 to Size", "Mod2 to Decay Time", "Mod2 to Low Cut", "Mod2 to Peak Freq", "Mod2 to Peak Gain", "Mod2 to High Cut", "Mod2 to Pre-Delay", "Mod2 to HF Damping", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
@@ -1027,7 +1027,7 @@
         },
         {
             "slug": "SurgeXTFXReverb2",
-            "name": "Reverb2",
+            "name": "Reverb 2",
             "groups": {
                 "Mod 1": ["Show Mod 1", "Mod1 to Room Size", "Mod1 to Decay Time", "Mod1 to Diffusion", "Mod1 to Modulation", "Mod1 to LF Damping", "Mod1 to HF Damping", "Mod1 to Pre-Delay", "Mod1 to Buildup", "Mod1 to Width", "Mod1 to Mix", "Modulation Signal 1 In"],
                 "Mod 2": ["Show Mod 2", "Mod2 to Room Size", "Mod2 to Decay Time", "Mod2 to Diffusion", "Mod2 to Modulation", "Mod2 to LF Damping", "Mod2 to HF Damping", "Mod2 to Pre-Delay", "Mod2 to Buildup", "Mod2 to Width", "Mod2 to Mix", "Modulation Signal 2 In"],
