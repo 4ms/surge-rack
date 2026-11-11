@@ -639,10 +639,10 @@ struct QuadLFO : modules::XTModule
         {
             configParam<RateQuantity>(RATE_0 + i, 0, 1, defaultRate0);
             configParam<DeformQuantity>(DEFORM_0 + i, -1, 1, 0);
-            configSwitch(SHAPE_0 + i, 0, 7, 0, "Shape",
+            configSwitch(SHAPE_0 + i, 0, 7, 0, "Shape " + std::to_string(i + 1),
                          {"Sine", "Ramp Up", "Ramp Down", "Triangle", "Pulse", "Random", "S&H",
                           "Random Trigger"});
-            configSwitch(BIPOLAR_0 + i, 0, 1, 1, "Bipolar", {"Uni", "Bi"});
+            configSwitch(BIPOLAR_0 + i, 0, 1, 1, "Bipolar " + std::to_string(i + 1), {"Uni", "Bi"});
         }
         // resetInteractionType() renames these, so they need a PortInfo
         for (int i = 0; i < n_lfos; ++i)
