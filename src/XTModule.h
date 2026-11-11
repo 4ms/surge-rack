@@ -151,23 +151,41 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
 #endif
 	}
 
+	// The dirs to scan for the given dir (they're merged): on MetaModule, the one on each drive,
+	// the patch's drive first (so its copy of a file is the one listed, if both have it)
+	static std::vector<fs::path> host_userdirs(std::string_view path) {
+#ifdef METAMODULE
+		std::string vols[] = {"sdc:/", "usb:/"};
+		if (std::string(MetaModule::Patch::get_volume()) == "usb:/")
+			std::swap(vols[0], vols[1]);
+		return {fs::path{vols[0].append(path)}, fs::path{vols[1].append(path)}};
+#else
+		return {fs::path{rack::asset::user(path)}};
+#endif
+	}
+
     fs::path getRackUserWavetablesDir()
     {
         return fs::path{host_userdir("SurgeXTRack/UserWavetables")};
     }
 
-    fs::path getRackExtraContentDir()
+    std::vector<fs::path> getRackUserWavetablesDirs()
     {
-        return fs::path{host_userdir("SurgeXTRack/SurgeXTRack_ExtraContent")};
+        return host_userdirs("SurgeXTRack/UserWavetables");
     }
 
-    // Find the dirs again before scanning: on MetaModule, the drive they were on may be gone
-    // (see host_userdir())
+    std::vector<fs::path> getRackExtraContentDirs()
+    {
+        return host_userdirs("SurgeXTRack/SurgeXTRack_ExtraContent");
+    }
+
+    // Find the dirs again before scanning: on MetaModule, the drives may have changed (see
+    // host_userdir() and host_userdirs())
     void refreshWavetableList()
     {
         guaranteeRackUserWavetablesDir();
-        storage->extraThirdPartyWavetablesPath = getRackExtraContentDir();
-        storage->extraUserWavetablesPath = getRackUserWavetablesDir();
+        storage->extraThirdPartyWavetablesPaths = getRackExtraContentDirs();
+        storage->extraUserWavetablesPaths = getRackUserWavetablesDirs();
         storage->refresh_wtlist();
     }
 
@@ -203,9 +221,9 @@ struct XTModule : public rack::Module, public SurgeStorage::ErrorListener
         if (loadWavetables || loadFX)
         {
             config.suppliedDataPath = rack::asset::plugin(pluginInstance, "build/surge-data/");
-            config.extraThirdPartyWavetablesPath = getRackExtraContentDir();
+            config.extraThirdPartyWavetablesPaths = getRackExtraContentDirs();
             guaranteeRackUserWavetablesDir();
-            config.extraUsersWavetablesPath = getRackUserWavetablesDir();
+            config.extraUsersWavetablesPaths = getRackUserWavetablesDirs();
             config.scanWavetableAndPatches = loadWavetables;
         }
 
