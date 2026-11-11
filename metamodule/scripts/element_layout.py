@@ -9,10 +9,10 @@ elements with the simulator's --dump-elements, then sets the module's entry in p
   - "names": "X" for each "ModN to X" param, "Mod N In" for each modulation input jack,
     "X Mod Display" for the display behind the X knob (which draws its mod depth arcs),
     "LCD Display" for the one other display, shorter names for some long jack names, and the
-    names in NAMES (which a knob's mod display also takes)
+    names in NAMES (which a knob's mod params and mod display also take)
   - "order": the panel's knobs and sliders, then its switches, then the params on the LCD,
     each in reading order, then the Mod groups, then the jacks in reading order, then the
-    LCD Display. Everything else follows, in the module's own order.
+    LCD Display, with the moves in MOVES. Everything else follows, in the module's own order.
 Elements are given by name, or by index ("param:N", "in:N", "out:N") if another element
 has the same name. Other entries in plugin-mm.json are kept.
 """
@@ -57,6 +57,19 @@ NAMES = {
         'param:8': 'Post Bandwidth',
         'param:9': 'Post High Cut',
     },
+    'SurgeXTFXFlanger': {
+        'param:7': 'Feedback Depth',
+        'param:8': 'Feedback Damping',
+    },
+    'SurgeXTDigitalRingMod': {
+        'param:2': 'Link 2A to Out 1',
+    },
+}
+
+# Elements to move in the order, by module slug: (element, the element it goes after), by index
+MOVES = {
+    'SurgeXTFXChow': [('param:60', 'param:0')],  # Flip It Good after Threshold
+    'SurgeXTLFO': [('param:10', 'param:91')],  # Type after Last Loop Point
 }
 
 ELEMENT = re.compile(r'^\[\s*\d+\] (\S+)\s+x=\s*(\S+) y=\s*(\S+) w=\s*(\S+) h=\s*(\S+) "([^"]*)"'
@@ -124,8 +137,9 @@ def layout(slug, elements):
 
     by_index = {index(el): el for el in elements if el.id is not None}
     overrides = NAMES.get(slug, {})
-    if unknown := overrides.keys() - by_index.keys():
-        sys.exit(f'{slug}: NAMES has elements it doesn\'t have: {", ".join(sorted(unknown))}')
+    moves = MOVES.get(slug, [])
+    if unknown := (overrides.keys() | {i for move in moves for i in move}) - by_index.keys():
+        sys.exit(f'{slug}: NAMES or MOVES has elements it doesn\'t have: {", ".join(sorted(unknown))}')
 
     # The mod params of a knob are at its center, and so is the display behind it
     mod_targets = {}
@@ -196,6 +210,10 @@ def layout(slug, elements):
     jacks = [el for el in elements if el.kind in JACKS and ref(el) not in grouped]
     order += [ref(el) for el in reading_order(jacks)]
     order += [ref(el) for el in lcds if len(lcds) == 1]
+
+    for i, after in moves:
+        order.remove(ref(by_index[i]))
+        order.insert(order.index(ref(by_index[after])) + 1, ref(by_index[i]))
 
     # NAMES first (and instead of any made above)
     named = {ref(by_index[i]): name for i, name in overrides.items() if name != by_index[i].name}
