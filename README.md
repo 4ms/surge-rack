@@ -15,7 +15,7 @@ git submodule update --init --recursive
 
 ```
 cd metamodule
-cmake --fresh -B build -DMETAMODULE_SDK_DIR=path/to/metamodue-plugin-sdk
+cmake --fresh -B build -DMETAMODULE_SDK_DIR=path/to/metamodule-plugin-sdk
 cmake --build build
 ```
 
