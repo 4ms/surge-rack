@@ -442,6 +442,7 @@
       "description": "Expander for the Unison Helper which allows you to co-route CV",
       "tags": [
         "Utility",
+        "Expander",
         "Polyphonic"
       ]
     }
